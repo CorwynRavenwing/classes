@@ -1,6 +1,8 @@
 # this has its own git instance, so shouldn't be added here
 /mnr/
 
-# any file too large for GitHub
-*.BIG
+# vi temp files
+.*.swp
 
+# *.out* files, often too large for GitHub
+*.out[0-9]*
