@@ -9,12 +9,12 @@ import prime_eratosthenes as eratosthenes
 import prime_dikstra as dikstra
 
 def is_prime(x):
-    E = eratosthenes.is_prime(x)
+    # E = eratosthenes.is_prime(x)
     D = dikstra.is_prime(x)
-    print("#CHECK", x, ":", E, D)
+    # print("#CHECK", x, ":", E, D)
     # assert E == D
-    if E != D:
-        print("#\n" * 2 + "# *** WRONG! ***" + "#\n#")
+    # if E != D:
+    #     print("#\n" * 2 + "# *** WRONG! ***" + "#\n#")
     return D
 
 # highest_known_prime = eratosthenes.highest_known_prime
