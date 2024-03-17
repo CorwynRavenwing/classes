@@ -1,5 +1,7 @@
-dikstra_pool = []
-dikstra_min = None
+from typing import List
+
+dikstra_pool: List[List[int]] = []
+dikstra_min = None                  # int | None
 dikstra_answers_upto = 0
 
 def dikstra_in_pool(number):
@@ -21,56 +23,39 @@ def dikstra_test(number):
     if number > dikstra_answers_upto:
         print("#DT:", None, number, dikstra_answers_upto)
         return None
-    return dikstra_in_pool(number)
+    answer = dikstra_in_pool(number)
+    # print("#DT+", answer, number, dikstra_answers_upto)
+    return answer
 
-def dikstra_add(prime):
-    global dikstra_pool, dikstra_min
+def dikstra_add_next():
+    global dikstra_pool, dikstra_min, dikstra_answers_upto
+    prime = dikstra_answers_upto
     prime_squared = prime*prime
-    known = dikstra_test(prime)
-    if known is not None:
-        if known:
-            print("#DA known prime", prime)
-            return prime_squared
-        else:
-            print("#DA KNOWN NON-PRIME: ERROR", prime)
-            assert False
-
-    if dikstra_in_pool(prime):
-        print("#DA", prime, "IN POOL")
-        return prime_squared
-
-    print("#DA", prime, known)
+    # print("#DA", prime)
     dikstra_pool.append([prime, prime_squared])
     if dikstra_min is None or prime_squared < dikstra_min:
         dikstra_min = prime_squared
-    return prime_squared
+    return
 
-def dikstra_check(number):
-    print("#DC", number)
+def dikstra_next():
     global dikstra_pool, dikstra_min, dikstra_answers_upto
-    known = dikstra_test(number)
-    if known is not None:
-        if known:
-            print("#DC known prime", number)
-            return True
-        else:
-            print("#DC known non-prime", number)
-            return False
+    dikstra_answers_upto += 1
+    number = dikstra_answers_upto
+    # print("#DN", number)
 
-    if dikstra_min is None:
+    if number < 2:
+        return False
+    elif number == 2 and dikstra_min is None:
         # "prime" the list
-        dikstra_add(2)
-
-    dikstra_answers_upto = max(dikstra_answers_upto, number)
-    print("#DC upto", dikstra_answers_upto)
-
-    if number < dikstra_min:
-        print("#DC prime, < min", dikstra_min, ", add")
-        dikstra_add(number)
+        dikstra_add_next()
+        return True
+    elif number < dikstra_min:
+        # print("#DN prime, < min", dikstra_min, ", add")
+        dikstra_add_next()
         return True
     elif number > dikstra_min:
-        print("#DC prime, > min", dikstra_min, ", add")
-        dikstra_add(number)
+        # print("#DN prime, > min", dikstra_min, ", add")
+        dikstra_add_next()
         return True
     elif number == dikstra_min:
         print("#DC compos, ==min", dikstra_min, ", bump")
@@ -99,18 +84,23 @@ def dikstra_check(number):
         print("#DC     new min", dikstra_min)
         # 3. this is not a prime
         return False
+    else:
+        print("ERROR: we should not get here")
+        assert(False)
+    pass
 
 def is_prime(x):
+    global dikstra_answers_upto
     result = dikstra_test(x)
     if result is not None:
         print("#IP known prime", x, result)
         return result
     for n in range(dikstra_answers_upto, x):
-        result = dikstra_check(n)
         print("#IP skip", n, result)
+        result = dikstra_next()
         # throw away result
-    result = dikstra_check(x)
     print("#IP found answer", x, result)
+    result = dikstra_test(x)
     return result
 
 def fetch_primes_list():
