@@ -5,23 +5,23 @@ dikstra_min = None                  # int | None
 dikstra_answers_upto = 0
 
 def dikstra_in_pool(number):
-    print("#DI POOL=", dikstra_pool)
+    # print("#DI POOL=", dikstra_pool)
     match = [
         p
         for (p, pMult) in dikstra_pool
         if p == number
     ]
-    print("#DI:", len(match))
+    # print("#DI:", len(match))
     return len(match) > 0
 
 def dikstra_test(number):
     global dikstra_pool, dikstra_answers_upto
-    print("#DT", number)
+    # print("#DT?", "???", number, dikstra_answers_upto)
     if number < 2:
-        print("#DT:", False)
+        # print("#DT-", False, number, dikstra_answers_upto)
         return False
     if number > dikstra_answers_upto:
-        print("#DT:", None, number, dikstra_answers_upto)
+        # print("#DT:", None, number, dikstra_answers_upto)
         return None
     answer = dikstra_in_pool(number)
     # print("#DT+", answer, number, dikstra_answers_upto)
@@ -58,30 +58,30 @@ def dikstra_next():
         dikstra_add_next()
         return True
     elif number == dikstra_min:
-        print("#DC compos, ==min", dikstra_min, ", bump")
+        # print("#DN compos, ==min", dikstra_min, ", bump")
         # 1. bump any matching values
-        print("#DC POOL<", dikstra_pool)
+        # print("#DN POOL<", dikstra_pool)
         min_indexes = [
             index
             for index, (p, pMult)
             in enumerate(dikstra_pool)
             if pMult == dikstra_min
         ]
-        print("#DC     indexes", min_indexes)
+        # print("#DN     indexes", min_indexes)
         for i in min_indexes:
             # the pMult value ... # the p value
             oldval = dikstra_pool[i][:]  # copy
             dikstra_pool[i][1] += dikstra_pool[i][0]
-            print("#DC         bump", i, oldval, "->", dikstra_pool[i])
+            # print("#DN         bump", i, oldval, "->", dikstra_pool[i])
         # 2. re-calculate new min
-        print("#DC POOL>", dikstra_pool)
+        # print("#DN POOL>", dikstra_pool)
         all_pMults = [
             pMult
             for (p, pMult) in dikstra_pool
         ]
-        print("#DC     all_mults", all_pMults)
+        # print("#DN     all_mults", all_pMults)
         dikstra_min = min(all_pMults)
-        print("#DC     new min", dikstra_min)
+        # print("#DN     new min", dikstra_min)
         # 3. this is not a prime
         return False
     else:
@@ -93,14 +93,14 @@ def is_prime(x):
     global dikstra_answers_upto
     result = dikstra_test(x)
     if result is not None:
-        print("#IP known prime", x, result)
+        # print("#IP known answer", x, result)
         return result
     for n in range(dikstra_answers_upto, x):
-        print("#IP skip", n, result)
         result = dikstra_next()
+        # print("#IP skip", n, result)
         # throw away result
-    print("#IP found answer", x, result)
     result = dikstra_test(x)
+    # print("#IP found answer", x, result)
     return result
 
 def fetch_primes_list():
@@ -134,7 +134,7 @@ def nth_prime(n):
         if is_prime(x):
             pass
     primes_list = fetch_primes_list()
-    print("#sort check", primes_list)
+    # print("#sort check", primes_list)
     # NOTE: might not be sorted by default
     return primes_list[n-1]
 
