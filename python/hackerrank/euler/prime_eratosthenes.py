@@ -1,5 +1,6 @@
+from typing import List
 
-primes_list = []
+primes_list: List[int] = []
 
 def is_prime(x):
     global primes_list
@@ -16,6 +17,8 @@ def is_prime(x):
 
 def highest_known_prime():
     global primes_list
+    if primes_list == []:
+        return 0
     val = primes_list[-1]  # max value on end
     return val
 
