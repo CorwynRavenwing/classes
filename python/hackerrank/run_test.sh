@@ -42,6 +42,8 @@ else
 	python -m py_compile ${PROGRAM}
 	# program will stop here on compilation failure
 	# because of "set -e" above
+	mypy ${PROGRAM}
+	# program will also stop here on type error
 fi
 if [ ! -f $TESTFILE ]; then
 	echo "Test file ${TESTFILE} doesn't exist"
