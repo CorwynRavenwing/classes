@@ -70,7 +70,7 @@ def dikstra_next():
         # print("#DN     indexes", min_indexes)
         for i in min_indexes:
             # the pMult value ... # the p value
-            oldval = dikstra_pool[i][:]  # copy
+            # oldval = dikstra_pool[i][:]  # copy
             dikstra_pool[i][1] += dikstra_pool[i][0]
             # print("#DN         bump", i, oldval, "->", dikstra_pool[i])
         # 2. re-calculate new min
@@ -86,7 +86,7 @@ def dikstra_next():
         return False
     else:
         print("ERROR: we should not get here")
-        assert(False)
+        assert False
     pass
 
 def is_prime(x):

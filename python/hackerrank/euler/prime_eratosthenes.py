@@ -3,6 +3,8 @@ from typing import List
 primes_list: List[int] = []
 
 def is_prime(x):
+    if x < 2:
+        return False
     global primes_list
     if x in primes_list:
         # print("#known prime", x)
@@ -21,6 +23,10 @@ def highest_known_prime():
         return 0
     val = primes_list[-1]  # max value on end
     return val
+
+def get_primes_list():
+    global primes_list
+    return primes_list[:]
 
 def count_known_primes():
     global primes_list
