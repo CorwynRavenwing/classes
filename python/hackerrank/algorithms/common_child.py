@@ -67,7 +67,7 @@ def scan_to_next_match(location):
     try:
         i2 = S2.index(c1, i2)
         c2 = S2[i2]
-        assert(c1 == c2)
+        assert c1 == c2
     except ValueError:
         return None
     return i2
