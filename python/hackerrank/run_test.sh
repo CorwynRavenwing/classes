@@ -101,7 +101,7 @@ diff -q $TEMPOUT $TEMPANS > /dev/null			\
     || (						\
     diff -s -W $(tput cols) -y $ACTUAL $EXPECTED	\
     || diff -s -W $(tput cols) -y $TEMPOUT $TEMPANS	\
-        | grep '\s[<|>]\s'				\
+        | grep '\s[<|>]\(\s\|$\)'			\
 	| tee $TEMPDIF					\
 	| head -n 20					\
 	| grep --color=always -E '(^|[^|]*\|[^|]*)'	\
