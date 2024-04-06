@@ -2,6 +2,8 @@ from typing import List, Tuple
 
 def bad_password_algorithm(password):
     # print(f'bad_pass({password})')
+    while len(password) < 6:
+        password += " "
     asc = map(ord, password)
     coeff = range(2, 2+len(password))
     pairs = zip(asc, coeff)
@@ -99,6 +101,21 @@ def find_alternate_passwords(password: str):
                 found += 1
     print(f"Found {found} alternates for {password} at depth {depth}")
     return
+ 
+def check_password_range(first_pass, last_pass):
+    first = bad_password_algorithm(first_pass)
+    last = bad_password_algorithm(last_pass)
+    difference = last - first + 1
+    print(
+        f"range '{first_pass}'-'{last_pass}':",
+        first, last,
+        difference
+    )
+    return difference
+
+def display_hash_for_password(pw):
+    print(f"password '{pw}' maps to hash {bad_password_algorithm(pw)}")
+    return
 
 # password_check("KLMNOP", "KLMNOP")
 # password_check("KLMNOP", "MLLNOP")
@@ -109,7 +126,18 @@ find_alternate_passwords("AAAAAA")
 find_alternate_passwords("MMMMMM")
 find_alternate_passwords("ABCDEF")
 
-first = bad_password_algorithm("AAAAAA")
-last = bad_password_algorithm("ZZZZZZ")
-print("range:", first, last, last - first + 1)
+display_hash_for_password("ABCDEF")
+display_hash_for_password("ABCDE")
+
+check_password_range("AAAAAA", "ZZZZZZ")
+check_password_range("AAAAA", "ZZZZZ")
+check_password_range("AAAA", "ZZZZ")
+check_password_range("AAA", "ZZZ")
+answers = []
+answers.append(check_password_range("AAA", "ZZZZZZ"))
+answers.append(check_password_range("AA", "ZZ"))
+answers.append(check_password_range("A", "Z"))
+check_password_range("", "")
+
+print("Total:", answers, sum(answers))
 
