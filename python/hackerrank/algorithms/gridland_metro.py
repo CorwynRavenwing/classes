@@ -12,19 +12,54 @@ import os
 #  INT[][] track
 # return INT
 def gridlandMetro(n, m, k, track):
-    city = {
-        i: set(range(1, m+1))
-        for i in range(1, n+1)
-    }
+    city = {}
     print(f"#{city=}")
     for (row, start, end) in track:
-        T = set(range(start, end+1))
-        print(f"#{row=} {start}-{end} {T=}")
-        city[row] = city[row] - T
+        city.setdefault(row, [])
+        city_row = city[row]
+        if not city_row:
+            city[row].append((start, end))
+            print(f"#{row=} {start}-{end} +ADD+")
+            continue
+        overlaps = [
+            (S, E)
+            for S, E in city_row
+            if (
+                start <= S <= end
+            ) or (
+                start <= E <= end
+            ) or (
+                S <= start <= E
+            ) or (
+                S <= end <= E
+            )
+        ]
+        disjoints = [
+            T
+            for T in city_row
+            if T not in overlaps
+        ]
+        print(f"#{row=} {start}-{end} {overlaps=} {disjoints=}")
+        for S, E in overlaps:
+            start = min(start, S)
+            end = max(end, E)
+            print(f"# -> {start}-{end}")
+        city[row] = disjoints
+        city[row].append((start, end))
     print(f"#{city=}")
-    lamps = [
-        len(row)
+    count_track = [
+        sum([
+            E - S + 1
+            for (S, E) in row
+        ])
         for row in city.values()
+    ]
+    print(f"#{count_track=}")
+    lamps = [
+        m - T
+        for T in count_track
+    ] + [
+        m * (n - len(city))
     ]
     print(f"#{lamps=}")
     return sum(lamps)
