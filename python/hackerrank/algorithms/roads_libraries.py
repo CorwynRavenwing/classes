@@ -13,30 +13,40 @@ import os
 # return LONG_INT
 def roadsAndLibraries(number_of_cities, c_lib, c_road, possible_roads):
     # ensure each road-endpoint pair is ordered [lower, higher]
-    possible_roads = list(map(sorted, possible_roads))
+    # and that list is in order by [lower]
+    # then turn it from a generator back into a list
+    possible_roads = list(sorted(map(sorted, possible_roads)))
     price = 0
     if c_lib <= c_road:
         price = number_of_cities * c_lib
         return price
-    print(f"#{number_of_cities=} {possible_roads=}")
-    connected_cities = {}
-    for city in range(1, number_of_cities+1):
+    # print(f"#{number_of_cities=} {possible_roads=}")
+    # connected_cities = []
+    disconnected_cities = list(range(1, number_of_cities+1))
+    while disconnected_cities:
+        city = disconnected_cities.pop(0)
         print(f"#{city=}")
-        roads_to_here = [
-            (A, B)
-            for A, B in possible_roads
-            if B == city and A in connected_cities
-        ]
-        print(f"#  {roads_to_here}")
-        if not roads_to_here:
-            print(f"#    LIBRARY {c_lib}")
-            price += c_lib
-            connected_cities[city] = "LIB"
-        else:
-            print(f"#    ROAD {c_road}")
-            price += c_road
-            connected_cities[city] = roads_to_here.pop(0)
-    print(f"#{connected_cities}")
+        # if city in connected_cities:
+        #     print("#  CONNECTED $0")
+        #     continue
+        print(f"#  LIBRARY #{city} ${c_lib}")
+        price += c_lib
+        # connected_cities.append(city)
+        check_connections = [city]
+        while check_connections:
+            # connection = check_connections.pop(0)
+            roads_from_here = set([
+                B
+                for A, B in possible_roads
+                if A in check_connections and B in disconnected_cities
+            ])
+            check_connections = roads_from_here
+            if roads_from_here:
+                print(f"#    ROADS {len(roads_from_here)} * ${c_road}")
+                price += c_road * len(roads_from_here)
+                for destination in roads_from_here:
+                    disconnected_cities.remove(destination)
+    # print(f"#{connected_cities}")
     return price
 
 if __name__ == '__main__':
