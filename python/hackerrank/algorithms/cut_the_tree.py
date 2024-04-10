@@ -64,7 +64,7 @@ def cutTheTree(data, edges):
             #     f"{data[other_node-1]}"
             # )
 
-        # pass 3: delete edge
+        # PASS 3: delete edge
         for node, edge in leaf_edges.items():
             if edge in edges:
                 # last pair will both be leaf nodes
