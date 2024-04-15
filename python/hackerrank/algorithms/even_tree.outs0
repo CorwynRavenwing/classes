@@ -1,0 +1,62 @@
+#evenForest() t_nodes=10 t_edges=9 t_from=[2, 3, 4, 5, 6, 7, 8, 9, 10] t_to=[1, 1, 3, 2, 1, 2, 6, 8, 8]
+#weights=['Z', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+#edges=[(2, 1), (3, 1), (4, 3), (5, 2), (6, 1), (7, 2), (8, 6), (9, 8), (10, 8)] endpoints=[1, 1, 1, 2, 2, 2, 3, 3, 4, 5, 6, 6, 7, 8, 8, 8, 9, 10]
+#endpoint_count=Counter({1: 3, 2: 3, 8: 3, 3: 2, 6: 2, 4: 1, 5: 1, 7: 1, 9: 1, 10: 1})
+#edges_by_endpoint={1: [(2, 1), (3, 1), (6, 1)], 2: [(2, 1), (5, 2), (7, 2)], 3: [(3, 1), (4, 3)], 4: [(4, 3)], 5: [(5, 2)], 6: [(6, 1), (8, 6)], 7: [(7, 2)], 8: [(8, 6), (9, 8), (10, 8)], 9: [(9, 8)], 10: [(10, 8)]}
+#len(edges_work)=9
+#  leaf_nodes=[4, 5, 7, 9, 10]
+#    endpoint=4
+#    weight=1
+#    edge=(4, 3)
+#  4: remove (4, 3) from [(4, 3)]
+#  3: remove (4, 3) from [(3, 1), (4, 3)]
+#    endpoint=5
+#    weight=1
+#    edge=(5, 2)
+#  5: remove (5, 2) from [(5, 2)]
+#  2: remove (5, 2) from [(2, 1), (5, 2), (7, 2)]
+#    endpoint=7
+#    weight=1
+#    edge=(7, 2)
+#  7: remove (7, 2) from [(7, 2)]
+#  2: remove (7, 2) from [(2, 1), (7, 2)]
+#    endpoint=9
+#    weight=1
+#    edge=(9, 8)
+#  9: remove (9, 8) from [(9, 8)]
+#  8: remove (9, 8) from [(8, 6), (9, 8), (10, 8)]
+#    endpoint=10
+#    weight=1
+#    edge=(10, 8)
+#  10: remove (10, 8) from [(10, 8)]
+#  8: remove (10, 8) from [(8, 6), (10, 8)]
+#len(edges_work)=4
+#  leaf_nodes=[2, 3, 8]
+#    endpoint=2
+#    weight=3
+#    edge=(2, 1)
+#  2: remove (2, 1) from [(2, 1)]
+#  1: remove (2, 1) from [(2, 1), (3, 1), (6, 1)]
+#    endpoint=3
+#    weight=2
+#    edge=(3, 1)
+#  3: remove (3, 1) from [(3, 1)]
+#  1: remove (3, 1) from [(3, 1), (6, 1)]
+#    endpoint=8
+#    weight=3
+#    edge=(8, 6)
+#  8: remove (8, 6) from [(8, 6)]
+#  6: remove (8, 6) from [(6, 1), (8, 6)]
+#len(edges_work)=1
+#  leaf_nodes=[1, 6]
+#    endpoint=1
+#    weight=4
+#    edge=(6, 1)
+#  6: remove (6, 1) from [(6, 1)]
+#  1: remove (6, 1) from [(6, 1)]
+#    endpoint=6
+#    weight=4
+#  weights=['Z', 4, 0, 2, 0, 0, 4, 0, 0, 0, 0]
+#  edges_keep=[(4, 3), (5, 2), (7, 2), (9, 8), (10, 8), (2, 1), (8, 6)]
+#  edges_cut=[(3, 1), (6, 1)]
+2
