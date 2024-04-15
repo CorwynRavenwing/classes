@@ -146,7 +146,6 @@ def euler_84(N, K):
         return num / den
 
     start = 'GO'
-    start_index = square_indexes[start]
     dice = roll_2_dice(N)
     # print(f"#{dice=}")
     this_level = [
