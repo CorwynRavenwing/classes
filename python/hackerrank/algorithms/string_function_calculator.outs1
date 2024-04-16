@@ -1,0 +1,21 @@
+#(0, 1) 'a' len=1/9 count=2 2
+#(0, 2) 'ab' len=2/9 count=2 4
+#(0, 3) 'abc' len=3/9 count=2 6
+#(0, 4) 'abca' len=4/9 count=1 6
+#(0, 5) 'abcab' len=5/9 count=1 6
+#(0, 6) 'abcabc' len=6/9 count=1 6
+#(0, 7) 'abcabcd' len=7/9 count=1 7
+#(0, 8) 'abcabcdd' len=8/9 count=1 8
+#(0, 9) 'abcabcddd' len=9/9 count=1 9
+#(1, 2) 'b' len=1/8 count=2 9
+#(1, 3) 'bc' len=2/8 count=2 9
+##### 8 * 1 <= 9
+#(2, 3) 'c' len=1/7 count=2 9
+##### 7 * 1 <= 9
+##### 6 * 1 <= 9
+##### 5 * 1 <= 9
+##### 4 * 1 <= 9
+##### 3 * 3 <= 9
+##### 2 * 3 <= 9
+##### 1 * 3 <= 9
+9
