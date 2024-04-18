@@ -1,0 +1,77 @@
+#a='bac' reversed_b='cab'
+#to_check=[(7, '', 'bac', 'cab')]
+#len(to_check)=1
+#  check=(7, '', 'bac', 'cab')
+#    -> (3, 'c', '', 'ab')
+#    -> (5, 'a', 'c', 'b')
+#    -> (3, 'b', 'ac', '')
+#    => (1, '', '', 'cab')
+#to_check=[(3, 'c', '', 'ab'), (5, 'a', 'c', 'b'), (3, 'b', 'ac', ''), (1, '', '', 'cab')]
+#len(to_check)=4
+#  check=(1, '', '', 'cab')
+#    X '' B:cab
+#to_check=[(3, 'b', 'ac', ''), (3, 'c', '', 'ab'), (5, 'a', 'c', 'b')]
+#len(to_check)=3
+#  check=(3, 'b', 'ac', '')
+#    ANSWER: bab
+#    SUCCESS: bab:
+#to_check=[(3, 'c', '', 'ab'), (5, 'a', 'c', 'b')]
+#len(to_check)=2
+#  check=(3, 'c', '', 'ab')
+#    ANSWER: cac
+#    FAIL: cac > bab
+#to_check=[(5, 'a', 'c', 'b')]
+#len(to_check)=1
+#  check=(5, 'a', 'c', 'b')
+#    => (3, 'a', '', 'b')
+#to_check=[(3, 'a', '', 'b')]
+#len(to_check)=1
+#  check=(3, 'a', '', 'b')
+#    ANSWER: aba
+#    SUCCESS: aba:bab
+#best_answer='aba'
+aba
+#a='abc' reversed_b='fed'
+#to_check=[(7, '', 'abc', 'fed')]
+#len(to_check)=1
+#  check=(7, '', 'abc', 'fed')
+#    => (1, '', '', 'fed')
+#to_check=[(1, '', '', 'fed')]
+#len(to_check)=1
+#  check=(1, '', '', 'fed')
+#    X '' B:fed
+#best_answer=''
+-1
+#a='jdfh' reversed_b='sdf'
+#to_check=[(7, '', 'jdfh', 'sdf')]
+#len(to_check)=1
+#  check=(7, '', 'jdfh', 'sdf')
+#    -> (3, 'f', 'h', '')
+#    -> (5, 'd', 'fh', 'f')
+#    => (1, '', '', 'sdf')
+#to_check=[(3, 'f', 'h', ''), (5, 'd', 'fh', 'f'), (1, '', '', 'sdf')]
+#len(to_check)=3
+#  check=(1, '', '', 'sdf')
+#    X '' B:sdf
+#to_check=[(3, 'f', 'h', ''), (5, 'd', 'fh', 'f')]
+#len(to_check)=2
+#  check=(3, 'f', 'h', '')
+#    ANSWER: fhf
+#    SUCCESS: fhf:
+#to_check=[(5, 'd', 'fh', 'f')]
+#len(to_check)=1
+#  check=(5, 'd', 'fh', 'f')
+#    -> (5, 'df', 'h', '')
+#    => (3, 'd', '', 'f')
+#to_check=[(5, 'df', 'h', ''), (3, 'd', '', 'f')]
+#len(to_check)=2
+#  check=(3, 'd', '', 'f')
+#    ANSWER: dfd
+#    SUCCESS: dfd:fhf
+#to_check=[(5, 'df', 'h', '')]
+#len(to_check)=1
+#  check=(5, 'df', 'h', '')
+#    ANSWER: dfhfd
+#    SUCCESS: dfhfd:dfd
+#best_answer='dfhfd'
+dfhfd
