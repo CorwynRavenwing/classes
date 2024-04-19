@@ -75,6 +75,7 @@ ulimit -v 1024000	# virtual memory hard limit 1G
 #	)		\
 #     ) | tee $OUTFILE
 #
+echo "time python $PROGRAM < $TESTFILE | tee $OUTFILE"
 time  python $PROGRAM < $TESTFILE	\
 	| tee $OUTFILE
 
