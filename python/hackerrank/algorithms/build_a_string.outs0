@@ -1,4 +1,74 @@
-#0
-#1 t=2
-#2
-#4 n=9 a=4 b=5
+#n=9 a=4 5
+#s='aabaacaba'
+#buildString(4,5,aabaacaba)
+#'' cost=0 index=0
+#  char='a'
+#append 'a' for $4
+#'a' cost=4 index=1
+#  char='a'
+#    'a' 
+#  'a' in 'a'
+#  length+1=1 1
+#append 'a' for 1 * $4 = $4
+#'aa' cost=8 index=2
+#  char='b'
+#append 'b' for $4
+#'aab' cost=12 index=3
+#  char='a'
+#    'a' 
+#  'a' in 'aab'
+#  length+1=1 1
+#  'aa' in 'aab'
+#  length+1=2 2
+#copy 'aa' for $5
+#'aabaa' cost=17 index=5
+#  char='c'
+#append 'c' for $4
+#'aabaac' cost=21 index=6
+#  char='a'
+#    'a' 
+#  'a' in 'aabaac'
+#  length+1=1 1
+#  'ab' in 'aabaac'
+#  length+1=2 2
+#  'aba' in 'aabaac'
+#  length+1=3 3
+#  'aba' in 'aabaac'
+#  length+1=4 3
+#copy 'aba' for $5
+26
+#n=9 a=8 9
+#s='bacbacacb'
+#buildString(8,9,bacbacacb)
+#'' cost=0 index=0
+#  char='b'
+#append 'b' for $8
+#'b' cost=8 index=1
+#  char='a'
+#append 'a' for $8
+#'ba' cost=16 index=2
+#  char='c'
+#append 'c' for $8
+#'bac' cost=24 index=3
+#  char='b'
+#    'b' 
+#  'b' in 'bac'
+#  length+1=1 1
+#  'ba' in 'bac'
+#  length+1=2 2
+#  'bac' in 'bac'
+#  length+1=3 3
+#copy 'bac' for $9
+#'bacbac' cost=33 index=6
+#  char='a'
+#    'a' 
+#  'a' in 'bacbac'
+#  length+1=1 1
+#  'ac' in 'bacbac'
+#  length+1=2 2
+#  'acb' in 'bacbac'
+#  length+1=3 3
+#  'acb' in 'bacbac'
+#  length+1=4 3
+#copy 'acb' for $9
+42
