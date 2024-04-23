@@ -1,0 +1,18 @@
+#gridlandProvinces(a,a)
+#string='aa'
+#answers_f=['aa', 'aa']
+#answers_r=['aa', 'aa']
+#answers_set={'aa'}
+1
+#gridlandProvinces(dab,abd)
+#string='dabdba'
+#answers_f=['dabdba', 'abdbad', 'bdbada', 'dbadab', 'badabd', 'adabdb']
+#answers_r=['abdbad', 'dabdba', 'adabdb', 'badabd', 'dbadab', 'bdbada']
+#answers_set={'abdbad', 'badabd', 'bdbada', 'dabdba', 'adabdb', 'dbadab'}
+6
+#gridlandProvinces(ababa,babab)
+#string='ababababab'
+#answers_f=['ababababab', 'bababababa', 'ababababab', 'bababababa', 'ababababab', 'bababababa', 'ababababab', 'bababababa', 'ababababab', 'bababababa']
+#answers_r=['bababababa', 'ababababab', 'bababababa', 'ababababab', 'bababababa', 'ababababab', 'bababababa', 'ababababab', 'bababababa', 'ababababab']
+#answers_set={'ababababab', 'bababababa'}
+2
