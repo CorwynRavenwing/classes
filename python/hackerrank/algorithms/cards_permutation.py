@@ -68,7 +68,7 @@ def solve(x):
         print(f"#  {attempt=}")
         answer = cache_get(attempt, None)
         if answer is not None:
-            line += answer
+            line_numbers += answer
             line_numbers %= mod
             continue
         if not attempt:
