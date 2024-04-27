@@ -8,7 +8,7 @@
 
 def possible_moves_from(pos):
     (i, j) = pos
-    return {
+    moves_dict = {
         'UL': (i-2, j-1),
         'UR': (i-2, j+1),
         'R': (i, j+2),
@@ -16,9 +16,25 @@ def possible_moves_from(pos):
         'LL': (i+2, j-1),
         'L': (i, j-2),
     }
+    return moves_dict
+
+def get_move_names_in_priority_order():
+    moves_dict = possible_moves_from((0, 0))
+    move_names = [
+        move_name
+        for move_name, new_pos in moves_dict.items()
+    ]
+    return tuple(move_names)
+
+def sort_moves_by_priority(move_list):
+    move_names = get_move_names_in_priority_order()
+
+    def sort_by_priority(move):
+        return move_names.index(move)
+
+    return sorted(move_list, key=sort_by_priority)
 
 def legal_position(pos, n):
-    # print(f"#DEBUG: {pos=}")
     (i, j) = pos
     return (0 <= i <= n-1) and (0 <= j <= n-1)
 
@@ -27,6 +43,75 @@ def distance_between(pos1, pos2):
     (i2, j2) = pos2
     return abs(i1 - i2) + abs(j1 - j2)
 
+def find_shortest_path(beginpos, endpos):
+    paths = [
+        (0, [], beginpos)
+    ]
+    shortest_path = None
+    while paths:
+        path = paths.pop(0)
+        print(f"#[{len(paths)}] {path}")
+        (moves, move_list, current) = path
+        assert moves == len(move_list)
+        if current == endpos:
+            print(f"#  FOUND PATH {moves} {move_list}")
+            shortest_path = move_list
+            break
+            # could just return it here instead
+        current_distance = distance_between(current, endpos)
+        possible_moves = possible_moves_from(current)
+        new_move_list = []
+        for move, new_position in possible_moves.items():
+            label = f"{move} {new_position}"
+            if not legal_position(new_position, n):
+                # print(f"#  {label} OOB!")
+                continue
+            new_distance = distance_between(new_position, endpos)
+            if new_distance >= current_distance:
+                # print(f"#  {label} FARTHER {current_distance} <= {new_distance}")
+                continue
+            new_move = (moves + 1, move_list + [move], new_position)
+            new_move_list.append(
+                (new_distance, new_move)
+            )
+        if not new_move_list:
+            print("#  NO NEW MOVES")
+            continue
+        new_distance_list = [
+            new_distance
+            for (new_distance, new_move) in new_move_list
+        ]
+        # print(f"#  {new_distance_list.copy()=}")
+        min_new_distance = min(new_distance_list)
+        short_new_moves_list = [
+            (new_distance, new_move)
+            for (new_distance, new_move) in new_move_list
+            if new_distance == min_new_distance
+        ]
+        # long_new_moves_list = [
+        #     (new_distance, new_move)
+        #     for (new_distance, new_move) in new_move_list
+        #     if new_distance > min_new_distance
+        # ]
+        first_short_new_move = short_new_moves_list.pop(0)
+        (new_distance, new_move) = first_short_new_move
+        (new_moves, new_move_list, new_position) = new_move 
+        label = f"{new_move_list[-1]} {new_position}"
+        dist_label = f"{current_distance} -> {new_distance}"
+        print(f"#  {label} *** YES *** {dist_label}")
+        paths.append(new_move)
+        # for (new_distance, new_move) in short_new_moves_list:
+        #     (new_moves, new_move_list, new_position) = new_move 
+        #     label = f"{new_move_list[-1]} {new_position}"
+        #     dist_label = f"{current_distance} -> {new_distance}"
+        #     print(f"#  {label} *** NO *** {dist_label}: NOT FIRST")
+        # for (new_distance, new_move) in long_new_moves_list:
+        #     (new_moves, new_move_list, new_position) = new_move 
+        #     label = f"{new_move_list[-1]} {new_position}"
+        #     dist_label = f"{current_distance} -> {new_distance}"
+        #     print(f"#  {label} *** NO *** {dist_label}: NOT NEAREST")
+    return shortest_path
+
 #  1. INTEGER n
 #  2. INTEGER i_start
 #  3. INTEGER j_start
@@ -34,48 +119,16 @@ def distance_between(pos1, pos2):
 #  5. INTEGER j_end
 # no return value
 def printShortestPath(n, i_start, j_start, i_end, j_end):
-    begin = (i_start, j_start)
-    endpoint = (i_end, j_end)
+    beginpos = (i_start, j_start)
+    endpos = (i_end, j_end)
+
+    shortest_path = find_shortest_path(beginpos, endpos)
     
-    paths = [
-        (0, [], begin)
-    ]
-    short_paths = []
-    shortest_path = None    # might pull this all back out now
-    while paths:
-        path = paths.pop(0)
-        # print(f"#[{len(paths)}] ({shortest_path}) {path}")
-        (moves, move_list, current) = path
-        assert moves == len(move_list)
-        if shortest_path is not None:
-            if shortest_path < moves:
-                # print(f"#  TOO LONG {moves} > {shortest_path}")
-                continue
-        if current == endpoint:
-            # print(f"#  FOUND PATH {moves} {move_list}")
-            short_paths.append(tuple(move_list))
-            shortest_path = moves
-            break
-            # continue
-        current_distance = distance_between(current, endpoint)
-        possible_moves = possible_moves_from(current)
-        for move, new_position in possible_moves.items():
-            # label = f"#  {move} {new_position}"
-            if not legal_position(new_position, n):
-                # print(f"#  {label} OOB!")
-                continue
-            new_distance = distance_between(new_position, endpoint)
-            if new_distance >= current_distance:
-                # print(f"#  {label} FARTHER {current_distance} <= {new_distance}")
-                continue
-            new_move = (moves + 1, move_list + [move], new_position)
-            paths.append(new_move)
-            # print(f"#  {label} *** YES *** {current_distance} -> {new_distance}")
-    # print(f"#{short_paths=}")
-    if short_paths:
-        shortest = short_paths.pop()
-        print(len(shortest))
-        print(' '.join(shortest))
+    print(f"#{shortest_path=}")
+    if shortest_path:
+        print(len(shortest_path))
+        shortest_path = sort_moves_by_priority(shortest_path)
+        print(' '.join(shortest_path))
     else:
         print("Impossible")
     pass
