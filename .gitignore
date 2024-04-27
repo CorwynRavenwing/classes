@@ -5,10 +5,10 @@
 .*.swp
 
 # project temp files
-*.temp[0-9]*
+*.temp*
 
 # *.out* files, often too large for GitHub
-*.out[0-9]*
+*.out*
 
 # compiled python bytecode, created while testing code syntax
 __pycache__/
