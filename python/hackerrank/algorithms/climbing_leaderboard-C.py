@@ -15,18 +15,20 @@ def climbingLeaderboard(ranked, player):
     ranked_nodups.sort()
     print(f"#{ranked_nodups[:10]=}")
     for P in player:
-        index = bisect_left(ranked_nodups, P)
-        nearest_value = (
-            ranked_nodups[index]
-            if index < len(ranked_nodups)
-            else "EOL"
-        )
-        print(f"#  {P=} {nearest_value=}")
-        if P != nearest_value:
+        if P in ranked_nodups:
+            index = ranked_nodups.index(P)
+        else:
+            index = bisect_left(ranked_nodups, P)
+            nearest_value = (
+                ranked_nodups[index]
+                if index < len(ranked_nodups)
+                else "EOL"
+            )
+            print(f"#  {P=} {nearest_value=}")
+            # if P < nearest_value:
+            #     index += 1
             ranked_nodups.insert(index, P)
             print(f"#  {index=} {ranked_nodups[:10]=}")
-        else:
-            print(f"#  {index=} do not insert")
         rank = len(ranked_nodups) - index
         print(f"#  {P=} {rank=} LEN={len(ranked_nodups)}")
         retval.append(rank)

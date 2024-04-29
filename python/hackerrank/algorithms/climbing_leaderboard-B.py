@@ -5,29 +5,27 @@ import os
 # import random
 # import re
 # import sys
-from bisect import bisect_left
 
 def climbingLeaderboard(ranked, player):
     retval = []
     print(f"#{ranked[:10]=}")
     nodups = set(ranked)
     ranked_nodups = list(nodups)
-    ranked_nodups.sort()
+    ranked_nodups.sort(reverse=True)
     print(f"#{ranked_nodups[:10]=}")
     for P in player:
-        index = bisect_left(ranked_nodups, P)
-        nearest_value = (
-            ranked_nodups[index]
-            if index < len(ranked_nodups)
-            else "EOL"
-        )
-        print(f"#  {P=} {nearest_value=}")
-        if P != nearest_value:
+        if P not in ranked_nodups:
+            nearest_value = min(
+                ranked_nodups,
+                key=lambda x: abs(x - P)
+            )
+            print(f"#  {P=} {nearest_value=}")
+            index = ranked_nodups.index(nearest_value)
+            if P < nearest_value:
+                index += 1
             ranked_nodups.insert(index, P)
             print(f"#  {index=} {ranked_nodups[:10]=}")
-        else:
-            print(f"#  {index=} do not insert")
-        rank = len(ranked_nodups) - index
+        rank = ranked_nodups.index(P) + 1
         print(f"#  {P=} {rank=} LEN={len(ranked_nodups)}")
         retval.append(rank)
     return retval
