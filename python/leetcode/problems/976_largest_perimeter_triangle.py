@@ -1,4 +1,3 @@
-IN PROGRESS
 
 class Solution:
     def largestPerimeter(self, nums: List[int]) -> int:
@@ -62,4 +61,5 @@ class Solution:
                         max_answer = max(max_answer, answer)
         return max_answer
 
-IN PROGRESS
+# this solution generally works, but runs out of time for
+# large problem sets.  I am giving up on making it faster.
