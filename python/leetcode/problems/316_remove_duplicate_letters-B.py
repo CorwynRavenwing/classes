@@ -1,6 +1,10 @@
 class Solution:
     def removeDuplicateLetters(self, s: str) -> str:
 
+        wrap = 1000
+        min_show = 2
+        skip_first = True
+
         def show(s: str) -> str:
             t = f'{s[:10]}...{s[-10:]}({len(s)})'
             return (
@@ -25,72 +29,6 @@ class Solution:
                 if G <= target
             ]
         
-        answer = ""
-        work = s
-        while work:
-            print(f'"{answer}" <- "{show(work)}"')
-            letters = sorted(list(set(work)))
-            for L in letters:
-                index = work.index(L)
-                print(f'  "{L}": [{index}]')
-                left = work[:index]
-                center = work[index]
-                right = work[index+1:]
-                assert center == L
-                print(f'    "{show(left)}" "{center}" "{show(right)}"')
-                missing = set(left) - set(right)
-                if missing:
-                    missingStr = "".join(sorted(list(missing)))
-                    print(f'      missing="{missingStr}"')
-                    continue
-                else:
-                    answer += L
-                    workList = filter_away_EQ(right, L)
-                    work = ''.join(workList)
-                    # print(f'      -> "{show(work)}"')
-                    break
-
-        return answer
-
-        while to_work:
-            L = len(to_work)
-            work = to_work.pop()
-            print(f'{L=} cache={len(cache)} W={len(work)}')
-            # print(f'  "{show(work)}"')
-            if work in cache:
-                print(f'    cache hit')
-                continue
-            else:
-                # print(f'    cache miss')
-                (first, rest) = (work[:1], work[1:])
-                if first in rest:
-                    rest_clean = ''.join(
-                        filter_away_EQ(rest, first)
-                    )
-                else:
-                    rest_clean = rest
-                keep_this = (first, rest_clean)
-                cache[work] = ([],[keep_this])
-                to_work.append(rest_clean)
-                # print(f'    +{first},{show(rest_clean)}')
-                if first in rest:
-                    skip_this = ("", rest)
-                    cache[work][1].append(skip_this)
-                    to_work.append(rest)
-                    # print(f'    -{show(rest)}')
-
-        # print(f'{type("")=}')   # <class 'str'>
-        # print(f'{type([])=}')   # <class 'list'>
-        # print(f'{type({})=}')   # <class 'dict'>
-
-        return "xyzzy"
-
-
-
-        wrap = 1000
-        min_show = 2
-        skip_first = True
-
         possibles = [
             ("", s)
         ]
@@ -162,3 +100,4 @@ class Solution:
         print(f'{answer=}')
         return answer
 
+# NOTE: in progress, still times out on large inputs
