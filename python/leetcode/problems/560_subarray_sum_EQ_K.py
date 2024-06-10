@@ -33,18 +33,26 @@ class Solution:
                 if mod == M
             ]
             # print(f'{M}: {indexes}')
-            for i, index1 in enumerate(indexes):
-                for j, index2 in enumerate(indexes):
-                    if i >= j:
-                        # print(f'  {i=} {j=} skip')
-                        continue
-                    value = sums[index2] - sums[index1]
-                    if value == k:
-                        # print(f'  {i=} {j=} {index1}..{index2} {value=} YES')
-                        answer += 1
-                    # else:
-                    #     print(f'  {i=} {j=} {index1}..{index2} {value=} no')
+            if k == 0:
+                # we need to count pairs of indexes
+                # i.e. N pick 2
+                # == (N!)/(N-2)!(2!)
+                # == (N)(N-1)/2
+                N = len(indexes)
+                print(f'  add ({N} pick {2})')
+                answer += N * (N - 1) // 2
+            else:
+                for i, index1 in enumerate(indexes):
+                    for j, index2 in enumerate(indexes):
+                        if i >= j:
+                            # print(f'  {i=} {j=} skip')
+                            continue
+                        value = sums[index2] - sums[index1]
+                        if value == k:
+                            # print(f'  {i=} {j=} {index1}..{index2} {value=} YES')
+                            answer += 1
+                        # else:
+                        #     print(f'  {i=} {j=} {index1}..{index2} {value=} no')
         
         return answer
 
-# NOTE: in progress
