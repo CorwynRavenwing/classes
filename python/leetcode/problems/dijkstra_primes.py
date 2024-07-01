@@ -1,9 +1,6 @@
 class Solution:
     def countPrimes(self, n: int) -> int:
 
-        # if n == 999983:
-            # return 78497
-
         def prime_iter(primes=None) -> int:
             heap = []
             if primes is None:
@@ -39,12 +36,50 @@ class Solution:
                 
                 assert N < heap[0][0]
         
-        count_primes = 0
-        for P in prime_iter():
-            # print(f'  {P} PRIME')
-            if P >= n:
-                break
-            count_primes += 1
+        primes_found = []
+        PI = prime_iter(primes_found)
         
-        return count_primes
+        def isPrime(Q: int) -> bool:
+            nonlocal primes_found, PI
+            print(f'isPrime({Q}): {primes_found=}')
+            # zeroth, 1 is not prime
+            if Q == 1:
+                print(f'  -> no ({Q} defined as non-prime)')
+                return False
+            # first, scan the known-primes list
+            if Q in primes_found:
+                print(f'  -> yes ({Q} known prime)')
+                return True
+            if Q < max(primes_found, default=0):
+                print(f'  -> no ({Q} known non-prime)')
+                return False
+            for P in primes_found:
+                # second, divide by already-known primes
+                if Q % P == 0:
+                    print(f'  -> no ({Q} non-prime, divisor {P})')
+                    return False
+                if P * P > Q:
+                    print(f'  -> yes ({Q} prime, prime {P}^2 > Q)')
+                    return True
+            for P in PI:
+                # last, divide by newly-produced primes
+                if P == Q:
+                    print(f'  -> yes ({Q} produced by prime iter)')
+                    return True
+                if Q % P == 0:
+                    print(f'  => no ({Q} non-prime, divisor {P})')
+                    return False
+                if P * P > Q:
+                    print(f'  => yes ({Q} prime, prime {P}^2 > Q)')
+                    return True
+            assert "prior loop" == "never ends"
+
+        # count_primes = 0
+        # for P in prime_iter():
+        #     # print(f'  {P} PRIME')
+        #     if P >= n:
+        #         break
+        #     count_primes += 1
+        #
+        # return count_primes
 
