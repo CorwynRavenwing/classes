@@ -18,7 +18,7 @@ class Solution:
             return max_so_far
 
         def min_subarray():
-            # Kadane's algorithm
+            # Kadane's algorithm inverted for Min
 
             current_sum = 0
             min_so_far = float('+inf')
