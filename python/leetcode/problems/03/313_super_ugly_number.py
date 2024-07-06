@@ -34,9 +34,4 @@ class Solution:
 
         return next(uglies)
 
-# NOTE: original file took 4800 ms and still ran out of time
-# on some n=100_000 cases
-# NOTE: new version uses heapq.merge to combine an independent
-# generator for each prime
 # NOTE: 317 ms; Beats 74.18% of users with Python3
-
