@@ -1,3 +1,5 @@
+class Solution:
+    def minimumLines(self, stockPrices: List[List[int]]) -> int:
 
         # these three functions are from IterTools Recipes:
         # https://docs.python.org/3/library/itertools.html
@@ -64,4 +66,29 @@
                 if N == 1 or D == 1:
                     return frac
             return frac
+
+        stockPrices.sort()
+        # print(f'{stockPrices=}')
+        differences = [
+            (X2 - X1, Y2 - Y1)
+            for ((X1, Y1), (X2, Y2)) in zip(stockPrices, stockPrices[1:])
+        ]
+        # print(f'{differences=}')
+        normalized_differences_with_count = [
+            (normalizeFraction(slope), 1)
+            for slope in differences
+        ]
+        # print(f'{normalized_differences_with_count=}')
+        for i in range(1, len(normalized_differences_with_count)):
+            (thisDiff, thisCount) = normalized_differences_with_count[i]
+            (prevDiff, prevCount) = normalized_differences_with_count[i - 1]
+            if thisDiff == prevDiff:
+                # print(f'merge {i-1} and {i} ({thisDiff}: {thisCount} + {prevCount})')
+                normalized_differences_with_count[i] = (thisDiff, thisCount + prevCount)
+                normalized_differences_with_count[i - 1] = None
+        while None in normalized_differences_with_count:
+            normalized_differences_with_count.remove(None)
+        print(f'merged {normalized_differences_with_count=}')
+        
+        return len(normalized_differences_with_count)
 
