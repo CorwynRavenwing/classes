@@ -1,3 +1,5 @@
+class Solution:
+    def smallestValue(self, n: int) -> int:
 
         # these three functions are from IterTools Recipes:
         # https://docs.python.org/3/library/itertools.html
@@ -44,24 +46,15 @@
                         return
             if n > 1:
                 yield n
-                
-        def AdividesB(A: int, B: int) -> bool:
-            return (B % A == 0)
 
-        @cache
-        def normalizeFraction(frac: Tuple[int,int]) -> Tuple[int,int]:
-            frac = tuple(frac)
-            (N, D) = frac
-            print(f'NF({frac}):')
-            if N == 1 or D == 1:
-                return frac
-            for F in factor(N):
-                while AdividesB(F, N) and AdividesB(F, D):
-                    N //= F
-                    D //= F
-                    frac = (N, D)
-                    print(f'  Divide {F} -> {frac}')
-                if N == 1 or D == 1:
-                    return frac
-            return frac
+        values = []
+        old_n = float('-inf')   # guaranteed different
+        while n != old_n:
+            print(f'{n=}')
+            values.append(n)
+            old_n = n
+            n = sum(factor(n))
 
+        return min(values)
+# NOTE: Runtime 41 ms Beats 65.12%
+# NOTE: Memory 16.78 MB Beats 25.58%
