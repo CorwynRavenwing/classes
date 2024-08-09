@@ -48,4 +48,5 @@ class Solution:
                     print(f'  no')
 
         return answer
-
+# NOTE: Runtime 41 ms Beats 60.00%
+# NOTE: Memory 16.56 MB Beats 53.33%
