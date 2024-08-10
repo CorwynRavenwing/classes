@@ -31,7 +31,7 @@
                 data[p*p : n : p+p] = bytes(len(range(p*p, n, p+p)))
             yield from iter_index(data, 1, start=3)
 
-        def factor_cachme(n):
+        def factor_cacheme(n):
             "Prime factors of n."
             # factor(99) → 3 3 11
             # factor(1_000_000_000_000_007) → 47 59 360620266859
