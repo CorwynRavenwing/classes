@@ -38,4 +38,5 @@ class Solution:
                     (answer + [C], new_remaining)
                 )
         return sorted(answers)
-
+# NOTE: Runtime 520 ms Beats 5.01%
+# NOTE: Memory 18.21 MB Beats 6.94%
