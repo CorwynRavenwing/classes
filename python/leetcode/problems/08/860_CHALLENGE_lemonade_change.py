@@ -28,4 +28,5 @@ class Solution:
         print("success")
         print(f"{cashbox}")
         return True
-
+# NOTE: Runtime 699 ms Beats 6.26%
+# NOTE: Memory 20.81 MB Beats 72.44%
