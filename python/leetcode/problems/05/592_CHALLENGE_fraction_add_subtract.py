@@ -123,3 +123,5 @@ class Solution:
         print(f'{answer=}')
         return answer
 
+# NOTE: Runtime 49 ms Beats 8.14%
+# NOTE: Memory 16.82 MB Beats 6.20%
