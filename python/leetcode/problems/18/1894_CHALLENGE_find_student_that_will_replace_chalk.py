@@ -17,4 +17,6 @@ class Solution:
                     return studentID
                 else:
                     k -= studentChalk
-# NOTE: Runtime 564 ms; Beats 86.83%
+
+# NOTE: Runtime 569 ms Beats 77.44%
+# NOTE: Memory 30.68 MB Beats 19.92%
