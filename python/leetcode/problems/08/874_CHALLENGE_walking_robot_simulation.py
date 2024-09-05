@@ -66,3 +66,5 @@ class Solution:
                 move(cmd)
         return maxdist
 
+# NOTE: Runtime 452 ms Beats 5.14%
+# NOTE: Memory 23.51 MB Beats 12.86%

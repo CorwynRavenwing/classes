@@ -16,3 +16,5 @@ class Solution:
                     return length_try
         return -1
 
+# NOTE: Runtime 89 ms Beats 7.16%
+# NOTE: Memory 16.48 MB Beats 80.52%

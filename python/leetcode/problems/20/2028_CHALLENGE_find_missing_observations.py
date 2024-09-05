@@ -49,3 +49,5 @@ class Solution:
             print(f'FAIL')
             return []
 
+# NOTE: Runtime 1075 ms Beats 15.51%
+# NOTE: Memory 27.73 MB Beats 22.73%
