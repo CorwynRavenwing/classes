@@ -1,5 +1,8 @@
 
         def factors_of(N: int) -> List[int]:
+            if N == 1:
+                return [1]
+
             answers = []
             for D in range(1, N // 2 + 1):
                 if N % D == 0:
