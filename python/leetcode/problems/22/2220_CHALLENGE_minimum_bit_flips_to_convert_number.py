@@ -29,3 +29,5 @@ class Solution:
         print(f'{flips=}')
         return len(flips)
 
+# NOTE: Runtime 32 ms Beats 77.00%
+# NOTE: Memory 16.70 MB Beats 26.96%
