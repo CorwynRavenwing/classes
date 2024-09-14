@@ -34,3 +34,8 @@ class Solution:
         return max(lengths)
 # NOTE: Runtime 628 ms Beats 72.85%
 # NOTE: Memory 31.10 MB Beats 31.79%
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 630 ms Beats 78.55%
+# NOTE: Memory 30.88 MB Beats 85.09%
+# NOTE: barely different raw numbers, but hugely better percentages.
+#       i.e. lots of people with worse numbers have joined after me.
