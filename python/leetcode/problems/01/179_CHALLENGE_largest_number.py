@@ -56,3 +56,5 @@ class Solution:
         #     answer = answer[1:]
         return answer
 
+# NOTE: Runtime 943 ms Beats 5.31%
+# NOTE: Memory 18.73 MB Beats 32.99%

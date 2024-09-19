@@ -33,3 +33,5 @@ class Solution:
         print(f'unsure how we got here: {answers=}')
         return answers
 
+# NOTE: Runtime 61 ms Beats 41.98%
+# NOTE: Memory 18.80 MB Beats 34.80%
