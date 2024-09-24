@@ -30,3 +30,5 @@ class Solution:
             return "ERROR"
         return test
 
+# NOTE: Runtime 2260 ms Beats 5.64%
+# NOTE: Memory 18.28 MB Beats 29.57%

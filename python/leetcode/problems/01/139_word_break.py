@@ -40,3 +40,5 @@ class Solution:
                     )
         return False
 
+# NOTE: Runtime 34 ms Beats 88.33%
+# NOTE: Memory 16.72 MB Beats 22.58%
