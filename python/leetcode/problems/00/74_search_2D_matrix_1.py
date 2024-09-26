@@ -76,3 +76,5 @@ class Solution:
         print(f'NOT FOUND')
         return False
 
+# NOTE: Runtime 52 ms Beats 14.39%
+# NOTE: Memory 17.39 MB Beats 21.62%

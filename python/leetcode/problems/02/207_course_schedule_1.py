@@ -38,3 +38,5 @@ class Solution:
         print(f'Not sure how we got here')
         return False
 
+# NOTE: Runtime 570 ms Beats 5.02%
+# NOTE: Memory 20.65 MB Beats 5.96%

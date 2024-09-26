@@ -31,3 +31,5 @@ class Solution:
                 )
         return sorted(answers)
 
+# NOTE: Runtime 247 ms Beats 5.58%
+# NOTE: Memory 17.78 MB Beats 5.04%
