@@ -1,0 +1,111 @@
+openapi: 3.0.0
+info:
+  title: H Plus Blog API
+  version: 1.0.0
+tags:
+  - name: Article
+    description: Articles for the H Plus Sport blog
+paths:
+  /article:
+    post:
+      description: Add a blog post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogPost'
+      responses:
+        200:
+          description: The blog post has been created
+        500:
+          $ref: '#/components/responses/500ApiError'
+
+    get:
+      parameters:
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        200:
+          description: List of articles in blog
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    created_date:
+                      type: string
+                      format: date
+                    title:
+                      type: string
+                    content:
+                      type: string
+                    category:
+                      type: string
+                    tags:
+                      type: array
+                      items:
+                        type: string
+        500:
+          $ref: '#/components/responses/500ApiError'
+
+components:
+  parameters:
+    PageNumber:
+      in: query
+      name: pageNumber
+      description: Page number to return
+      required: false
+      schema:
+        type: integer
+        example: 1
+    PageSize:
+      in: query
+      name: pageSize
+      description: Number of results per page
+      required: false
+      schema:
+        type: integer
+        example: 10
+        maximum: 100
+
+  schemas:
+    BlogPost:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: integer
+        created_date:
+          type: string
+          format: date
+        title:
+          type: string
+        content:
+          type: string
+        category:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+
+  responses:
+    500ApiError:
+      description: this is an unexpected error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: string
+                example: 500
+              message:
+                type: string
+                example: Unexpected error while processing request
+

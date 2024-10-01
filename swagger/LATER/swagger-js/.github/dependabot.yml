@@ -1,0 +1,22 @@
+version: 2
+updates:
+
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+  commit-message:
+    prefix: "chore"
+    include: "scope"
+  open-pull-requests-limit: 10
+  ignore:
+    - dependency-name: "undici" # we need to stay on undici@5 for testing on Node.js@16
+      update-types:
+        - "version-update:semver-major"
+
+
+- package-ecosystem: "github-actions"
+  target-branch: "master"
+  directory: "/"
+  schedule:
+    interval: daily
