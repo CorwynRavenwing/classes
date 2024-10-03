@@ -6,43 +6,53 @@
 class Solution:
     def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
 
-        def ListNodeToList(l1: ListNode) -> List[int]:
-            answer = []
-            lp = l1
-            while lp:
-                answer.append(lp.val)
-                lp = lp.next
-            return answer
+        def show_ListNode(label: str, node: ListNode):
+            S = f'{label}: {node}'
+            S = S.replace('ListNode{val: ', 'ListNode{')
+            S = S.replace('next: ListNode{', '')
+            S = S.replace('next: None', 'EOL')
+            while '}}' in S:
+                S = S.replace('}}', '}')
+            print(S)
 
-        def ListToListNode(s1: List[int]) -> ListNode:
-            answer = None
-            while s1:
-                val = s1.pop()
-                answer = ListNode(val, answer)
+        show_ListNode('start  : l1', l1)
+        show_ListNode('start  : l2', l2)
+        s1 = l1
+        s2 = l2
+        while s1 and s2:
+            if s1.next or s2.next:
+                # if either list has a "next", they both must, with value 0
+                if not s1.next:
+                    s1.next = ListNode(0)
+                if not s2.next:
+                    s2.next = ListNode(0)
+                show_ListNode('stretch: l1', l1)
+                show_ListNode('stretch: l2', l2)
+            s1.val += s2.val
+            s2.val -= s2.val
+            show_ListNode('add    : l1', l1)
+            show_ListNode('add    : l2', l2)
+            s1 = s1.next
+            s2 = s2.next
 
-            return answer
+        s1 = l1
+        while s1:
+            if s1.val > 9:
+                show_ListNode('val > 9: l1', l1)
+                if not s1.next:
+                    s1.next = ListNode(0)
+                    show_ListNode('stretch: l1', l1)
+                carry = s1.val // 10
+                print(f'  {carry=}')
+                s1.next.val += carry
+                s1.val -= carry*10
+                show_ListNode('carry  : l1', l1)
+            s1 = s1.next
+            
+        return l1
 
-        s1 = ListNodeToList(l1)
-        s2 = ListNodeToList(l2)
-        while len(s1) < len(s2):
-            s1 += [0]
-        while len(s2) < len(s1):
-            s2 += [0]
-        print(f"#{s1=}\n#{s2=}")
-        sz = list(zip(s1, s2))
-        print(f"#{sz=}")
-        ss = list(map(sum, sz))
-        while max(ss) > 9:
-            print(f"#{ss=}")
-            if ss[-1] > 9:
-                ss += [0]
-                continue
-            index = ss.index(max(ss))
-            carry = ss[index] // 10
-            ss[index+1] += carry
-            ss[index] -= carry*10
-        print(f"#{ss=}")
-
-        answer = ListToListNode(ss)
-        return answer
-
+# NOTE: A version that is much more in keeping with what
+#       the problem-setter had in mind.
+# NOTE: Accepted on first Submit
+# NOTE: Runtime 820 ms Beats 5.44%
+# NOTE: Memory 16.64 MB Beats 32.97%

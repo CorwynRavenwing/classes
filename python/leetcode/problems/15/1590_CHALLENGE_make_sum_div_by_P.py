@@ -76,3 +76,5 @@ class Solution:
         print(f'Impossible')
         return -1
 
+# NOTE: Runtime 475 ms Beats 5.06%
+# NOTE: Memory 55.57 MB Beats 5.06%
