@@ -30,3 +30,7 @@ class Solution:
         
         return (tokens2 == [])
 
+# NOTE: Sentence Similarity 1 is subscription-only
+# NOTE: Sentence Similarity 2 is subscription-only
+# NOTE: Runtime 37 ms Beats 43.79%
+# NOTE: Memory 16.54 MB Beats 47.21%
