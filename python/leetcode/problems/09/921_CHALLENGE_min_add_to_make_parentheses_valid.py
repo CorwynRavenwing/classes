@@ -21,3 +21,5 @@ class Solution:
             print(f'{stack} unbalanced open parens, {errors=}')
         return errors
 
+# NOTE: Runtime 47 ms Beats 7.09%
+# NOTE: Memory 16.60 MB Beats 30.64%

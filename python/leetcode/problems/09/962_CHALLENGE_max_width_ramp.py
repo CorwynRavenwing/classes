@@ -32,3 +32,5 @@ class Solution:
         print(f'   {widths=}')
         return max(widths)
 
+# NOTE: Runtime 616 ms Beats 5.01%
+# NOTE: Memory 30.82 MB Beats 5.93%

@@ -58,3 +58,5 @@ class Solution:
         else:
             return True
 
+# NOTE: Runtime 278 ms Beats 5.55%
+# NOTE: Memory 20.18 MB Beats 25.36%
