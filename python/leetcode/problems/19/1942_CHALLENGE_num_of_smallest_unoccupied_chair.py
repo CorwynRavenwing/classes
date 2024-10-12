@@ -39,3 +39,5 @@ class Solution:
             Depart = (departure, chair)     # we don't care about friendID
             insort(outgoing, Depart)
 
+# NOTE: Runtime 669 ms Beats 21.92%
+# NOTE: Memory 23.01 MB Beats 35.14%
