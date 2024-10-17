@@ -29,3 +29,5 @@ class Solution:
         
         return int(''.join(digits))
 
+# NOTE: Runtime 40 ms Beats 17.59%
+# NOTE: Memory 16.50 MB Beats 42.30%

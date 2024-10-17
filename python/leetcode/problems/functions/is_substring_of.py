@@ -1,3 +1,9 @@
+
+# Okay, this actually doesn't find "is substring of",
+# which is trivially accomplished with "haystack.index(needle)"
+# or "needle in haystack"; instead, it finds "is sub*SEQUENCE* of"
+# which is much more useful.
+
 # version A:
         def isSubstringOf(needle: str, haystack: str) -> bool:
             if not needle:
@@ -38,11 +44,12 @@
                 return False
             if len(needle) > len(haystack):
                 return False
-            count_needle = Counter(needle)
-            count_haystack = Counter(haystack)
-            missing_letters = count_needle - count_haystack
-            if missing_letters:
-                return False
+            # The following section actually makes it much *slower*:
+            # count_needle = Counter(needle)
+            # count_haystack = Counter(haystack)
+            # missing_letters = count_needle - count_haystack
+            # if missing_letters:
+            #     return False
             
             def found_index_I_after_index_J(i: int, j: int) -> bool:
                 # print(f'fIaJ({i},{j})')

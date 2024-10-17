@@ -9,17 +9,17 @@ class Trie:
     def insert(self, word: str) -> None:
         # print(f'insert("{word}"):')
         trie = self.data
-        for ch in word:
+        for ch in reversed(word):
             # print(f'  "{ch}"')
             trie.setdefault(ch, {})
             trie = trie[ch]
         trie['#'] = True
         # print(f'debug: {self.data}')
     
-    def match_trie(self, prefix: str) -> dict:
-        # print(f'match_trie({prefix}):')
+    def match_trie(self, suffix: str) -> dict:
+        # print(f'match_trie({suffix}):')
         trie = self.data
-        for ch in prefix:
+        for ch in reversed(suffix):
             if ch in trie:
                 # print(f'  "{ch}"')
                 trie = trie[ch]
@@ -33,15 +33,13 @@ class Trie:
         trie = self.match_trie(word)
         return (trie is not None) and ('#' in trie)
 
-    def startsWith(self, prefix: str) -> bool:
-        print(f'startsWith("{prefix}"):')
-        trie = self.match_trie(prefix)
+    def endsWith(self, suffix: str) -> bool:
+        print(f'endsWith("{suffix}"):')
+        trie = self.match_trie(suffix)
         return (trie is not None)
 
 # Your Trie object will be instantiated and called as such:
 # obj = Trie()
 # obj.insert(word)
 # param_2 = obj.search(word)
-# param_3 = obj.startsWith(prefix)
-
-# NOTE: 105 ms; Beats 92.26% of users with Python3
+# param_3 = obj.endsWith(suffix)
