@@ -40,3 +40,5 @@ class Solution:
 
         return kthElement_index1(n, k)
 
+# NOTE: Runtime 2 ms Beats 100.00%
+# NOTE: Memory 16.78 MB Beats 10.99%
