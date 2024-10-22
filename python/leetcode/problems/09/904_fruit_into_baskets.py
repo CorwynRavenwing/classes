@@ -52,3 +52,5 @@ class Solution:
 
         return answer
 
+# NOTE: Runtime 223 ms Beats 98.09%
+# NOTE: Memory 27.35 MB Beats 5.63%

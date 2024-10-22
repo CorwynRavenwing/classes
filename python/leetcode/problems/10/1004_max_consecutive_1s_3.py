@@ -34,3 +34,5 @@ class Solution:
                 
         return bestSoFar
 
+# NOTE: Runtime 393 ms Beats 95.87%
+# NOTE: Memory 17.38 MB Beats 6.01%
