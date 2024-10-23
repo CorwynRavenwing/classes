@@ -46,3 +46,6 @@ class Solution:
         return root
 # NOTE: Runtime 621 ms Beats 44.61%
 # NOTE: Memory 83.84 MB Beats 14.50%
+# NOTE: ran again later for challenge, and got:
+# NOTE: Runtime 232 ms Beats 94.40%
+# NOTE: Memory 88.42 MB Beats 12.23%
