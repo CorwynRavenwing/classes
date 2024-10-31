@@ -26,3 +26,5 @@ class Solution:
         
         return max(data)
 
+# NOTE: Runtime 1155 ms Beats 68.86%
+# NOTE: Memory 17.16 MB Beats 11.06%
