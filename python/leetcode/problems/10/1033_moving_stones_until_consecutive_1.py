@@ -39,3 +39,5 @@ class Solution:
 
         return [fastest, slowest]
 
+# NOTE: Runtime 0 ms Beats 100.00%
+# NOTE: Memory 16.85 MB Beats 16.92%
