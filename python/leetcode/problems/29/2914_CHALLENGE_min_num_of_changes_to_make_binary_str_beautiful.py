@@ -17,5 +17,10 @@ class Solution:
             prior = None
             
         return answer
+
 # NOTE: Runtime 324 ms Beats 5.29%
 # NOTE: Memory 17.35 MB Beats 25.29%
+# NOTE: re-ran later for challenge and received:
+# NOTE: Runtime 302 ms Beats 5.40%
+# NOTE: Memory 17.17 MB Beats 67.89%
+# NOTE: ... slightly better memory; greatly better percentage!
