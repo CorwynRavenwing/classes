@@ -1,5 +1,7 @@
 class Solution:
-    def removeDuplicateLetters(self, s: str) -> str:
+    def smallestSubsequence(self, s: str) -> str:
+        
+        # we borrow some code from #316:
 
         def show(s: str) -> str:
             t = f'{s[:10]}...{s[-10:]}({len(s)})'
@@ -8,7 +10,7 @@ class Solution:
                 if len(t) < len(s)
                 else s
             )
-        
+
         def filter_away_EQ(group: List[str], target: str) -> List[str]:
             if target not in group:
                 return group
@@ -24,7 +26,7 @@ class Solution:
                 for G in group
                 if G <= target
             ]
-        
+
         answer = ""
         work = s
         while work:
@@ -52,5 +54,8 @@ class Solution:
 
         return answer
 
-# NOTE: Runtime 21 ms Beats 5.18%
-# NOTE: Memory 17.14 MB Beats 12.46%
+# NOTE: re-used entire prior version, unchanged
+# NOTE: Accepted on first Run
+# NOTE: Accepted on first Submit
+# NOTE: Runtime 7 ms Beats 6.21%
+# NOTE: Memory 16.96 MB Beats 20.06%
