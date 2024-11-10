@@ -260,3 +260,6 @@ class Solution:
 
 # NOTE: Runtime 2021 ms Beats 43.95%
 # NOTE: Memory 199.00 MB Beats 5.10%
+# NOTE: re-ran for challenge and received:
+# NOTE: Runtime 1551 ms Beats 67.44%
+# NOTE: Memory 203.66 MB Beats 6.01%
