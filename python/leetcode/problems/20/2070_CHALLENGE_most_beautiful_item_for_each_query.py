@@ -41,4 +41,6 @@ class Solution:
             doQuery(Q)
             for Q in queries
         ]
-# NOTE: accepted upon first submission :-)
+# NOTE: Accepted on first Submit
+# NOTE: Runtime 984 ms Beats 6.10%
+# NOTE: Memory 66.49 MB Beats 60.22%
