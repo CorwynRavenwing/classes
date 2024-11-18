@@ -93,3 +93,5 @@ class Solution:
 
         return min_deleted
 
+# NOTE: Runtime 9356 ms Beats 5.41%
+# NOTE: Memory 30.83 MB Beats 67.29%

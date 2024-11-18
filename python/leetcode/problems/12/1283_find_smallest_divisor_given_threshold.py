@@ -1,4 +1,7 @@
 class Solution:
+
+    # we borrow some code from #875:
+
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
 
         def eatingTime(speed: int) -> int:
@@ -16,7 +19,7 @@ class Solution:
                 time += ceil
             print(f'    total {time=}')
             return time
-        
+
         def eatingTimeOk(speed: int) -> bool:
             nonlocal h
             time = eatingTime(speed)
@@ -26,7 +29,7 @@ class Solution:
             # else:
             #     print(f'  > {h} (not ok)')
             return ok
-        
+
         left = 1
         right = max(piles)
         print(f'0: {left} --- {right}')
@@ -47,5 +50,12 @@ class Solution:
         print(f'Z: {left} --- {right}')
         return right
 
-# NOTE: Runtime 225 ms Beats 7.24%
-# NOTE: Memory 17.73 MB Beats 79.79%
+    def smallestDivisor(self, nums: List[int], threshold: int) -> int:
+        
+        return self.minEatingSpeed(nums, threshold)
+
+# NOTE: re-used entire previous version, with wrapper code
+# NOTE: Accepted on second Run (first was function-name typo)
+# NOTE: Accepted on first Submit
+# NOTE: Runtime 163 ms Beats 13.62%
+# NOTE: Memory 21.92 MB Beats 53.80%

@@ -1,10 +1,10 @@
-class Trie:
+class Solution:
 
-    data = None
-
+    # we set up a Trie here:
     def __init__(self):
         # the '#' key contains the 'is-terminal' flag
         self.data = {}
+        return
     
     def insert(self, word: str) -> None:
         # print(f'insert("{word}"):')
@@ -15,7 +15,7 @@ class Trie:
             trie = trie[ch]
         trie['#'] = True
         # print(f'debug: {self.data}')
-    
+
     def match_trie(self, prefix: str) -> dict:
         # print(f'match_trie({prefix}):')
         trie = self.data
@@ -37,7 +37,7 @@ class Trie:
         print(f'startsWith("{prefix}"):')
         trie = self.match_trie(prefix)
         return (trie is not None)
-
+    
     def topNfromTrie(self, prefix: str, trie: dict, N: int) -> List[str]:
         # print(f'topNfromTrie("{prefix},[trie],{N}"):')
         answer = []
@@ -71,8 +71,21 @@ class Trie:
         trie = self.match_trie(prefix)
         return self.topNfromTrie(prefix, trie, N)
 
-# Your Trie object will be instantiated and called as such:
-# obj = Trie()
-# obj.insert(word)
-# param_2 = obj.search(word)
-# param_3 = obj.startsWith(prefix)
+    def suggestedProducts(self, products: List[str], searchWord: str) -> List[List[str]]:
+        for product in products:
+            self.insert(product)
+        
+        word = ''
+        answer = []
+        for letter in searchWord:
+            word += letter
+            print(f'\nSearch {word=}:')
+            top3 = self.topNstartingWith(word, 3)
+            answer.append(top3)
+        
+        return answer
+
+# NOTE: Accepted on first Run
+# NOTE: Accepted on second Submit (first was search-not-found edgecase)
+# NOTE: Runtime 468 ms Beats 10.06%
+# NOTE: Memory 22.33 MB Beats 39.14%
