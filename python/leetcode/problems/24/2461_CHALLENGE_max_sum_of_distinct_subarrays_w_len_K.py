@@ -30,5 +30,9 @@ class Solution:
             if not subarray_counts[ToDelete]:
                 del subarray_counts[ToDelete]
         return answer
+
 # NOTE: Runtime 652 ms Beats 11.43%
 # NOTE: Memory 34.65 MB Beats 29.73%
+# NOTE: re-ran for challenge and recieved:
+# NOTE: Runtime 201 ms Beats 8.99%
+# NOTE: Memory 36.75 MB Beats 6.50%
