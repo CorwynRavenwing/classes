@@ -58,4 +58,10 @@
 
             return CF
 
+        def factor_pairs_of(N: int) -> List[Tuple[int,int]]:
+            answers = [
+                (D, N // D)
+                for D in factors_of(N)
+            ]
+            return sorted(answers)
 
