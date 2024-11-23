@@ -38,3 +38,11 @@
             grid[X][Y] = value
             return True
 
+        def allCellsWithValue(value: int) -> List[Tuple[int,int]]:
+            return [
+                (X, Y)
+                for X in range(M)
+                for Y in range(N)
+                if getValue((X, Y)) == value
+            ]
+

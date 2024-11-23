@@ -26,3 +26,6 @@ class Solution:
 # NOTE: O(N*M)
 # NOTE: Memory 19.98 MB Beats 17.11%
 # NOTE: O(N)
+# NOTE: re-ran later for challenge:
+# NOTE: Runtime 91 ms Beats 25.93%
+# NOTE: Memory 20.11 MB Beats 20.60%
