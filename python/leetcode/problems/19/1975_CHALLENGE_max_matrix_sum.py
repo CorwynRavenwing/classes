@@ -83,3 +83,7 @@ class Solution:
             # print(f'- {all_other_negatives}')
             return answer_with_one_remaining_negative
 
+# NOTE: Accepted on first Run
+# NOTE: Accepted on first Submit
+# NOTE: Runtime 177 ms Beats 5.33%
+# NOTE: Memory 27.08 MB Beats 6.16%

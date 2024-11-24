@@ -14,3 +14,9 @@
                 ])
                 return total / 2
 
+        def median_ish(arr: List[int]) -> float:
+            arr = sorted(arr)
+            L = len(arr)
+            index = (L - 1) // 2
+            return arr[index]
+
