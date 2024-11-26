@@ -11,6 +11,10 @@
                 NodeGroup[i] = j
             return j
 
+        def fixGroups():
+            for i in nodes:
+                _ = getGroup(i)
+
         def sameGroup(i: int, j: int) -> bool:
             return getGroup(i) == getGroup(j)
 
