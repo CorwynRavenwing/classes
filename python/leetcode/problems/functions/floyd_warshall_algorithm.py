@@ -8,6 +8,8 @@
         # DO NOT allow edge values from/to the same node
         # e.g. (3, 3, 12) b/c all such edges must have 0 cost
 
+        nodes = range(n)
+
         distanceMatrix = [
             [
                 (
@@ -16,10 +18,23 @@
                     else
                     float('inf')
                 )
-                for j in range(n)
+                for j in nodes
             ]
-            for i in range(n)
+            for i in nodes
         ]
+        # version for non-integer "nodes" (must still be hashable)
+        # distanceMatrix = {
+        #     i: {
+        #         j: (
+        #             0
+        #             if i == j
+        #             else
+        #             float('inf')
+        #         )
+        #         for j in nodes
+        #     }
+        #     for i in nodes
+        # }
 
         def showMatrix(label: str):
             print(f'===== {label} =====')
@@ -35,9 +50,9 @@
         # showMatrix('with weights')
 
         # O(N^3) algorithm
-        for k in range(n):
-            for i in range(n):
-                for j in range(n):
+        for k in nodes:
+            for i in nodes:
+                for j in nodes:
                     # if it's faster to go I -> K -> J than straight I -> J,
                     # then lower the I -> J cost to that faster number
                     D_ij = distanceMatrix[i][j]
