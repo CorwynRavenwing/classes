@@ -22,19 +22,6 @@
             ]
             for i in nodes
         ]
-        # version for non-integer "nodes" (must still be hashable)
-        # distanceMatrix = {
-        #     i: {
-        #         j: (
-        #             0
-        #             if i == j
-        #             else
-        #             float('inf')
-        #         )
-        #         for j in nodes
-        #     }
-        #     for i in nodes
-        # }
 
         def showMatrix(label: str):
             print(f'===== {label} =====')
