@@ -24,5 +24,10 @@ class Solution:
             return False
         print(f'Succeed')
         return True
+
 # NOTE: Runtime 472 ms Beats 5.20%
 # NOTE: Memory 17.76 MB Beats 12.40%
+# NOTE: re-ran for challenge, and recieved:
+# NOTE: Runtime 452 ms Beats 5.56%
+# NOTE: Memory 17.90 MB Beats 5.69%
+# NOTE: about the same, though memory percent is much worse

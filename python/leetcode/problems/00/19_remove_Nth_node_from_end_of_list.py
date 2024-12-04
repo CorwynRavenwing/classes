@@ -41,3 +41,5 @@ class Solution:
 
         return head
 
+# NOTE: Runtime 0 ms Beats 100.00%
+# NOTE: Memory 17.58 MB Beats 5.22%
