@@ -14,5 +14,8 @@ class Solution:
             # print(f'{N=} {current_sum=} {max_so_far=}')
         return max_so_far
 
-# NOTE: 484 ms; Beats 93.27%
-
+# NOTE: 484 ms Beats 93.27%
+# NOTE: re-ran later, got this result:
+# NOTE: Runtime 11 ms Beats 99.70%
+# NOTE: Memory 31.81 MB Beats 6.29%
+# NOTE: astoundingly better run time
