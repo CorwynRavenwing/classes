@@ -51,3 +51,5 @@ class Solution:
             print(f'{answers=}')
         return max(answers)
 
+# NOTE: Runtime 363 ms Beats 27.67%
+# NOTE: Memory 72.68 MB Beats 17.80%
