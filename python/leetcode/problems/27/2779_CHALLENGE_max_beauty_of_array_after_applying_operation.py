@@ -19,5 +19,10 @@ class Solution:
                 i += 1
                 continue
         return max(answers)
+
 # NOTE: Runtime 867 ms Beats 75.12%
 # NOTE: Memory 30.64 MB Beats 35.21%
+# NOTE: re-ran for challenge, and received:
+# NOTE: Runtime 220 ms Beats 60.25%
+# NOTE: Memory 28.74 MB Beats 26.05%
+# NOTE: much better time, slightly better percentage.
