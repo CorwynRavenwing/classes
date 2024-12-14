@@ -1,6 +1,8 @@
 
     # this version is for minimizing something.
 
+        nums.sort()
+
         def test(target: int) -> bool:
             # put the test here.
             # Here, True is good and happens for higher numbers
@@ -34,12 +36,12 @@
 
     # this version is for maximizing something.
 
+        nums.sort()
+
         def test(target: int) -> bool:
             # put the test here.
             # Here, True is good and happens for lower numbers
             return True
-
-        nums.sort()
 
         L = 0
         left = test(L)

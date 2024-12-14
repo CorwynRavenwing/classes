@@ -39,3 +39,6 @@ class Solution:
         return answer
 # NOTE: Runtime 794 ms Beats 30.77%
 # NOTE: Memory 26.96 MB Beats 51.92%
+# NOTE: re-ran for challenge, and recieved:
+# NOTE: Runtime 831 ms Beats 21.69%
+# NOTE: Memory 27.56 MB Beats 28.65%
