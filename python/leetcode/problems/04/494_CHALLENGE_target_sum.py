@@ -24,3 +24,5 @@ class Solution:
         available.setdefault(target, 0)
         return available[target]
 
+# NOTE: Runtime 172 ms Beats 54.83%
+# NOTE: Memory 18.30 MB Beats 59.59%
