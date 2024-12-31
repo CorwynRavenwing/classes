@@ -26,7 +26,13 @@ class Solution:
 
 # NOTE: Runtime 85 ms Beats 5.09%
 # NOTE: Memory 41.78 MB Beats 5.09%
+
 # NOTE: re-ran after online problems, and received:
 # NOTE: Runtime 85 ms Beats 5.30%
 # NOTE: Memory 41.78 MB Beats 5.33%
 # NOTE: ... exact same numbers; slightly better percentages (?)
+
+# NOTE: re-ran for challenge, and received:
+# NOTE: Runtime 80 ms Beats 5.67%
+# NOTE: Memory 41.36 MB Beats 5.10%
+# NOTE: slightly better
