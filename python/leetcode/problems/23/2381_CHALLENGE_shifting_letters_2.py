@@ -40,5 +40,11 @@ class Solution:
         # print(f'{newString=}')
 
         return newString
+
 # NOTE: Runtime 1003 ms Beats 83.23%
 # NOTE: Memory 41.13 MB Beats 94.31%
+
+# NOTE: re-ran for challenge, and received:
+# NOTE: Runtime 71 ms Beats 34.35%
+# NOTE: Memory 42.00 MB Beats 7.90%
+# NOTE: 93% speedup, 3x better percentage!
