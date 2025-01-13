@@ -88,3 +88,5 @@ class Solution:
             # print(f'Nope, impossible')
             return False
 
+# NOTE: Runtime 511 ms Beats 5.19%
+# NOTE: Memory 24.07 MB Beats 6.05%
