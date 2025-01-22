@@ -43,5 +43,12 @@ class Solution:
         print(f'{answers=}')
 
         return min(answers)
+
 # NOTE: Runtime 832 ms Beats 54.93%
 # NOTE: Memory 32.84 MB Beats 40.04%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 111 ms Beats 54.75%
+# NOTE: Memory 32.32 MB Beats 5.25%
+# NOTE: greatly better speed: basically identical percantage
+# NOTE: basically identical memory usage: much worse percentage
