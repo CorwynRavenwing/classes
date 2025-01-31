@@ -60,86 +60,63 @@ class Solution:
         if not land:
             return 1
         
-        nodes = land
+        for cell in land:
+            setValue(cell, -1)
+        
+        shoreline = set()
+        ISLAND_NUMBER = 0
+        for cell in land:
+            value = getValue(cell)
+            if value != -1:
+                # seen
+                continue
+            ISLAND_NUMBER += 1
+            # print(f'{ISLAND_NUMBER=}')
+            queue = {cell}
+            while queue:
+                cell = queue.pop()
+                value = getValue(cell)
+                if value == 0:
+                    # print(f'  {cell}: water')
+                    shoreline.add(cell)
+                    continue
+                if value != -1:
+                    # print(f'  {cell}: seen')
+                    continue
+                # print(f'  {cell}: land')
+                setValue(cell, ISLAND_NUMBER)
+                for neighbor in neighborsOf(cell):
+                    queue.add(neighbor)
 
-        # Union Find
-        NodeGroup = {
-            i: i
-            for i in nodes
-        }
-        def getGroup(i: int) -> int:
-            j = NodeGroup[i]
-            if i != j:
-                j = getGroup(j)
-                NodeGroup[i] = j
-            return j
+        print(f'{grid=}')
+        print(f'{shoreline=}')
 
-        def fixGroups():
-            for i in nodes:
-                _ = getGroup(i)
-
-        def sameGroup(i: int, j: int) -> bool:
-            return getGroup(i) == getGroup(j)
-
-        def mergeGroups(i: int, j: int):
-            i = getGroup(i)
-            j = getGroup(j)
-            if i != j:
-                NodeGroup[i] = j
-            return
-
-        def nodeGroupMembers() -> Dict[int,List[int]]:
-            NodeGroupMembers = {}
-            for i, nodeName in NodeGroup.items():
-                NodeGroupMembers.setdefault(nodeName, set())
-                NodeGroupMembers[nodeName].add(i)
-            return NodeGroupMembers
-
-        water_cells_adjacent = set()
-        for cell in nodes:
-            for neighbor in neighborsOf(cell):
-                if neighbor in nodes:
-                    # part of this island
-                    mergeGroups(cell, neighbor)
-                else:
-                    # water cell next to this 
-                    water_cells_adjacent.add(
-                        (cell, neighbor)
-                    )
-        fixGroups()
-        NGM = nodeGroupMembers()
-        # print(f'{NGM=}')
-
-        if len(NGM) == 1:
+        if ISLAND_NUMBER == 1:
             return len(land) + 1
 
-        return -99999
-
+        island_groups = set()
+        for cell in shoreline:
+            island_list = set()
+            for neighbor in neighborsOf(cell):
+                value = getValue(neighbor)
+                if value == 0:
+                    # water
+                    continue
+                if value == -1:
+                    raise Exception(f'Did not clear -1 from {cell=}')
+                island_list.add(value)
+            island_groups.add(
+                tuple(island_list)
+            )
+        print(f'{island_groups=}')
+        
         island_size = {
-            island_id: len(island_cells)
-            for island_id, island_cells in NGM.items()
+            island_id: len(
+                allCellsWithValue(island_id)
+            )
+            for island_id in range(1, ISLAND_NUMBER + 1)
         }
         print(f'{island_size=}')
-
-        return -99999
-
-        # print(f'{water_cells_adjacent=}')
-        islands_adjacent = {}
-        for land_cell, water_cell in water_cells_adjacent:
-            island_id = getGroup(land_cell)
-            islands_adjacent.setdefault(water_cell, set())
-            islands_adjacent[water_cell].add(island_id)
-        # print(f'{islands_adjacent=}')
-
-        return -99999
-
-        island_groups = {
-            tuple(island_id_list)
-            for water_cell, island_id_list in islands_adjacent.items()
-        }
-        print(f'{island_groups=}')
-
-        return -99999
 
         choices = [
             # [1] is for the linking cell that's turned into land
@@ -147,7 +124,7 @@ class Solution:
                 island_size[island_id]
                 for island_id in island_id_list
             ]
-            for water_cell, island_id_list in islands_adjacent.items()
+            for island_id_list in island_groups
         ]
         print(f'{choices=}')
 
@@ -159,3 +136,4 @@ class Solution:
 # NOTE: Acceptance Rate 53.6% (HARD)
 
 # NOTE: Time Limit Exceeded
+
