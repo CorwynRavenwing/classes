@@ -39,4 +39,8 @@ class Solution:
             checkPrereq(*Q)
             for (Q) in queries
         ]
-# NOTE: 588 ms; Beats 53.09%
+# NOTE: Runtime 588 ms; Beats 53.09%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 47 ms Beats 58.85%
+# NOTE: Memory 20.93 MB Beats 7.11%

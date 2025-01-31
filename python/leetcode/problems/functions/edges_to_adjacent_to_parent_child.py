@@ -14,8 +14,13 @@
             childrenOf.setdefault(i, set())
         parentOf[root] = None
         queue = {root}
+        seen = set()
         while queue:
             node = queue.pop()
+            if node in seen:
+                continue
+            else:
+                seen.add(node)
             for neighbor in adjacentTo[node]:
                 if parentOf[node] == neighbor:
                     continue

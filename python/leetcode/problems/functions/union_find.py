@@ -25,4 +25,11 @@
                 NodeGroup[i] = j
             return
 
+        def nodeGroupMembers() -> Dict[int,List[int]]:
+            NodeGroupMembers = {}
+            for i, nodeName in NodeGroup.items():
+                NodeGroupMembers.setdefault(nodeName, set())
+                NodeGroupMembers[nodeName].add(i)
+            return NodeGroupMembers
+
 

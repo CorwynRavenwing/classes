@@ -33,3 +33,7 @@ class Solution:
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 53 ms Beats 69.39%
 # NOTE: Memory 17.14 MB Beats 36.72%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 2 ms Beats 64.41%
+# NOTE: Memory 18.20 MB Beats 46.28%
