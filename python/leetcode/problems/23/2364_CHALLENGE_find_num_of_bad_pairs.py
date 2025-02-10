@@ -36,3 +36,6 @@ class Solution:
 
         return BadPairs
 
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 345 ms Beats 5.47%
+# NOTE: Memory 51.64 MB Beats 8.10%

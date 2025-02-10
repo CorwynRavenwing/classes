@@ -32,3 +32,8 @@ class NumberContainers:
 
 # NOTE: Runtime 5674 ms Beats 5.48%
 # NOTE: Memory 74.72 MB Beats 54.27%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 5464 ms Beats 5.39%
+# NOTE: Memory 76.48 MB Beats 81.37%
+# NOTE: same memory; much better percentage

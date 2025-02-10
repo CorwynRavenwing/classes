@@ -36,3 +36,9 @@ class Solution:
 
 # NOTE: Runtime 1217 ms Beats 22.37%
 # NOTE: Memory 82.27 MB Beats 7.02%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 124 ms Beats 6.09%
+# NOTE: Memory 83.91 MB Beats 11.94%
+# NOTE: 10x faster, much worse percentage
+# NOTE: very similar memory, better percentage
