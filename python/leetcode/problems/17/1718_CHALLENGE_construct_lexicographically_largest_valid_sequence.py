@@ -52,3 +52,6 @@ class Solution:
                 )
         return sequence
 
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 91 ms Beats 5.47%
+# NOTE: Memory 18.14 MB Beats 21.88%

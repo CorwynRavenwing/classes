@@ -31,3 +31,8 @@ class ProductOfNumbers:
 # NOTE: Accepted on second Submit (first was Time Limit Exceeded)
 # NOTE: Runtime 3559 ms Beats 10.22%
 # NOTE: Memory 31.49 MB Beats 49.68%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 3541 ms Beats 5.18%
+# NOTE: Memory 32.32 MB Beats 11.26%
+# NOTE: same time and memory; much worse percentages
