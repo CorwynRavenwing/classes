@@ -40,3 +40,8 @@ class FindElements:
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 28 ms Beats 16.92%
 # NOTE: Memory 22.40 MB Beats 5.54%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 23 ms Beats 16.84%
+# NOTE: Memory 22.88 MB Beats 10.70%
+# NOTE: same memory, 2x better percentage
