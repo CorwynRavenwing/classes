@@ -82,5 +82,10 @@ class Solution:
             answer = max(answer, pathProfit)
 
         return answer
+
 # NOTE: Runtime 2533 ms Beats 13.23%
 # NOTE: Memory 109.69 MB Beats 5.79%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 1479 ms Beats 11.52%
+# NOTE: Memory 107.80 MB Beats 5.08%

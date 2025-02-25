@@ -25,3 +25,6 @@ class Solution:
 
         return answer % mod
 
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 158 ms Beats 11.83%
+# NOTE: Memory 26.99 MB Beats 5.11%
