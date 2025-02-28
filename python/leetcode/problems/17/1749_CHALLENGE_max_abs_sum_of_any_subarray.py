@@ -23,8 +23,12 @@ class Solution:
             self.maxSubArray(negativeNums),
         ])
 
-# NOTE: re-used entire previous version, adding only clue code
+# NOTE: re-used entire previous version, adding only glue code
 # NOTE: Accepted on second Run (function-name typo)
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 23 ms Beats 89.85%
 # NOTE: Memory 28.53 MB Beats 38.93%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 23 ms Beats 90.24%
+# NOTE: Memory 28.86 MB Beats 21.46%

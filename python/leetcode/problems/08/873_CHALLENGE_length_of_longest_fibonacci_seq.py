@@ -54,3 +54,6 @@ class Solution:
         # print(f'{maxlen=}')
         return maxlen if maxlen > 2 else 0
 
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 3993 ms Beats 5.96%
+# NOTE: Memory 80.13 MB Beats 5.96%
