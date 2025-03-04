@@ -20,3 +20,8 @@ class Solution:
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 3 ms Beats 14.29%
 # NOTE: Memory 17.37 MB Beats 10.20%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 0 ms Beats 100.00%
+# NOTE: Memory 17.76 MB Beats 59.96%
+# NOTE: same code, infinitely faster
