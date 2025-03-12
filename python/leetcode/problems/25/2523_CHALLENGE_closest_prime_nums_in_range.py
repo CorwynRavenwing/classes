@@ -63,5 +63,10 @@ class Solution:
             prior_prime = prime
         
         return answer
+
 # NOTE: Runtime 370 ms Beats 74.18%
 # NOTE: Memory 18.77 MB Beats 70.59%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 319 ms Beats 62.81%
+# NOTE: Memory 20.04 MB Beats 68.44%
