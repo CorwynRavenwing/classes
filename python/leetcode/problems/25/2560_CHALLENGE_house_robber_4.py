@@ -44,5 +44,10 @@ class Solution:
         print(f'[{L},{R}] ({left},{right})')
         # R is now the lowest possible True value
         return R
+
 # NOTE: Runtime 742 ms Beats 51.06%
 # NOTE: Memory 27.92 MB Beats 20.68%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 349 ms Beats 48.95%
+# NOTE: Memory 28.64 MB Beats 50.00%
