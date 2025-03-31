@@ -62,3 +62,6 @@ class Solution:
 
         return pathsToHere % mod
 
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 683 ms Beats 5.62%
+# NOTE: Memory 29.18 MB Beats 5.31%

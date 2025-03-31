@@ -46,3 +46,5 @@ class Solution:
             intervals = non_overlap_group + [interval1]
         return answer
 
+# NOTE: Runtime 3774 ms Beats 5.51%
+# NOTE: Memory 21.22 MB Beats 36.95%

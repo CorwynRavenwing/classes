@@ -41,11 +41,16 @@ class Solution:
             partitions.remove(None)
         print(f'merged {partitions=}')
 
-        return (
+        return [
             B - A + 1       # e.g. partition [3, 3] is of length 1, not 0
             for (A, B) in partitions
-        )
+        ]
 
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 40 ms Beats 64.36%
 # NOTE: Memory 16.59 MB Beats 38.74%
+
+# NOTE: re-ran for challenge
+# NOTE: Original version failed b/c Generator != List
+# NOTE: Runtime 6 ms Beats 47.27%
+# NOTE: Memory 18.05 MB Beats 14.39%
