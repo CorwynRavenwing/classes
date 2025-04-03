@@ -19,5 +19,11 @@ class Solution:
         ]
         # print(f'{values=}')
         return max(values)
+
 # NOTE: Runtime 736 ms Beats 70.62%
 # NOTE: Memory 30.30 MB Beats 31.75%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 173 ms Beats 67.58%
+# NOTE: Memory 32.55 MB Beats 5.12%
+# NOTE: same memory, much worse percentage

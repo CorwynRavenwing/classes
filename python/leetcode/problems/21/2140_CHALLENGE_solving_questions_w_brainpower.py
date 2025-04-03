@@ -26,3 +26,7 @@ class Solution:
 # NOTE: Accepted on second Submit (Time Exceeded: add cache)
 # NOTE: Runtime 307 ms Beats 5.01%
 # NOTE: Memory 141.56 MB Beats 5.44%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 293 ms Beats 5.29%
+# NOTE: Memory 141.83 MB Beats 5.72%
