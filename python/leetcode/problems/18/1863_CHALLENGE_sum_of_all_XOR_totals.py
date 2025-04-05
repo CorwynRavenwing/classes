@@ -21,3 +21,6 @@ class Solution:
             retval += A * count
         return retval
 
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 3 ms Beats 83.33%
+# NOTE: Memory 17.83 MB Beats 41.01%
