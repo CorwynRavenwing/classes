@@ -31,3 +31,6 @@ class Solution:
 
         return (0 in states)
 
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 1347 ms Beats 31.46%
+# NOTE: Memory 19.76 MB Beats 54.60%

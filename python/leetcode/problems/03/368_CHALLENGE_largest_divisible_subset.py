@@ -31,3 +31,6 @@ class Solution:
         print(f'sorted {LDS=}')
         return LDS[0]  # again, first == longest
 
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 202 ms Beats 30.32%
+# NOTE: Memory 18.32 MB Beats 22.26%
