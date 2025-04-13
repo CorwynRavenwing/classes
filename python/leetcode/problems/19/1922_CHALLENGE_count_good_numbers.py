@@ -40,3 +40,6 @@ class Solution:
 
         return good_numbers % mod
 
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 7 ms Beats 1.44%
+# NOTE: Memory 17.74 MB Beats 71.93%
