@@ -23,3 +23,6 @@ class Solution:
             print(f'CAS[{i}] = "{CAS[i]}"')
         return CAS[n]
 
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 11 ms Beats 24.00%
+# NOTE: Memory 18.22 MB Beats 9.42%
