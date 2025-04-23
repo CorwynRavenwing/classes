@@ -33,49 +33,29 @@ class Solution:
         # indices[index] === num1[index]'s position in num2
         indices = [pos2[num] for num in nums1]
         print(f'{indices=}')
-
+        
         left_counts = []
-        # TODO: use a normal List and sort it ourselves
-        left_sorted = SortedList()
+        left_sorted = []
         for idx in indices:
-            left_counts.append(left_sorted.bisect_left(idx))
-            left_sorted.add(idx)
+            index = bisect_left(left_sorted, idx)
+            count = index
+            print(f'Left  {idx}: {index} {count}')
+            left_counts.append(count)
+            left_sorted.insert(index, idx)
 
         right_counts = []
-        right_sorted = SortedList()
+        right_sorted = []
         for idx in reversed(indices):
-            right_counts.append(len(right_sorted) - right_sorted.bisect_right(idx))
-            right_sorted.add(idx)
-        right_counts.reverse() 
-        
-        return sum(left * right for left, right in zip(left_counts, right_counts))
-
-
-
-        #####
-
-
-
-        left = [0] * N
-        right = [0] * N
-
-        for i in range(N):
-            for j in range(N):
-                # print(f'[{i}:{j}]:')
-                if i == j:
-                    continue
-                if pos1[i] < pos1[j] and pos2[i] < pos2[j]:
-                    # print(f'  YES {pos1[i]} < {pos1[j]} and {pos2[i]} < {pos2[j]}')
-                    right[i] += 1
-                    left[j] += 1
-                # else:
-                #     # print(f'  NO! {pos1[i]} > {pos1[j]}, or {pos2[i]} > {pos2[j]}')
-        # print(f'{left =}')
-        # print(f'{right=}')
+            index = bisect_left(right_sorted, idx)
+            count = len(right_sorted) - index
+            print(f'Right {idx} : {index} {count}')
+            right_counts.append(count)
+            right_sorted.insert(index, idx)
+        right_counts.reverse()
 
         answers = [
-            A * B
-            for (A, B) in zip(left, right)
+            L * R
+            for (L, R) in zip(left_counts, right_counts)
         ]
         # print(f'{answers=}')
 
@@ -83,10 +63,5 @@ class Solution:
 
 # NOTE: Acceptance Rate 44.1% (HARD)
 
-# NOTE: Needed a hint that actually hinted at the solution :-(
-# NOTE: Accepted on first Submit
-# NOTE: Runtime 771 ms Beats 73.83%
-# NOTE: Memory 47.94 MB Beats 32.71%
-
-# NOTE: TODO clean this up a bit
-
+# NOTE: Runtime 3850 ms Beats 5.00%
+# NOTE: Memory 51.98 MB Beats 5.96%

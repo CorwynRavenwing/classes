@@ -15,5 +15,12 @@ class Solution:
             return 0
         else:
             return answer
+
 # NOTE: Runtime 844 ms Beats 75.15%
 # NOTE: Memory 31.79 MB Beats 31.52%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 81 ms Beats 66.67%
+# NOTE: Memory 33.58 MB Beats 6.06%
+# NOTE: 10x faster, slightly better percentage
+# NOTE: same memory, much worse percentage
