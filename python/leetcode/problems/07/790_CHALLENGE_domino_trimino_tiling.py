@@ -75,6 +75,12 @@ class Solution:
 
         return DP[n] % mod
 
+# NOTE: Acceptance Rate 48.4% (medium)
+
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 44 ms Beats 23.28%
 # NOTE: Memory 16.84 MB Beats 25.40%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 9 ms Beats 13.61%
+# NOTE: Memory 18.15 MB Beats 30.56%

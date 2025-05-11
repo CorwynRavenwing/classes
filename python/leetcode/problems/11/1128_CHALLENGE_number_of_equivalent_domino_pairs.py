@@ -1,4 +1,4 @@
-from collections import Counter
+# from collections import Counter
 
 class Solution:
     def numEquivDominoPairs(self, dominoes: List[List[int]]) -> int:
@@ -24,3 +24,6 @@ class Solution:
 
         return sum(pairs)
 
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 23 ms Beats 11.70%
+# NOTE: Memory 27.12 MB Beats 7.56%

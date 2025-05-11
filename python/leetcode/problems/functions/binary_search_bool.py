@@ -3,25 +3,25 @@
 
         nums.sort()
 
-        def test(target: int) -> bool:
+        def isPossible(target: int) -> bool:
             # put the test here.
             # Here, True is good and happens for higher numbers
             return True
         
         L = min(nums)
-        left = test(L)
+        left = isPossible(L)
         if left:
             print(f'Strange, {L=} is true')
             return L
         R = max(nums)
-        right = test(R)
+        right = isPossible(R)
         if not right:
             print(f'Strange, {R=} is false')
             return -1
         print(f'[{L},{R}] ({left},{right})')
         while L + 1 < R:
             M = (L + R) // 2
-            mid = test(M)
+            mid = isPossible(M)
             print(f'[{L},{M},{R}] ({left},{mid},{right})')
             if mid:
                 print(f'  True: replace Right')
@@ -38,25 +38,25 @@
 
         nums.sort()
 
-        def test(target: int) -> bool:
+        def isPossible(target: int) -> bool:
             # put the test here.
             # Here, True is good and happens for lower numbers
             return True
 
         L = 0
-        left = test(L)
+        left = isPossible(L)
         if not left:
             print(f'Strange, {L=} is false')
             return L
         R = len(nums) + 1
-        right = test(R)
+        right = isPossible(R)
         if right:
             print(f'Strange, {R=} is true')
             return -1
         print(f'[{L},{R}] ({left},{right})')
         while L + 1 < R:
             M = (L + R) // 2
-            mid = test(M)
+            mid = isPossible(M)
             print(f'[{L},{M},{R}] ({left},{mid},{right})')
             if mid:
                 print(f'  True: replace Left')
