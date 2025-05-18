@@ -40,7 +40,15 @@ class Solution:
             answer.append(words[K])
             K = longest_ss_prior_index[K]
 
-        return reversed(answer)
+        return tuple(reversed(answer))
+
 # NOTE: Accepted first Submit
 # NOTE: Runtime 95 ms Beats 6.33%
 # NOTE: Memory 16.64 MB Beats 11.07%
+
+# NOTE: re-ran for challenge:
+# NOTE: Accepted on second Run (return type issue)
+# NOTE: Accepted on first Submit
+# NOTE: Runtime 24 ms Beats 5.54%
+# NOTE: Memory 18.05 MB Beats 5.36%
+# NOTE: twice as fast, same percent; same memory, much worse percent

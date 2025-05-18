@@ -51,6 +51,13 @@ class Solution:
             K = longest_ss_prior_index[K]
 
         return reversed(answer)
+
 # NOTE: Accepted first Submit
 # NOTE: Runtime 1741 ms Beats 24.19%
 # NOTE: Memory 17.07 MB Beats 59.68%
+
+# NOTE: re-ran for challenge:
+# NOTE: Accepted on second Run (output type mismatch)
+# NOTE: Accepted on first Submit
+# NOTE: Runtime 1735 ms Beats 19.32%
+# NOTE: Memory 17.96 MB Beats 93.18%

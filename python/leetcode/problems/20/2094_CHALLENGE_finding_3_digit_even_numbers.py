@@ -28,3 +28,6 @@ class Solution:
         # print(f"{possible=}")
         return possible
 
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 2153 ms Beats 33.42%
+# NOTE: Memory 62.05 MB Beats 5.55%

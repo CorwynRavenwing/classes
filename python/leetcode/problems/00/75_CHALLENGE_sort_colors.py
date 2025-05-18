@@ -27,3 +27,6 @@ class Solution:
         Do not return anything, modify nums in-place instead.
         """
 
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 7 ms Beats 3.70%
+# NOTE: Memory 18.07 MB Beats 11.82%
