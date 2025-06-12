@@ -28,11 +28,11 @@ class Solution:
         return LO_beginning_with(0, n)
 
 # NOTE: Accepted on first Submit
-# NOTE: Runtime
-228ms
-Beats5.02%
+# NOTE: Runtime 228 ms Beats 5.02%
 # NOTE: O(N)
-# NOTE: Memory
-22.73MB
-Beats46.00%
+# NOTE: Memory 22.73 MB Beats 46.00%
 # NOTE: O(N)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 165 ms Beats 7.20%
+# NOTE: Memory 21.78 MB Beats 50.36%

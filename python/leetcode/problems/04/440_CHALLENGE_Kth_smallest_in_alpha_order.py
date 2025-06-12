@@ -60,3 +60,11 @@ class Solution:
 # NOTE: About my fourth attempted algorithm.
 # NOTE: Runtime 44 ms Beats 6.43%
 # NOTE: Memory 16.60 MB Beats 10.29%
+
+# NOTE: Acceptance Rate 42.3% (HARD)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 7 ms Beats 0.50%
+# NOTE: Memory 17.72 MB Beats 64.68%
+# NOTE: much better time, much worse percentage
+# NOTE: same size, much better percentage

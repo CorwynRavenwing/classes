@@ -66,3 +66,7 @@ class Solution:
 #   zip(s, minCharFromRight), consuming each character one-by-one,
 #   and putting things onto and off of "T" when necessary before
 #   repeating the loop.  At the end, eat the rest of T.
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 6505 ms Beats 5.34%
+# NOTE: Memory 21.22 MB Beats 33.59%
