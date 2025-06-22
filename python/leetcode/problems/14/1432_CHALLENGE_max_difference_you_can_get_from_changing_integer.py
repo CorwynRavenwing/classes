@@ -15,4 +15,10 @@ class Solution:
                     possible.add(newStr)
         print(f'{possible=}')
         return int(max(possible)) - int(min(possible))
+
 # NOTE: 35 ms; Beats 66.43%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 7 ms Beats 9.69%
+# NOTE: Memory 18.05 MB Beats 15.31%
+# NOTE: much faster; much worse percentage

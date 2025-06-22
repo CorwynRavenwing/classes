@@ -1,4 +1,7 @@
 
+        # NOTE: factorial() is also a built-in function
+        # which we could use instead.
+
         cache = {}
         def factorial(n: int) -> int:
             if n not in cache:
