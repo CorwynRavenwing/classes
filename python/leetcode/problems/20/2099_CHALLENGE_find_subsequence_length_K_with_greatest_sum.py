@@ -26,3 +26,6 @@ class Solution:
         print(f'{answer=}')
         return answer
 
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 7 ms Beats 27.51%
+# NOTE: Memory 18.10 MB Beats 32.14%
