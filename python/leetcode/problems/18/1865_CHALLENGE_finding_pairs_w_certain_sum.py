@@ -37,3 +37,7 @@ class FindSumPairs:
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 377 ms Beats 28.13%
 # NOTE: Memory 48.58 MB Beats 26.08%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 375 ms Beats 24.82%
+# NOTE: Memory 49.05 MB Beats 21.90%
