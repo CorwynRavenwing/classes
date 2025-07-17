@@ -28,3 +28,6 @@ class Solution:
             return False
         return True
 
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 0 ms Beats 100.00%
+# NOTE: Memory 17.66 MB Beats 86.06%

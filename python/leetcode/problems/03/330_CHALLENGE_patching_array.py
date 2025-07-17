@@ -26,3 +26,7 @@ class Solution:
 
         return answer
 
+# NOTE: Acceptance Rate 53.6% (HARD)
+
+# NOTE: Runtime 12 ms Beats 2.20%
+# NOTE: Memory 18.02 MB Beats 22.20%
