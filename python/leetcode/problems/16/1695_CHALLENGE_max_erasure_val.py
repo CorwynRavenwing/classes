@@ -38,3 +38,8 @@ class Solution:
 # NOTE: Accepted on third Submit (Output Exceeded; Time Limit Exceeded)
 # NOTE: Runtime 598 ms Beats 10.71%
 # NOTE: Memory 28.64 MB Beats 54.18%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 599 ms Beats 11.09%
+# NOTE: Memory 29.24 MB Beats 12.10%
+# NOTE: same runtime.  same memory; much worse percentage.

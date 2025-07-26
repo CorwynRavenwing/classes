@@ -24,3 +24,7 @@ class Solution:
 # NOTE: Accepted on third Submit (first two were Output Exceeded)
 # NOTE: Runtime 531 ms Beats 13.51%
 # NOTE: Memory 35.30 MB Beats 5.17%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 604 ms Beats 10.74%
+# NOTE: Memory 35.42 MB Beats 5.57%

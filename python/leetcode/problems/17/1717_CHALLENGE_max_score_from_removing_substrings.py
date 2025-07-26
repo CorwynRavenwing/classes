@@ -57,4 +57,10 @@ class Solution:
             getScore(SS)
             for SS in substrings
         ])
+
 # NOTE: recursion was not necessary; cache is redundant but harmless
+
+# NOTE: re-ran for challenge:
+# NOTE: ... and it didn't work :-(
+# NOTE: 
+# NOTE: 
