@@ -65,7 +65,14 @@ class Solution:
         )
         # print(f'{maxDistance=}')
         return maxDistance
+
+# NOTE: Acceptance Rate 49.3% (medium)
+
 # NOTE: Runtime 1148 ms Beats 55.17%
 # NOTE: O(N log M)
 # NOTE: Memory 238.51 MB Beats 5.17%
 # NOTE: O(N)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 899 ms Beats 44.09%
+# NOTE: Memory 242.99 MB Beats 5.51%
