@@ -46,9 +46,10 @@ class Solution:
 
 # NOTE: Runtime 40 ms Beats 36.98%
 # NOTE: Memory 16.62 MB Beats 5.73%
-# NOTE: re-ran for challenge and received:
+
+# NOTE: re-ran for challenge:
 # NOTE: Runtime 2 ms Beats 44.68%
 # NOTE: O(N)
 # NOTE: Memory 16.55 MB Beats 69.70%
 # NOTE: O(1)
-# NOTE: ludicrously faster: only beats a slightly better percentage
+# NOTE: ludicrously faster, but only slightly better percentage

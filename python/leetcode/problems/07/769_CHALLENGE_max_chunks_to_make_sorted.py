@@ -33,7 +33,7 @@ class Solution:
         return len(chunks)
 
 # NOTE: Runtime 30 ms; Beats 84.80%
-# NOTE: re-ran for challenge and received:
+# NOTE: re-ran for challenge:
 # NOTE: Runtime 3 ms Beats 100.00%
 # NOTE: Memory 17.83 MB Beats 14.45%
 # NOTE: hugely better!

@@ -50,6 +50,7 @@ class Solution:
 # NOTE: Acceptance Rate 40.6% (HARD)
 # NOTE: Runtime 740 ms Beats 33.33%
 # NOTE: Memory 82.98 MB Beats 5.21%
-# NOTE: re-ran for challenge, and received:
+
+# NOTE: re-ran for challenge:
 # NOTE: Runtime 700 ms Beats 38.54%
 # NOTE: Memory 82.89 MB Beats 5.21%

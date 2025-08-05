@@ -35,6 +35,7 @@ class Solution:
         return moves
 # NOTE: Runtime 1078 ms Beats 47.98%
 # NOTE: Memory 26.66 MB Beats 98.48%
-# NOTE: ran again for challenge and received:
+
+# NOTE: ran again for challenge:
 # NOTE: Runtime 230 ms Beats 42.42%
 # NOTE: Memory 26.64 MB Beats 96.82%

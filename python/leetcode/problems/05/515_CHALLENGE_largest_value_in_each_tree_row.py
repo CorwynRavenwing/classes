@@ -57,7 +57,7 @@ class Solution:
 # NOTE: Runtime 55 ms Beats 5.09%
 # NOTE: Memory 18.54 MB Beats 8.24%
 
-# NOTE: re-ran for challenge, and received:
+# NOTE: re-ran for challenge:
 # NOTE: [an error: return value can't be a map() -- fixed]
 # NOTE: Runtime 5 ms Beats 9.78%
 # NOTE: Memory 19.88 MB Beats 6.38%

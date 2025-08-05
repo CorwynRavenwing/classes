@@ -23,7 +23,7 @@ class Solution:
 
 # NOTE: THE CHALLENGE DID NOT ACCEPT THIS ANSWER
 
-# NOTE: re-ran and received:
+# NOTE: ran it again, and it worked:
 # NOTE: Runtime 3 ms Beats 64.01%
 # NOTE: Memory 17.67 MB Beats 28.23%
 # NOTE: ... which is 10x better speed!

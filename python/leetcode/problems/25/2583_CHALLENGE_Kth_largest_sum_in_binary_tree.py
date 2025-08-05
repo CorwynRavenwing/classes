@@ -29,6 +29,7 @@ class Solution:
         return Sums[k - 1]  # -1 b/c zero-based array
 # NOTE: Runtime 317 ms Beats 28.08%
 # NOTE: Memory 57.49 MB Beats 10.73%
-# NOTE: re-ran later for the challenge and received:
+
+# NOTE: re-ran later for the challenge:
 # NOTE: Runtime 113 ms Beats 96.87%
 # NOTE: Memory 64.48 MB Beats 5.33%
