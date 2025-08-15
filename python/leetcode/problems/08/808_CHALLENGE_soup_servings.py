@@ -34,8 +34,15 @@ class Solution:
         
         (A_first_odds, both_odds, B_first_odds) = serveMore(n, n)
         print(f'ANSWER: (A,both,B)={(A_first_odds, both_odds, B_first_odds)}')
+
         return A_first_odds + (both_odds / 2)
+
+# NOTE: Acceptance Rate 60.2% (medium)
 
 # NOTE: Accepted on second Submit (first was RecursionError exception)
 # NOTE: Runtime 173 ms Beats 20.80%
 # NOTE: Memory 21.50 MB Beats 18.55%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 139 ms Beats 9.68%
+# NOTE: Memory 22.43 MB Beats 9.68%

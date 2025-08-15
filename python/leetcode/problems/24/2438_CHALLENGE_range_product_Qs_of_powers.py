@@ -33,5 +33,12 @@ class Solution:
             doQuery(tuple(Q))
             for Q in queries
         ]
+
+# NOTE: Acceptance Rate 48.5% (medium)
+
 # NOTE: Runtime 1395 ms Beats 60.23%
 # NOTE: Memory 52.15 MB Beats 92.40%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 36 ms Beats 85.09%
+# NOTE: Memory 45.06 MB Beats 93.17%

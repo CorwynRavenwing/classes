@@ -42,5 +42,12 @@ class Solution:
                 possible[NP] += count
 
         return possible[n] % mod
+
+# NOTE: Acceptance Rate 34.6% (medium)
+
 # NOTE: Runtime 1400 ms Beats 50.00%
 # NOTE: Memory 16.85 MB Beats 59.71%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 1455 ms Beats 41.57%
+# NOTE: Memory 18.01 MB Beats 62.50%

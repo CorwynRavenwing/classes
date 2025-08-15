@@ -21,5 +21,11 @@ class Solution:
             exp += 1
             two_exp *= 2
 
+# NOTE: Acceptance Rate 62.2% (medium)
+
 # NOTE: 35 ms; Beats 78.11%
 # (tied for best possible speed)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 0 ms Beats 100.00%
+# NOTE: Memory 17.97 MB Beats 17.56%
