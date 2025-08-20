@@ -5,7 +5,7 @@
             return pattern[index + 1:]
 
         # GENERATOR
-        def all_combinations_size_K(pattern: List[int], k: int) -> List[List[int]]:
+        def all_combinations_size_K_gen(pattern: List[int], k: int) -> List[List[int]]:
             if k == 0:
                 yield ()
                 return
@@ -17,3 +17,6 @@
                     yield (D,) + value
             return
 
+        # may be cached
+        def all_combinations_size_K(pattern: List[int], k: int) -> List[List[int]]:
+            return tuple(all_combinations_size_K_gen(pattern, k))

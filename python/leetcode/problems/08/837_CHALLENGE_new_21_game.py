@@ -38,6 +38,12 @@ class Solution:
         print(f'Odds[{k}:{n+1}]={Odds[k:n+1]}')
         return sum(Odds[k:n+1])
 
+# NOTE: Acceptance Rate 45.6% (medium)
+
 # NOTE: A better version than the previous, which minimizes summation
 # NOTE: Runtime 457 ms Beats 5.17%
 # NOTE: Memory 18.32 MB Beats 5.17%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 422 ms Beats 5.16%
+# NOTE: Memory 19.27 MB Beats 5.81%
