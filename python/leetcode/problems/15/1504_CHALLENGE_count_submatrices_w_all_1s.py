@@ -28,7 +28,13 @@ class Solution:
         print(f'{answers=}')
         return sum(answers)
 
+# NOTE: Acceptance Rate 57.6% (medium)
+
 # NOTE: Accepted on first Run
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 453 ms Beats 27.83%
 # NOTE: Memory 48.26 MB Beats 5.51%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 455 ms Beats 22.74%
+# NOTE: Memory 48.72 MB Beats 5.30%
