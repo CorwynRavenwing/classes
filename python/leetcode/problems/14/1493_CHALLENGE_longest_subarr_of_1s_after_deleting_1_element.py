@@ -38,7 +38,13 @@ class Solution:
         else:
             return answer
 
+# NOTE: Acceptance Rate 69.5% (medium)
+
 # NOTE: Accepted on first Run
 # NOTE: Accepted on second Submit (first was edge case with no 1's)
 # NOTE: Runtime 15 ms Beats 98.78%
 # NOTE: Memory 21.44 MB Beats 5.66%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 15 ms Beats 98.36%
+# NOTE: Memory 22.77 MB Beats 6.20%
