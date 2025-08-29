@@ -18,5 +18,8 @@ class Solution:
         return area
 
 
-        return 000000
-        
+# NOTE: Acceptance Rate 36.8% (easy)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 14 ms Beats 5.88%
+# NOTE: Memory 18.28 MB Beats 22.60%

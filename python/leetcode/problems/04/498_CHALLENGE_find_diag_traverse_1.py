@@ -31,7 +31,13 @@ class Solution:
             for D in flatten
         ]
 
+# NOTE: Acceptance Rate 63.6% (medium)
+
 # NOTE: Accepted on first Run
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 171 ms Beats 10.03%
 # NOTE: Memory 21.00 MB Beats 5.10%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 39 ms Beats 8.76%
+# NOTE: Memory 23.05 MB Beats 5.95%

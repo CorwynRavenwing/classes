@@ -2,7 +2,7 @@ class Solution:
     def flowerGame(self, n: int, m: int) -> int:
 
         # SHORTCUT:
-        # the "clockwise / anticlockwise" thing doesn't matter, b/c there is
+        # the "top row / bottom row" thing doesn't matter, b/c there is
         # no pentalty for running out of flowers in one direction, only in both.
 
         # SHORTCUT:
@@ -24,3 +24,8 @@ class Solution:
 # NOTE: O(1)
 # NOTE: Memory 16.46 MB Beats 73.13%
 # NOTE: O(1)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 0 ms Beats 100.00%
+# NOTE: Memory 17.49 MB Beats 100.00%
+# NOTE: Same code, much better runtime, same memory, perfect percentage
