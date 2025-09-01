@@ -37,6 +37,8 @@ class Solution:
         
         return answer
 
+# NOTE: Acceptance Rate 71.8% (medium)
+
 # NOTE: Accepted on second Run (one-char typo)
 # NOTE: Accepted on second Submit (Output Exceeded)
 # NOTE: Runtime 3066 ms Beats 5.55%
@@ -45,3 +47,7 @@ class Solution:
 # NOTE: re-ran for challenge:
 # NOTE: Runtime 2830 ms Beats 5.33%
 # NOTE: Memory 54.83 MB Beats 16.67%
+
+# NOTE: Another challenge:
+# NOTE: Runtime 2989 ms Beats 5.65%
+# NOTE: Memory 55.26 MB Beats 7.39%
