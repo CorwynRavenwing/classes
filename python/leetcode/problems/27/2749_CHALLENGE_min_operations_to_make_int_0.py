@@ -54,3 +54,8 @@ class Solution:
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 6 ms Beats 8.20%
 # NOTE: Memory 17.65 MB Beats 91.80%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 7 ms Beats 0.00%
+# NOTE: Memory 17.81 MB Beats 44.30%
+# NOTE: Wow, I've never had a "beats 0%" score before :-/
