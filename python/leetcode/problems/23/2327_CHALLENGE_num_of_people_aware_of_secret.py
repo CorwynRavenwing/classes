@@ -74,3 +74,8 @@ class Solution:
 
         return hasSecretOnDay(n) % mod
 
+# NOTE: Acceptance Rate 47.4% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 123 ms Beats 32.12%
+# NOTE: Memory 21.84 MB Beats 5.11%

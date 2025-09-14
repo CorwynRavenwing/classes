@@ -32,7 +32,13 @@ class Solution:
 
         raise Exception('Spoiler alert: the vowel count will ALWAYS be odd here.')
 
+# NOTE: Acceptance Rate 74.7% (medium)
+
 # NOTE: Accepted on first Run
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 98 ms Beats 36.15%
 # NOTE: Memory 17.48 MB Beats 50.88%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 67 ms Beats 13.03%
+# NOTE: Memory 18.14 MB Beats 50.30%

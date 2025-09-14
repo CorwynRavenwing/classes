@@ -1,5 +1,6 @@
 class Solution:
     def minimumTeachings(self, n: int, languages: List[List[int]], friendships: List[List[int]]) -> int:
+
         personLanguageSet = tuple(map(set, languages))
         # print(f'{personLanguageSet=}')
 
@@ -31,7 +32,13 @@ class Solution:
 
         return min_teach
 
+# NOTE: Acceptance Rate 49.2% (medium)
+
 # NOTE: Accepted on first Run
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 5656 ms Beats 5.22%
 # NOTE: Memory 31.82 MB Beats 7.98%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 5597 ms Beats 6.10%
+# NOTE: Memory 31.64 MB Beats 76.83%

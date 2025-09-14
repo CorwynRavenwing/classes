@@ -15,6 +15,13 @@ class Solution:
             L[i] = char
 
         return ''.join(L)
+
+# NOTE: Acceptance Rate 79.9% (medium)
+
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 112 ms Beats 85.89%
 # NOTE: Memory 24.29 MB Beats 9.53%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 71 ms Beats 84.41%
+# NOTE: Memory 24.71 MB Beats 17.75%

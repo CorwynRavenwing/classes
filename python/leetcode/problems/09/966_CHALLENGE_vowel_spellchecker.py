@@ -37,6 +37,12 @@ class Solution:
             for Q in queries
         ]
 
+# NOTE: Acceptance Rate 52.1% (medium)
+
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 38 ms Beats 98.42%
 # NOTE: Memory 19.19 MB Beats 73.50%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 35 ms Beats 81.02%
+# NOTE: Memory 20.24 MB Beats 55.81%
