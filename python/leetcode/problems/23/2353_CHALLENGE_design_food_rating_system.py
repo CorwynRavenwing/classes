@@ -38,5 +38,11 @@ class FoodRatings:
 # obj.changeRating(food,newRating)
 # param_2 = obj.highestRated(cuisine)
 
+# NOTE: Acceptance Rate 45.5% (medium)
+
 # NOTE: Runtime 8100 ms Beats 5.20%
 # NOTE: Memory 44.68 MB Beats 98.70%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 7108 ms Beats 5.01%
+# NOTE: Memory 50.87 MB Beats 93.14%
