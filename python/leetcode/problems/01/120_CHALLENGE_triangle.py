@@ -17,6 +17,12 @@ class Solution:
 
         return min(pathSums)
 
+# NOTE: Acceptance Rate 59.4% (medium)
+
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 58 ms Beats 77.77%
 # NOTE: Memory 17.64 MB Beats 63.87%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 10 ms Beats 19.06%
+# NOTE: Memory 18.70 MB Beats 90.91%

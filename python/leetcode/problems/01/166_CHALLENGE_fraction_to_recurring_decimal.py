@@ -40,3 +40,8 @@ class Solution:
             answer = "0"
         return answer
 
+# NOTE: Acceptance Rate 26.7% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 37 ms Beats 1.74%
+# NOTE: Memory 18.25 MB Beats 20.31%

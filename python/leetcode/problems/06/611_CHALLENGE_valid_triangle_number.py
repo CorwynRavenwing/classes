@@ -24,3 +24,8 @@ class Solution:
 
         return retval
 
+# NOTE: Acceptance Rate 52.9% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 1599 ms Beats 8.97%
+# NOTE: Memory 18.08 MB Beats 12.94%
