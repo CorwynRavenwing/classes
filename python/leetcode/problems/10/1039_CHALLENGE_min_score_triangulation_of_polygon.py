@@ -48,6 +48,12 @@ class Solution:
         # make it hashable
         return self.DP(tuple(values))
 
-# NOTE: Accepted on second Submit (first was Output Exceeded)
+# NOTE: Acceptance Rate 60.8% (medium)
+
+# NOTE: Accepted on second Submit (Output Exceeded)
 # NOTE: Runtime 157 ms Beats 5.19%
 # NOTE: Memory 21.84 MB Beats 10.77%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 155 ms Beats 5.28%
+# NOTE: Memory 22.72 MB Beats 7.22%

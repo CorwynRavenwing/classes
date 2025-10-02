@@ -24,7 +24,13 @@ class Solution:
                 print(f'{drunk=} {numBottles=} {emptyBottles=} {numExchange=}')
         return drunk
 
+# NOTE: Acceptance Rate 64.3% (medium)
+
 # NOTE: Accepted on first Run
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 42 ms Beats 19.75%
 # NOTE: Memory 16.61 MB Beats 26.11%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 53 ms Beats 5.56%
+# NOTE: Memory 17.67 MB Beats 62.22%

@@ -20,3 +20,8 @@ class Solution:
                 print(f'{drunk=} {numBottles=} {emptyBottles=}')
         return drunk
 
+# NOTE: Acceptance Rate 70.7% (easy)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 0 ms Beats 100.00%
+# NOTE: Memory 17.92 MB Beats 17.52%
