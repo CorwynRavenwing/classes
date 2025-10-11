@@ -1,13 +1,14 @@
 class Solution:
     def pacificAtlantic(self, grid: List[List[int]]) -> List[List[int]]:
         # variable-rename "heights" to "grid"
+        grid = heights
 
         M = len(grid)
         N = len(grid[0])
 
         if M == N == 1:
             # a one-cell island can flow to both oceans
-            return {(0,0)}
+            return [(0,0)]
 
         def legalPos(cell: Tuple[int,int]) -> bool:
             (X, Y) = cell
@@ -157,5 +158,12 @@ class Solution:
 
         return sorted(BothOceans)
 
+# NOTE: Acceptance Rate 58.2% (medium)
+
 # NOTE: Runtime 1308 ms Beats 6.88%
 # NOTE: Memory 182.76 MB Beats 5.64%
+
+# NOTE: re-ran for challenge:
+# NOTE: needed cleanup of return type, despite prior run working
+# NOTE: Runtime 1191 ms Beats 5.21%
+# NOTE: Memory 183.80 MB Beats 5.73%

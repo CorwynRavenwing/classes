@@ -1,5 +1,6 @@
 class Solution:
     def networkDelay(self, adjacent: Dict[any,Dict[any,int]], source: any, target: any) -> int:
+
         nodeDelay = {}
         queue = [(0, source)]    # second 0, node "source"
         while queue:
@@ -95,6 +96,11 @@ class Solution:
         return None
 
 # NOTE: Acceptance Rate 61.6% (HARD)
+
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 3880 ms Beats 5.19%
 # NOTE: Memory 18.90 MB Beats 5.35%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 4097 ms Beats 5.01%
+# NOTE: Memory 19.96 MB Beats 5.42%

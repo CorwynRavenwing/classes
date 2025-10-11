@@ -140,3 +140,7 @@ class Solution:
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 390 ms Beats 5.21%
 # NOTE: Memory 22.64 MB Beats 30.77%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 391 ms Beats 5.17%
+# NOTE: Memory 22.53 MB Beats 26.65%

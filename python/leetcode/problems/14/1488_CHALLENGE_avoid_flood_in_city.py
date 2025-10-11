@@ -188,3 +188,8 @@ class Solution:
             print(f'Answer failed!')
             return []
 
+# NOTE: Acceptance Rate 27.8% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 4308 ms Beats 5.12%
+# NOTE: Memory 42.59 MB Beats 21.40%

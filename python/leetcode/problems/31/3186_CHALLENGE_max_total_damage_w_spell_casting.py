@@ -76,6 +76,12 @@ class Solution:
 
         return DP(0)
 
+# NOTE: Acceptance Rate 29.0% (medium)
+
 # NOTE: Finally successful (version 4)
 # NOTE: Runtime 1587 ms Beats 34.05%
 # NOTE: Memory 101.52 MB Beats 24.75%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 743 ms Beats 29.75%
+# NOTE: Memory 102.24 MB Beats 28.50%

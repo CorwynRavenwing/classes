@@ -1,5 +1,6 @@
 class Solution:
     def successfulPairs(self, spells: List[int], potions: List[int], success: int) -> List[int]:
+
         # print(f'{spells=}')
         potions.sort()
         # print(f'{potions=}')
@@ -27,4 +28,10 @@ class Solution:
             retval.append(answer)
         return retval
 
-# 804ms Beats 97.26% of users with Python3
+# NOTE: Acceptance Rate 46.2% (medium)
+
+# NOTE: 804ms Beats 97.26% of users with Python3
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 163 ms Beats 90.23%
+# NOTE: Memory 41.89 MB Beats 82.93%
