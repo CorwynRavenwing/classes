@@ -30,7 +30,13 @@ class Solution:
         
         return min_answer
 
+# NOTE: Acceptance Rate 66.2% (medium)
+
 # NOTE: Accepted on first Run
 # NOTE: Accepted on second Submit (Output Exceeded)
 # NOTE: Runtime 1017 ms Beats 18.42%
 # NOTE: Memory 18.88 MB Beats 55.33%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 1019 ms Beats 17.27%
+# NOTE: Memory 19.40 MB Beats 74.82%
