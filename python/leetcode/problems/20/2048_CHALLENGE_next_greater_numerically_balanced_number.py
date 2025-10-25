@@ -124,5 +124,12 @@ class Solution:
                 answers.append(answer)
         if answers:
             return min(answers)
+
+# NOTE: Acceptance Rate 51.0% (medium)
+
 # NOTE: Runtime 44 ms Beats 86.92%
 # NOTE: Memory 16.73 MB Beats 14.62%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 15 ms Beats 83.14%
+# NOTE: Memory 18.09 MB Beats 12.21%
