@@ -87,7 +87,13 @@ class Solution:
 
         return len(unguarded)
 
+# NOTE: Acceptance Rate 65.9% (medium)
+
 # NOTE: Accepted on first Run
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 1319 ms Beats 5.00%
 # NOTE: Memory 41.88 MB Beats 65.50%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 1476 ms Beats 5.10%
+# NOTE: Memory 42.54 MB Beats 35.71%

@@ -21,5 +21,11 @@ class Solution:
 
         return sum(beams)
 
+# NOTE: Acceptance Rate 85.6% (medium)
+
 # NOTE: Runtime 191 ms Beats 19.78%
 # NOTE: Memory 18.95 MB Beats 6.12%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 108 ms Beats 23.39%
+# NOTE: Memory 19.87 MB Beats 7.41%

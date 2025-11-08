@@ -43,3 +43,7 @@ class Solution:
 # NOTE: re-ran for challenge:
 # NOTE: Runtime 60 ms Beats 33.08%
 # NOTE: Memory 18.04 MB Beats 47.22%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 56 ms Beats 38.31%
+# NOTE: Memory 18.04 MB Beats 51.74%

@@ -54,7 +54,13 @@ class Bank:
 # param_2 = obj.deposit(account,money)
 # param_3 = obj.withdraw(account,money)
 
+# NOTE: Acceptance Rate 62.8% (medium)
+
 # NOTE: Accepted on second Run (1-basis accounts vs. 0-basis array)
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 65 ms Beats 9.87%
 # NOTE: Memory 49.34 MB Beats 18.51%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 70 ms Beats 6.88%
+# NOTE: Memory 49.28 MB Beats 19.14%

@@ -25,5 +25,11 @@ class Solution:
         head = head.next                # get rid of helper front node
         return head
 
+# NOTE: Acceptance Rate 67.4% (medium)
+
 # NOTE: Runtime 726 ms Beats 47.98%
 # NOTE: Memory 54.37 MB Beats 98.22%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 73 ms Beats 18.30%
+# NOTE: Memory 58.69 MB Beats 42.31%
