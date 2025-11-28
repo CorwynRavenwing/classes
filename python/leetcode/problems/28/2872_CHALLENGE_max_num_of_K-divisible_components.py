@@ -50,9 +50,13 @@ class Solution:
 
         return maxCuts
 
-
 # NOTE: Acceptance Rate 68.8% (HARD)
+
 # NOTE: Accepted on second Run (variable-name typo)
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 812 ms Beats 7.41%
 # NOTE: Memory 53.42 MB Beats 7.41%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 737 ms Beats 5.07%
+# NOTE: Memory 53.42 MB Beats 5.07%
