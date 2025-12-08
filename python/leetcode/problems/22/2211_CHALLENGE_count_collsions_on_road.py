@@ -19,3 +19,8 @@ class Solution:
         ]
         return sum(moving_cars_who_will_crash)
 
+# NOTE: Acceptance Rate 48.2% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 8493 ms Beats 5.21%
+# NOTE: Memory 20.01 MB Beats 5.95%
