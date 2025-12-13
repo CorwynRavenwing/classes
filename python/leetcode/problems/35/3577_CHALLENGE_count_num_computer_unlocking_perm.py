@@ -29,3 +29,7 @@ class Solution:
 # NOTE: Accepted on second Submit (edge case requiring modulo)
 # NOTE: Runtime 207 ms Beats 24.34%
 # NOTE: Memory 32.09 MB Beats 35.09%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 211 ms Beats 12.22%
+# NOTE: Memory 32.19 MB Beats 17.22%
