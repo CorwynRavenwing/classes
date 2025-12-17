@@ -30,3 +30,9 @@ class Solution:
 # NOTE: Accepted on first Submit
 # NOTE: Runtime 6175 ms Beats 5.34%
 # NOTE: Memory 30.10 MB Beats 30.96%
+
+# NOTE: Acceptance Rate 60.9% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 6003 ms Beats 5.22%
+# NOTE: Memory 30.30 MB Beats 9.70%
