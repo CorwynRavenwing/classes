@@ -45,3 +45,8 @@ class Solution:
                 continue
         return deletes
 
+# NOTE: Acceptance Rate 36.4% (medium)
+
+# NOTE: re-ran for challenge
+# NOTE: Runtime 63 ms Beats 5.13%
+# NOTE: Memory 17.74 MB Beats 84.62%

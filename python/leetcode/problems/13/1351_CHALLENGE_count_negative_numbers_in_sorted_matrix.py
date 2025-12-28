@@ -9,6 +9,11 @@ class Solution:
         ]
         return len(negatives)
         
-        # "95 ms.  Beats 92.55% of users with Python3".
-        # Does not need binary-search optimization.
+# "95 ms.  Beats 92.55% of users with Python3".
+# Does not need binary-search optimization.
 
+# NOTE: Acceptance Rate 78.2% (easy)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 0 ms Beats 100.00%
+# NOTE: Memory 18.37 MB Beats 91.60%
