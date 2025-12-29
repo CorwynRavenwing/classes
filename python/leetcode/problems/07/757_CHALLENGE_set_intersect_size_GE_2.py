@@ -41,3 +41,7 @@ class Solution:
 # NOTE: Accepted on second Submit (edge case)
 # NOTE: Runtime 103 ms Beats 6.21%
 # NOTE: Memory 19.10 MB Beats 50.34%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 91 ms Beats 10.64%
+# NOTE: Memory 18.88 MB Beats 92.90%
