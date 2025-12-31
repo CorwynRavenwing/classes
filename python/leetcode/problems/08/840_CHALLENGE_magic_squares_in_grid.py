@@ -48,5 +48,12 @@ class Solution:
                     print(f'  no')
 
         return answer
+
+# NOTE: Acceptance Rate 51.8% (medium)
+
 # NOTE: Runtime 41 ms Beats 60.00%
 # NOTE: Memory 16.56 MB Beats 53.33%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 7 ms Beats 2.42%
+# NOTE: Memory 17.34 MB Beats 90.91%

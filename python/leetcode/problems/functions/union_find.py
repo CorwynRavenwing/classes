@@ -1,7 +1,11 @@
 
         # nodes = tuple(range(1, len(edges) + 1))
 
-	def UnionFind(nodes: List[int], edges: List[List[int]]) -> Dict[int,List[int]]:
+	def UnionFind(nodes: List[int], edges: List[List[int]]) -> Tuple[Dict[int,List[int]],any]:
+            # note: edges may be a generator
+	    # note: second return value is getGroup() fn
+            # note: third return value is sameGroup() fn
+
             NodeGroup = {
                 i: i
                 for i in nodes
@@ -34,6 +38,9 @@
                     NodeGroupMembers[nodeName].add(i)
                 return NodeGroupMembers
 
+            for (A, B) in edges:
+                mergeGroups(A, B)
+
             fixGroups()
-            return nodeGroupMembers()
+            return (NodeGroupMembers, getGroup sameGroup)
 
