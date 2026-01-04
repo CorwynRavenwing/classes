@@ -18,5 +18,11 @@ class Solution:
             print(f'{N} -> {DN} ({len(DN)})')
             if len(DN) == 4:
                 answer += sum(DN)
+
         return answer
 
+# NOTE: Acceptance Rate 46.4% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 475 ms Beats 11.15%
+# NOTE: Memory 18.68 MB Beats 87.80%
