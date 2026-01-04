@@ -1,0 +1,42 @@
+/* CSS for Space Company game autorunner */
+
+/* this can be used in either the left sidebar or the right pane */
+.bump_max {
+    background-color: pink;
+}
+
+/* these three only apply to the right pane */
+.unknown_substance {
+    background-color: lightgray;
+}
+
+.cant_click {
+    background-color: yellow;
+}
+
+.click_me {
+    background-color: lightgreen;
+}
+
+.clicking {
+    background-color: green;
+}
+
+/* hyper-specific codes to override .info elements in cerulean-bootstrap.css */
+/* this only applies to the left sidebar */
+.table>thead>tr>td.info.bump_max,
+.table>tbody>tr>td.info.bump_max,
+.table>tfoot>tr>td.info.bump_max,
+.table>thead>tr>th.info.bump_max,
+.table>tbody>tr>th.info.bump_max,
+.table>tfoot>tr>th.info.bump_max,
+.table>thead>tr.info.bump_max>td,
+.table>tbody>tr.info.bump_max>td,
+.table>tfoot>tr.info.bump_max>td,
+.table>thead>tr.info.bump_max>th,
+.table>tbody>tr.info.bump_max>th,
+.table>tfoot>tr.info.bump_max>th,
+.info.bump_max {
+    background-color:#CBC3E3;       /* pastel purple */
+}
+

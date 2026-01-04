@@ -1,0 +1,541 @@
+// JavaScript to auto-run the game "Space Company":
+// https://sparticle999.github.io/SpaceCompany/
+
+var DEBUG = false
+var prior_cick_time
+
+var pane_descriptors = {
+    Resource:     '#resourceTabParent    .tab-pane',
+    Research:     '#research             .tab-pane',
+    // SolarSystem:  '#solarSystem          .tab-pane',
+    Wonder:       '#wonder               .tab-pane',
+    SolCenter:    '#solCenterPage        .tab-pane',
+    // Machine:      '#machineTab           .tab-pane',
+    Interstellar: '#interstellarTab_pane .tab-pane',
+}
+
+function from_number(value) {
+    mult_idx = 0
+    while (value > 1000) {
+        mult_idx += 1
+        value /= 1000
+    }
+    value = Math.round(value * 1000) / 1000;    // round to 3 places
+    value_int = Math.round(value)
+    if (value == value_int) {
+        value = value_int       // convert to type int if exact value
+    }
+    multipliers = ['', 'K', 'M', 'B', 'T', '???']
+    multiplier_str = multipliers[mult_idx]
+    answer = value.toString() + multiplier_str
+    return answer
+}
+
+function to_number(orig_value, comment= '') {
+    value = orig_value
+    value = value.replaceAll(',', '')
+    value = value.replaceAll('/', '')  // Energy comes preceeded by '/' for some reason
+    value = value.trim()            // and a million spaces
+    var answer = parseFloat(value)
+    multiplier_str = value.replace(/^[0-9.]*/, '')
+    multiplier = 1
+    switch(multiplier_str) {
+        case '':    multiplier = 1;                 break;
+        case 'K':   multiplier = 1_000;             break;
+        case 'M':   multiplier = 1_000_000;         break;
+        case 'B':   multiplier = 1_000_000_000;     break;
+        case 'T':   multiplier = 1_000_000_000_000; break;
+        default:
+            throw new Error('to_number(): Invalid multiplier "' + multiplier_str + '" (' + orig_value + '->' + value + ') ' + comment)
+    } 
+    // if (DEBUG) console.log('to_number:', value, multiplier_str, multiplier, answer)
+    answer *= multiplier
+    answer = Math.round(answer)
+    return answer
+}
+
+function toHHMMSS(total_sec) {
+    var hours   = Math.floor(total_sec / 3600)
+    var minutes = Math.floor(total_sec / 60) % 60
+    var seconds = total_sec % 60
+
+    if (hours) { hours += ' hour' } else { hours = '' }
+    if (minutes) { minutes += ' min' } else { minutes = '' }
+    if (seconds) { seconds += ' sec' } else { seconds = '' }
+    
+    return [hours,minutes,seconds]
+        .join(" ")
+}
+
+function get_one_max(tr, argument=null) {
+    var tr = $( tr )
+    var is_hidden = tr.hasClass('hidden')
+    if (is_hidden) {
+        // console.warn('max: hidden', tr)
+        return []
+    }
+    // console.log(tr)
+    var tds = tr.children()
+    var label = $( tds[1] ).text().trim().toLowerCase()
+    if (! label) {
+        // console.warn('max: no label', label)
+        return []
+    }
+    var values = $( tds[3] ).children()
+    var quant = $( values[1] ).text().trim()
+    quant = to_number(quant)
+    
+    // console.log(label, '<=', quant)
+    return [label, quant]
+}
+
+function for_each_nav(Fn, argument=null) {
+    var answer = []
+
+    var sidetabs = $('#resourceNavParent > tbody > tr');
+    $.each(sidetabs, function(index, value) {
+        ob = $( value )
+        // is_sidetab = ob.hasClass('sideTab');
+        // if (! is_sidetab) {
+        //     return;
+        // }
+        answer.push( Fn(ob, argument) );
+    });
+
+    return answer
+}
+
+function get_maxes() {
+    var max_pairs = for_each_nav(get_one_max)
+    // console.log(max_pairs)
+    science_ob = $('#science')
+    science_value = science_ob.text()
+    science_value = to_number(science_value)
+    science_max = (10 * science_value)      // actually unlimited
+    var maxes = {
+        science: science_max,
+        // should pull these maxes from the Interstellar:Rockets page
+        shield_plating: 50,
+        engine_unit: 25,
+        aerodynamic_sections: 15,
+    }
+
+    $.each(max_pairs, function(pair_idx, max_pair) {
+        if (max_pair.length == 0) {
+            // console.log('get_maxes: SKIP', pair_idx, max_pair)
+            return
+        }
+        var [label, quant] = max_pair
+        // console.log('get_maxes: ok', label, quant)
+        maxes[label] = quant
+    });
+    return maxes
+}
+
+function check_tabs(maxes) {
+    const cost_flag = "Costs"
+    var GLOBAL_overflow_reasons = new Object;
+    var GLOBAL_pane_heading
+    var GLOBAL_pane_title
+    var GLOBAL_purchase
+    var GLOBAL_unknown_substances
+    var GLOBAL_bump_specifics
+    var GLOBAL_clicked_something = false
+
+    // console.log(panes)
+
+    function scan_one_cost(cost_idx, cost_str) {
+        if (cost_str == "") {
+            // no costs (energy-mass conversion page): NOOP
+            return
+        }
+        // console.log('cost_str:', cost_idx, cost_str)
+        cost_split = cost_str
+            .replaceAll(' ', '_')       // any number of spaces -> underscore
+            .replace('_', ' ')          // first underscore -> space again
+            .split(' ', 2);             // split on that first space
+        // console.log('cost split:', cost_split)
+        var [needed, substance] = cost_split
+        needed = to_number(needed, cost_str)
+        substance = substance.toLowerCase()
+        if (substance == 'gem') { substance = 'gems' }
+        known_substance = (substance in maxes)
+        if (! known_substance) {
+            /* if (DEBUG) */ console.warn('cost of UNKNOWN SUBSTANCE:', GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, cost_idx, '"' + cost_str + '"', substance, needed)
+            GLOBAL_unknown_substances.push(substance)
+            return
+        }
+        max_value = maxes[substance]
+        if (needed <= max_value) {
+            // console.log('cost ok:', cost_idx, substance, needed, max_value)
+            return
+        }
+
+        if (GLOBAL_purchase.includes('Swarm:')) {
+            console.warn('Swarm (scan_one_cost)', GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
+            return
+        }
+
+        if (! (substance in GLOBAL_overflow_reasons)) {
+            GLOBAL_overflow_reasons[substance] = []
+        }
+        GLOBAL_overflow_reasons[substance].push(
+            GLOBAL_pane_heading + '/' + GLOBAL_pane_title + "/" + GLOBAL_purchase + ": " + from_number(needed)
+        )
+        GLOBAL_bump_specifics.push(substance)
+    }
+    
+    function cleanup_costs(orig_string) {
+        string = orig_string
+        // Wonder phrases before costs:
+        string = string.replace('He requires that you donate', cost_flag)
+        string = string.replace('He requests a pyramid containing', cost_flag)
+        string = string.replace('He requests a tower consisting of', cost_flag)
+        string = string.replace('The Overlord wishes for a cube made up of', cost_flag)
+
+        // alternate cost flag
+        string = string.replace('Cost:', cost_flag)
+
+        // Wonder phrases within costs:
+        string = string.replaceAll(' and ', ', ')
+
+        // Wonder phrases after costs:
+        string = string.replace(' for this knowledge', '')
+        string = string.replace(' to acquire his methods', '')
+        string = string.replace(' to unlock this technology', '')
+        string = string.replace(' to be given this technology', '')
+
+        // Wonder phrases to clean up:
+        string = string.replace('Donate Resources', '')
+        string = string.replace(/Activate .*/, '')
+        string = string.replace(/Rebuild .*/, '')
+        string = string.replace('Unlock Dyson Sphere Research', '')
+        string = string.replace(/[0-9.]+%$/, '')
+
+        if (GLOBAL_pane_title == "energy-mass conversion") {
+            // does not have Costs section
+            return ""
+        }
+        if (GLOBAL_pane_title == 'dyson swarms and sphere') {
+            // has non-standard Costs section
+            return ""
+        }
+
+        var position = string.search(cost_flag)
+        if (DEBUG) console.log('Costs Position:', position)
+        if (position == -1) {
+            throw new Error("'Costs' not found:\n" + GLOBAL_pane_heading + "/" + GLOBAL_pane_title + "\n" + orig_string + "\n---\n" + string)
+        }
+        position += cost_flag.length
+        string = string
+            .slice(position)        // delete up to after "Costs"
+            .replace(/^:/, '')      // remove leading colon
+            .trim()                 // remove lead/trail spaces
+            .replace(/[.]+$/, '');  // remove trailing period
+
+        string = string.replaceAll(/  +/g, ' ')     // no doubled spaces
+
+        // if (GLOBAL_pane_title == 'inside the wonder station') {
+        //     console.log(orig_string)
+        //     console.log(string)
+        // }
+
+        return string
+    }
+
+    function scan_one_tr(tr_idx, tr) {
+        tr = $( tr )
+        var h3 = tr.find('h3')
+        GLOBAL_purchase = h3
+            .text()
+            .trim()
+            .replace(/: [0-9]*$/, '')   // remove ": 37" from end
+        if (! GLOBAL_purchase) {
+            return
+        }
+        is_hidden = tr.hasClass('hidden')
+        if (is_hidden) {
+            if (DEBUG) console.warn(GLOBAL_pane_title, GLOBAL_purchase, 'HIDDEN')
+            return
+        }
+        if (GLOBAL_purchase.includes('Swarm:')) {
+            console.warn('Swarm (scan_one_tr)', GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
+            console.warn('tr', tr)
+        }
+        if (GLOBAL_pane_title == 'energy-mass conversion') {
+            return
+        }
+        if (GLOBAL_pane_title == 'dyson swarms and sphere') {
+            return
+        }
+        var cant_click = false
+        // console.log('tr:', tr_idx, tr)
+        details = tr
+            .find('td > span')
+            .text()
+            .trim();
+        var current_ob = h3
+            .find('span');
+        var current = current_ob
+            .text()
+            .trim();
+        var td = tr.find('td')
+        var button = td
+            .find('button')
+            [0];
+        if (! button) {
+            button = td
+                .find('div.btn')
+                [0];
+        }
+        if (button) {
+            button = $( button )
+        }
+        if (button) {
+            if (button.hasClass('destroy')) {
+                console.error('destroy button!', button)
+                button = null
+            }
+        }
+        // yes, repeat the prior question
+        if (button) {
+            var button_is_hidden = button
+                .parent()
+                .hasClass('hidden');
+            if (button_is_hidden) {
+                // console.warn('button is hidden', button.parent())
+                button = null
+            }
+        }
+        var input = td
+            .find('input.desired');
+        if (button && (input.length == 0)) {
+            // console.warn(GLOBAL_pane_title, GLOBAL_purchase, 'Creating input object:')
+            input = $('<input type="textbox" class="desired"/>')
+            td.append(input)
+        }
+        var desired = ''
+        if (input) {
+            var val = input.val()
+            if (val) {
+                desired = val.trim()
+            }
+        }
+        desired = to_number(desired)
+        // if (current && desired) {
+        //     console.log(pane_title, purchase, 'current', current, 'desired', desired)
+        // }
+        red_ingredients = tr
+            .find('td > span span.red');
+        if (red_ingredients.length) {
+            // console.log('red_ingredients', red_ingredients)
+            cant_click = true
+        }
+        DETAIL = false
+        if (DEBUG) console.log('purchase:', GLOBAL_purchase)
+        details = cleanup_costs(details)
+        // if (DEBUG)  console.log('details:', details)
+        costs = details.split(', ')     // comma space
+        if (DEBUG) console.log('costs:', costs)
+        if (DETAIL) console.log(GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, costs)
+        GLOBAL_unknown_substances = []
+        GLOBAL_bump_specifics = []
+        $.each(costs, scan_one_cost)
+        pop_up = []
+        set_class = ''
+
+        var all_click_classes = [
+            'bump_max',
+            'cant_click',
+            'click_me',
+            'clicking',
+            'unknown_substance',
+        ];
+
+        if (desired) {
+            if (! button) {
+                console.warn('Trying to click missing button', GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
+                cant_click = true
+            }
+            if (cant_click) {
+                set_class = 'cant_click'
+                pop_up.push("Missing Ingredients: " + red_ingredients.length)
+            } else {
+                if (GLOBAL_clicked_something) {
+                    set_class = 'click_me'
+                } else {
+                    set_class = 'clicking'
+                }
+            }
+        }
+
+        if (GLOBAL_bump_specifics.length) {
+            set_class = 'bump_max'
+            pop_up.push("Bump:")
+            pop_up.push(...GLOBAL_bump_specifics)
+        }
+        if (GLOBAL_unknown_substances.length) {
+            pop_up.push("Unknown:")
+            pop_up.push(...GLOBAL_unknown_substances)
+            set_class = 'unknown_substance'
+        }
+        if (set_class == 'clicking') {
+            // if (red_ingredients.length) {
+            //     console.warn('red_ingredients', red_ingredients)
+            //     console.warn('cant_click:', cant_click)
+            // }
+            var click_time
+            click_time = Math.floor(new Date().getTime() / 1000)
+
+            var elapsed_s = (click_time - prior_cick_time)
+            var TIME = toHHMMSS(elapsed_s)
+            TIME = "(" + TIME.trim() + ")"
+            
+            button.click()
+            var new_current = current_ob.text().trim();
+            var VERIFY = false
+            if (VERIFY && (current != '') && (new_current == current)) {
+                console.warn("ERROR: tried clicking", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, "no change", new_current, current)
+                set_class = 'click_me'
+                // need to remove click-me from removal list
+            } else {
+                GLOBAL_clicked_something = true
+
+                console.log('AUTO-CLICK', TIME, GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, '(' + desired + ')')
+
+                prior_cick_time = click_time
+
+                desired -= 1
+                if (! desired) {
+                    desired = ''
+                }
+                input.val(desired)
+            }
+        }
+        if (set_class) {
+            tr.addClass(set_class)
+        }
+        $.each(all_click_classes, function(remove_idx, remove_me) {
+            if (remove_me != set_class) {
+                tr.removeClass(remove_me)
+            }
+        });
+        if (pop_up.length) {
+            reasons = pop_up
+                .join("\n");
+            tr.prop('title', reasons)
+        } else {
+            tr.prop('title', '')
+        }
+    }
+
+    function scan_one_pane(pane_idx, pane) {
+        // console.warn('B', pane_heading, DEBUG)
+        pane = $(pane)
+        var trs = pane.find("tr")
+        var tr0 = $( trs[0] )
+        h2 = tr0.find('h2')
+        GLOBAL_pane_title = h2
+            .text()
+            .trim()
+            .toLowerCase()
+            .replace(/^the /, '');
+        // known_title = (pane_title in maxes)
+        // if (! known_title) {
+        //     if (DEBUG) console.warn('Skip', pane_title)
+        //     return
+        // }
+        if (GLOBAL_pane_title == 'dyson swarms and sphere') {
+            // console.warn('Ignore Dyson Swarm / Sphere pane')
+            return
+        }
+        if (DEBUG) console.log('pane:', pane)
+        if (DEBUG) console.log(trs)
+        if (DEBUG) console.log('tr0:', tr0)
+        if (DEBUG) console.log('h2:', h2)
+        if (DEBUG) console.log('pane_title:', GLOBAL_pane_title)
+        $.each(trs, scan_one_tr)
+    }
+
+    $.each(pane_descriptors, function(desc_idx, pane_desc) {
+        // console.log('pane descriptor:', desc_idx, pane_desc)
+        GLOBAL_pane_heading = desc_idx
+        // DEBUG = (pane_heading == 'Wonder')
+        if (DEBUG) console.log('pane_heading:', GLOBAL_pane_heading)
+        // console.warn('A', pane_heading, DEBUG)
+        var panes = $( pane_desc )
+        if (DEBUG) console.warn('panes:', pane_desc, panes)
+        $.each(panes, scan_one_pane)
+    })
+
+    // console.log('overflow_reasons', GLOBAL_overflow_reasons)
+    return GLOBAL_overflow_reasons
+}
+
+function colorize_one_max(tr, tab_data) {
+    var tr = $( tr )
+    var is_hidden = tr.hasClass('hidden')
+    if (is_hidden) {
+        return false
+    }
+    // console.log(tr)
+    var tds = tr.children()
+    var label = $( tds[1] )
+        .text()
+        .trim()
+        .toLowerCase();
+    is_overflow = (label in tab_data)
+    if (is_overflow) {
+        tr.addClass('bump_max')
+        reasons = tab_data[label]
+            .join("\n");
+        tr.prop('title', reasons)
+        return [label, 'yes']
+    } else {
+        tr.removeClass('bump_max')
+        tr.prop('title', '')
+        return [label, 'no']
+    }
+}
+
+// global variable
+var tick_id;
+
+function tick() {
+    // console.log('tick', tick_id)
+    var maxes = get_maxes()
+    // console.log('maxes:', maxes)
+    var tab_data = check_tabs(maxes);
+    // console.log('tab_data', tab_data)
+    var results = for_each_nav(colorize_one_max, tab_data)
+    // console.log('results', results)
+}
+
+function tick_start() {
+    var tick_seconds = 5
+    var tick_milliseconds = tick_seconds * 1000
+    if (tick_id) {
+        tick_stop();
+    }
+    tick_id = setInterval(tick, tick_milliseconds)
+    console.warn('tick start', tick_id)
+    tick()
+}
+
+function tick_stop() {
+    if (tick_id) {
+        clearInterval(tick_id)
+        console.warn('tick stop', tick_id)
+        tick_id = 0
+    }
+}
+
+var DEBUG_tick = false
+
+if (DEBUG_tick) {
+    tick_stop()
+    tick()
+} else {
+    tick_start()
+}
+
