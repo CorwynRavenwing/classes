@@ -87,5 +87,11 @@ class Solution:
         mod = 10 ** 9 + 7
         answerMod = answer % mod
         print(f'   {answer=}\n{answerMod=}')
+
         return answerMod
 
+# NOTE: Acceptance Rate 48.3% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 104 ms Beats 15.21%
+# NOTE: Memory 50.88 MB Beats 5.32%

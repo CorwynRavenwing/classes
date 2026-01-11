@@ -26,6 +26,7 @@ class Solution:
                         break
                         
         print(f'{answers=}')
+
         return sum(answers)
 
 # NOTE: Acceptance Rate 57.6% (medium)
