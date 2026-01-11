@@ -7,7 +7,7 @@ var prior_cick_time
 var pane_descriptors = {
     Resource:     '#resourceTabParent    .tab-pane',
     Research:     '#research             .tab-pane',
-    // SolarSystem:  '#solarSystem          .tab-pane',
+    SolarSystem:  '#solarSystem          .tab-pane',
     Wonder:       '#wonder               .tab-pane',
     SolCenter:    '#solCenterPage        .tab-pane',
     // Machine:      '#machineTab           .tab-pane',
@@ -34,6 +34,7 @@ function from_number(value) {
 function to_number(orig_value, comment= '') {
     value = orig_value
     value = value.replaceAll(',', '')
+    value = value.replaceAll('N/A', '')
     value = value.replaceAll('/', '')  // Energy comes preceeded by '/' for some reason
     value = value.trim()            // and a million spaces
     var answer = parseFloat(value)
@@ -112,12 +113,23 @@ function get_maxes() {
     science_value = science_ob.text()
     science_value = to_number(science_value)
     science_max = (10 * science_value)      // actually unlimited
+
+    fuel_ob = $('#rocketFuel')
+    fuel_value = fuel_ob.text()
+    fuel_value = to_number(fuel_value)
+    fuel_max = (10 * fuel_value)      // actually unlimited
+
+    rockets_max = 1_000     // NOTE: not sure how to compute this
+
     var maxes = {
         science: science_max,
         // should pull these maxes from the Interstellar:Rockets page
         shield_plating: 50,
         engine_unit: 25,
         aerodynamic_sections: 15,
+        // should pull these maxes from the Solar System tab
+        rocket: rockets_max,
+        rocket_fuel: fuel_max,
     }
 
     $.each(max_pairs, function(pair_idx, max_pair) {
@@ -194,6 +206,7 @@ function check_tabs(maxes) {
         string = string.replace('The Overlord wishes for a cube made up of', cost_flag)
 
         // alternate cost flag
+        string = string.replace('This requires', cost_flag)
         string = string.replace('Cost:', cost_flag)
 
         // Wonder phrases within costs:
@@ -519,7 +532,6 @@ function tick_start() {
     }
     tick_id = setInterval(tick, tick_milliseconds)
     console.warn('tick start', tick_id)
-    tick()
 }
 
 function tick_stop() {
