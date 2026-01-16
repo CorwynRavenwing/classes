@@ -233,6 +233,10 @@ function check_tabs(maxes) {
             // has non-standard Costs section
             return ""
         }
+        if (GLOBAL_pane_title == "rockets") {
+            // does not have Costs section
+            return ""
+        }
 
         var position = string.search(cost_flag)
         if (DEBUG) console.log('Costs Position:', position)
