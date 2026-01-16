@@ -26,6 +26,14 @@ class Solution:
             # no intersection: impossible
             return -1
         S = max(I)      # largest possible
+
         return (S * S) % mod
+
 # NOTE: Runtime 1122 ms Beats 84.62%
 # NOTE: Memory 51.18 MB Beats 37.06%
+
+# NOTE: Acceptance Rate 25.7% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 1191 ms Beats 90.24%
+# NOTE: Memory 53.86 MB Beats 15.85%
