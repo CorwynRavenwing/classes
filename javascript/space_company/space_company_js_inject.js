@@ -237,7 +237,7 @@ function get_maxes() {
     return maxes
 }
 
-function check_tabs(maxes) {
+function check_tabs(maxes, available_substances) {
     const cost_flag = "Costs"
     var GLOBAL_overflow_reasons = new Object;
     var GLOBAL_pane_heading
@@ -632,9 +632,9 @@ function tick() {
     // console.log('GLOBAL_tabs_available:', GLOBAL_tabs_available)
     var maxes = get_maxes()
     // console.log('maxes:', maxes)
-    var tab_data = check_tabs(maxes);
     var available_substances = get_available_substances(maxes)
     // console.log('available_substances:', available_substances)
+    var tab_data = check_tabs(maxes, available_substances);
     // console.log('tab_data', tab_data)
     var results = for_each_nav(colorize_one_max, tab_data)
     // console.log('results', results)
