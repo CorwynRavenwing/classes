@@ -14,6 +14,8 @@ var pane_descriptors = {
     Interstellar:    '#interstellarTab_pane .tab-pane',
     Stargaze:        '#stargazeTab          .tab-pane',
 }
+
+var GLOBAL_known_unknowns = []
 }
 
 function from_number(value) {
@@ -175,8 +177,12 @@ function check_tabs(maxes) {
         if (substance == 'gem') { substance = 'gems' }
         known_substance = (substance in maxes)
         if (! known_substance) {
-            /* if (DEBUG) */ console.warn('cost of UNKNOWN SUBSTANCE:', GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, cost_idx, '"' + cost_str + '"', substance, needed)
             GLOBAL_unknown_substances.push(substance)
+            var seen = (GLOBAL_known_unknowns.includes(substance))
+            if (! seen) {
+                GLOBAL_known_unknowns.push(substance)
+                /* if (DEBUG) */ console.warn('cost of UNKNOWN SUBSTANCE:', GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, cost_idx, '"' + cost_str + '"', substance, needed)
+            }
             return
         }
         max_value = maxes[substance]
