@@ -68,3 +68,9 @@ class Solution:
 # NOTE: Accepted on third Submit (edge case; Output Exceeded)
 # NOTE: Runtime 191 ms Beats 66.23%
 # NOTE: Memory 18.60 MB Beats 14.29%
+
+# NOTE: Acceptance Rate 54.9% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 195 ms Beats 58.62%
+# NOTE: Memory 20.18 MB Beats 6.32%
