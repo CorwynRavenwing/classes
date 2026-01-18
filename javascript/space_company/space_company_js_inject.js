@@ -29,7 +29,7 @@ function get_available_substances(maxes) {
 
     $.each(maxes, function(max_item, max_value) {
         answer.push(max_item)
-    }
+    });
 
     function get_one_available(index, tr) {
         tr = $( tr )
