@@ -18,6 +18,37 @@ var pane_descriptors = {
 }
 
 var GLOBAL_known_unknowns = []
+
+var GLOBAL_tabs_available = []
+
+var GLOBAL_known_missing_tabs = []
+
+function get_tabs_available() {
+    var answer = []
+
+    var tabList = $("#tabList li")
+    $.each(tabList, function(index, value) {
+        ob = $( value )
+        var hidden = ob.is(':hidden');
+        if (hidden) {
+            return
+        }
+        var pull_right = ob.hasClass('pull-right');
+        if (pull_right) {
+            return
+        }
+        var label = ob.text().trim()
+        answer.push(label);
+        var known_label = (label in pane_descriptors)
+        if (! known_label) {
+            if (! GLOBAL_known_missing_tabs.includes(label)) {
+                console.log('VISIBLE TAB, UNKNOWN LABEL:', label)
+                GLOBAL_known_missing_tabs.push(label)
+            }
+        }
+    });
+
+    return answer
 }
 
 function from_number(value) {
@@ -536,6 +567,8 @@ var tick_id;
 
 function tick() {
     // console.log('tick', tick_id)
+    GLOBAL_tabs_available = get_tabs_available()
+    // console.log('GLOBAL_tabs_available:', GLOBAL_tabs_available)
     var maxes = get_maxes()
     // console.log('maxes:', maxes)
     var tab_data = check_tabs(maxes);
