@@ -560,11 +560,11 @@ function check_tabs(maxes, available_substances) {
             .trim()
             .toLowerCase()
             .replace(/^the /, '');
-        // known_title = (pane_title in maxes)
-        // if (! known_title) {
-        //     if (DEBUG) console.warn('Skip', pane_title)
-        //     return
-        // }
+        known_title = (available_substances.includes(GLOBAL_pane_title))
+        if (! known_title) {
+            if (DEBUG) console.warn('Skip', GLOBAL_pane_title)
+            return
+        }
         if (GLOBAL_pane_title == 'dyson swarms and sphere') {
             // console.warn('Ignore Dyson Swarm / Sphere pane')
             return
