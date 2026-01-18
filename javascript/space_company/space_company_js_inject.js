@@ -288,7 +288,7 @@ function check_tabs(maxes) {
         var position = string.search(cost_flag)
         if (DEBUG) console.log('Costs Position:', position)
         if (position == -1) {
-            throw new Error("'Costs' not found:\n" + GLOBAL_pane_heading + "/" + GLOBAL_pane_title + "\n" + orig_string + "\n---\n" + string)
+            throw new Error("'Costs' not found:\n" + GLOBAL_pane_heading + "/" + GLOBAL_pane_title + "\n'" + orig_string + "'\n---\n'" + string + "'")
         }
         position += cost_flag.length
         string = string
