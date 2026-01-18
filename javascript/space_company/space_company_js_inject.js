@@ -7,14 +7,14 @@ var DEBUG = false
 var prior_cick_time
 
 var pane_descriptors = {
-    Resources:       '#resourceTabParent    .tab-pane',
-    Research:        '#research             .tab-pane',
-    'Solar System':  '#solarSystem          .tab-pane',
-    Wonder:          '#wonder               .tab-pane',
-    SolCenter:       '#solCenterPage        .tab-pane',
-    // Machine:         '#machineTab           .tab-pane',
-    Interstellar:    '#interstellarTab_pane .tab-pane',
-    Stargaze:        '#stargazeTab          .tab-pane',
+    Resources:       '#resourceTabParent',
+    Research:        '#research',
+    'Solar System':  '#solarSystem',
+    Wonder:          '#wonder',
+    SolCenter:       '#solCenterPage',
+    // Machine:         '#machineTab',
+    Interstellar:    '#interstellarTab_pane',
+    Stargaze:        '#stargazeTab',
 }
 
 var GLOBAL_known_unknowns = []
@@ -532,7 +532,7 @@ function check_tabs(maxes) {
         // DEBUG = (pane_heading == 'Wonder')
         if (DEBUG) console.log('pane_heading:', GLOBAL_pane_heading)
         // console.warn('A', pane_heading, DEBUG)
-        var panes = $( pane_desc )
+        var panes = $( pane_desc + ' .tab-pane')
         if (DEBUG) console.warn('panes:', pane_desc, panes)
         $.each(panes, scan_one_pane)
     })
