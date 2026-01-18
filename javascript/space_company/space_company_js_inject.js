@@ -14,7 +14,7 @@ var pane_descriptors = {
     SolCenter:       '#solCenterPage',
     // Machine:         '#machineTab',
     Interstellar:    '#interstellarTab_pane',
-    Stargaze:        '#stargazeTab',
+    Stargaze:        '#stargazeTab_pane',
 }
 
 var GLOBAL_known_unknowns = []
