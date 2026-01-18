@@ -1,6 +1,8 @@
 // JavaScript to auto-run the game "Space Company":
 // https://sparticle999.github.io/SpaceCompany/
 
+var tick_seconds = 1
+
 var DEBUG = false
 var prior_cick_time
 
@@ -537,7 +539,6 @@ function tick() {
 }
 
 function tick_start() {
-    var tick_seconds = 5
     var tick_milliseconds = tick_seconds * 1000
     if (tick_id) {
         tick_stop();
