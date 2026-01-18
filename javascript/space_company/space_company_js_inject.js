@@ -524,6 +524,11 @@ function check_tabs(maxes) {
     $.each(pane_descriptors, function(desc_idx, pane_desc) {
         // console.log('pane descriptor:', desc_idx, pane_desc)
         GLOBAL_pane_heading = desc_idx
+        var available = GLOBAL_tabs_available.includes(GLOBAL_pane_heading)
+        if (! available) {
+            if (DEBUG) console.warn('Skip unavailable tab', GLOBAL_pane_heading)
+            return
+        }
         // DEBUG = (pane_heading == 'Wonder')
         if (DEBUG) console.log('pane_heading:', GLOBAL_pane_heading)
         // console.warn('A', pane_heading, DEBUG)
