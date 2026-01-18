@@ -248,6 +248,11 @@ function check_tabs(maxes) {
             // does not have Costs section
             return ""
         }
+        if (GLOBAL_pane_title == "travel") {
+            // Interstellar.
+            // does not have Costs section
+            return ""
+        }
 
         var position = string.search(cost_flag)
         if (DEBUG) console.log('Costs Position:', position)
