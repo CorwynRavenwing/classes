@@ -5,13 +5,15 @@ var DEBUG = false
 var prior_cick_time
 
 var pane_descriptors = {
-    Resource:     '#resourceTabParent    .tab-pane',
-    Research:     '#research             .tab-pane',
-    SolarSystem:  '#solarSystem          .tab-pane',
-    Wonder:       '#wonder               .tab-pane',
-    SolCenter:    '#solCenterPage        .tab-pane',
-    // Machine:      '#machineTab           .tab-pane',
-    Interstellar: '#interstellarTab_pane .tab-pane',
+    Resources:       '#resourceTabParent    .tab-pane',
+    Research:        '#research             .tab-pane',
+    'Solar System':  '#solarSystem          .tab-pane',
+    Wonder:          '#wonder               .tab-pane',
+    SolCenter:       '#solCenterPage        .tab-pane',
+    // Machine:         '#machineTab           .tab-pane',
+    Interstellar:    '#interstellarTab_pane .tab-pane',
+    Stargaze:        '#stargazeTab          .tab-pane',
+}
 }
 
 function from_number(value) {
