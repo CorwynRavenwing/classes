@@ -232,6 +232,7 @@ function check_tabs(maxes) {
         string = string.replace('Donate Resources', '')
         string = string.replace(/Activate .*/, '')
         string = string.replace(/Rebuild .*/, '')
+        string = string.replace('Unlock Plasma Research', '')
         string = string.replace('Unlock Dyson Sphere Research', '')
         string = string.replace(/[0-9.]+%$/, '')
 
