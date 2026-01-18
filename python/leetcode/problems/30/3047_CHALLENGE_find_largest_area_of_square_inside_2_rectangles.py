@@ -54,7 +54,7 @@ class Solution:
                 )
                 # print(f'    {maxSize=}')
         
-        return maxSize * maxSize    # are of this square
+        return maxSize * maxSize    # area of this square
 
 # NOTE: Runtime 6941 ms Beats 13.90%
 # NOTE: Memory 17.53 MB Beats 5.88%
