@@ -4,6 +4,7 @@
 var tick_seconds = 1
 
 var DEBUG = false
+var DEBUG_tick = false
 var prior_cick_time
 
 var pane_descriptors = {
@@ -656,8 +657,6 @@ function tick_stop() {
         tick_id = 0
     }
 }
-
-var DEBUG_tick = false
 
 if (DEBUG_tick) {
     tick_stop()
