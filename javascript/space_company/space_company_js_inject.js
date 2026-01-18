@@ -560,6 +560,7 @@ function check_tabs(maxes, available_substances) {
             .text()
             .trim()
             .toLowerCase()
+            .replaceAll(' ', '_')
             .replace(/^the /, '');
         known_title = (available_substances.includes(GLOBAL_pane_title))
         if (! known_title) {
