@@ -341,6 +341,10 @@ function check_tabs(maxes, available_substances) {
             // does not have Costs section
             return ""
         }
+        if (string == '') {
+            // string is now blank: no costs
+            return ""
+        }
 
         var position = string.search(cost_flag)
         if (DEBUG) console.log('Costs Position:', position)
