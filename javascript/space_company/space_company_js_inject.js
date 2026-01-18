@@ -587,7 +587,6 @@ function check_tabs(maxes, available_substances) {
             return
         }
         GLOBAL_pane_heading = desc_idx
-        // DEBUG = (pane_heading == 'Wonder')
         if (DEBUG) console.log('pane_heading:', GLOBAL_pane_heading)
         // console.warn('A', pane_heading, DEBUG)
         var panes = $( pane_desc + ' .tab-pane')
