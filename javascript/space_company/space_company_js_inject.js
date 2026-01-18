@@ -23,6 +23,62 @@ var GLOBAL_tabs_available = []
 
 var GLOBAL_known_missing_tabs = []
 
+function get_available_substances(maxes) {
+    var answer = []
+
+    $.each(maxes, function(max_item, max_value) {
+        answer.push(max_item)
+    }
+
+    function get_one_available(index, tr) {
+        tr = $( tr )
+        var is_hidden = tr.hasClass('hidden')
+        if (is_hidden) {
+            return
+        }
+        var tds = tr.children('td')
+        if (tds.length == 1) {
+            // "Collapse Group" control
+            return
+        }
+        var first = $( tds[0] )
+        if( first.children('img').length ) {
+            first = $( tds[1] )
+        }
+
+        var text = first
+            .text()
+            .trim()
+            .toLowerCase()
+            .replaceAll(' ', '_');
+        answer.push( text )
+        if (DEBUG) console.log('TD:', text)
+    }
+
+    function scan_one_tab(tab_idx, tab) {
+        tab = $( tab )
+        // console.log('DEBUG: tab', tab_idx, tab)
+
+        var trs = tab.children('table').children('tbody').children('tr')
+        $.each(trs, get_one_available)
+    }
+
+    $.each(pane_descriptors, function(desc_idx, tab_desc) {
+        var available = GLOBAL_tabs_available.includes(desc_idx)
+        if (! available) {
+            if (DEBUG) console.warn('Skip unavailable tab', desc_idx)
+            return
+        }
+        if (DEBUG) console.log('Check tab', desc_idx)
+
+        var tabs = $( tab_desc + ' > .container')
+        if (DEBUG) console.warn('tabs:', tab_desc, tabs)
+        $.each(tabs, scan_one_tab)
+    })
+
+    return answer
+}
+
 function get_tabs_available() {
     var answer = []
 
@@ -577,6 +633,8 @@ function tick() {
     var maxes = get_maxes()
     // console.log('maxes:', maxes)
     var tab_data = check_tabs(maxes);
+    var available_substances = get_available_substances(maxes)
+    // console.log('available_substances:', available_substances)
     // console.log('tab_data', tab_data)
     var results = for_each_nav(colorize_one_max, tab_data)
     // console.log('results', results)
