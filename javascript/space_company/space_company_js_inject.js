@@ -19,10 +19,10 @@ var pane_descriptors = {
 }
 
 var GLOBAL_known_unknowns = []
-
 var GLOBAL_tabs_available = []
-
 var GLOBAL_known_missing_tabs = []
+var GLOBAL_available_substances = []
+var GLOBAL_available_substances_by_page = {}
 
 function get_available_substances(maxes) {
     var answer = []
