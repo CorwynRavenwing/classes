@@ -55,6 +55,7 @@ function get_available_substances(maxes) {
             .replaceAll(' ', '_');
         answer.push( text )
         if (DEBUG) console.log('TD:', text)
+        GLOBAL_available_substances_by_page[NONLOCAL_tab_desc].push(text)
     }
 
     function scan_one_tab(tab_idx, tab) {
@@ -76,8 +77,9 @@ function get_available_substances(maxes) {
         var tabs = $( tab_desc + ' > .container')
         if (DEBUG) console.warn('tabs:', tab_desc, tabs)
         NONLOCAL_tab_desc = desc_idx
+        GLOBAL_available_substances_by_page[NONLOCAL_tab_desc] = []
         $.each(tabs, scan_one_tab)
-    })
+    });
 
     return answer
 }
