@@ -579,9 +579,11 @@ function check_tabs(maxes, available_substances) {
         GLOBAL_pane_title = h2
             .text()
             .trim()
-            .toLowerCase()
-            .replaceAll(' ', '_')
-            .replace(/^the /, '');
+            .toLowerCase()                  // must be zeroth
+            .replace(/^inside the /, '')    // must be first
+            .replace(/^the /, '')           // must be second
+            .replaceAll(' ', '_')           // must be third
+            ;
         known_title = (available_substances.includes(GLOBAL_pane_title))
         if (! known_title) {
             if (DEBUG) console.warn('Skip', GLOBAL_pane_title)
