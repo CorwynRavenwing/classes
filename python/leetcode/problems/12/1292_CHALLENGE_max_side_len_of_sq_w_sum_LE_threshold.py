@@ -80,3 +80,9 @@ class Solution:
 # NOTE: Accepted on third Submit (fencepost error; output exceeded)
 # NOTE: Runtime 1200 ms Beats 24.39%
 # NOTE: Memory 24.02 MB Beats 9.66%
+
+# NOTE: Acceptance Rate 54.1% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 1220 ms Beats 17.41%
+# NOTE: Memory 26.38 MB Beats 22.77%
