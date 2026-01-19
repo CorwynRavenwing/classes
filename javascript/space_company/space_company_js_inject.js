@@ -662,6 +662,7 @@ function tick() {
     // console.log('maxes:', maxes)
     var available_substances = get_available_substances(maxes)
     // console.log('available_substances:', available_substances)
+    GLOBAL_available_substances = available_substances
     var tab_data = check_tabs(maxes, available_substances);
     // console.log('tab_data', tab_data)
     var results = for_each_nav(colorize_one_max, tab_data)
