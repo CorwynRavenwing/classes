@@ -52,6 +52,8 @@ function get_available_substances(maxes) {
             .text()
             .trim()
             .toLowerCase()
+            .replace(': dormant', '')
+            .replace(': activated', '')
             .replaceAll(' ', '_');
         answer.push( text )
         if (DEBUG) console.log('TD:', text)
