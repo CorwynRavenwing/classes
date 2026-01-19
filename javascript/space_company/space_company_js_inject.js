@@ -26,6 +26,7 @@ var GLOBAL_known_missing_tabs = []
 
 function get_available_substances(maxes) {
     var answer = []
+    var NONLOCAL_tab_desc
 
     $.each(maxes, function(max_item, max_value) {
         answer.push(max_item)
@@ -74,6 +75,7 @@ function get_available_substances(maxes) {
 
         var tabs = $( tab_desc + ' > .container')
         if (DEBUG) console.warn('tabs:', tab_desc, tabs)
+        NONLOCAL_tab_desc = desc_idx
         $.each(tabs, scan_one_tab)
     })
 
