@@ -325,6 +325,7 @@ function check_tabs(maxes, available_substances) {
         string = string.replace(/Activate .*/, '')
         string = string.replace(/Rebuild .*/, '')
         string = string.replace('Unlock Plasma Research', '')
+        string = string.replace('Unlock EMC Machine Research', '')
         string = string.replace('Unlock Dyson Sphere Research', '')
         string = string.replace(/[0-9.]+%$/, '')
 
