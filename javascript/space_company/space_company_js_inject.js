@@ -329,6 +329,10 @@ function check_tabs(maxes, available_substances) {
         string = string.replace('Unlock Dyson Sphere Research', '')
         string = string.replace(/[0-9.]+%$/, '')
 
+        // Dark Matter phrases to clean up:
+        string = string.replaceAll(/Improves relationship by [0-9.]+/g, '')
+        string = string.replaceAll(/Improves relationship by/g, '')
+
         if (GLOBAL_pane_title == "energy-mass conversion") {
             // does not have Costs section
             return ""
