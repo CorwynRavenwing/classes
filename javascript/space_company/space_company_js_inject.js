@@ -692,4 +692,3 @@ if (DEBUG_tick) {
 } else {
     tick_start()
 }
-
