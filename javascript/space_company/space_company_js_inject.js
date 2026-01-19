@@ -55,6 +55,9 @@ function get_available_substances(maxes) {
             .replace(': dormant', '')
             .replace(': activated', '')
             .replaceAll(' ', '_');
+        if (! text) {
+            return
+        }
         answer.push( text )
         if (DEBUG) console.log('TD:', text)
         GLOBAL_available_substances_by_page[NONLOCAL_tab_desc].push(text)
