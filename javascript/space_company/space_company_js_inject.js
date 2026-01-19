@@ -586,7 +586,12 @@ function check_tabs(maxes, available_substances) {
             ;
         known_title = (available_substances.includes(GLOBAL_pane_title))
         if (! known_title) {
-            if (DEBUG) console.warn('Skip', GLOBAL_pane_title)
+            var page_designator = GLOBAL_pane_heading + '/' + GLOBAL_pane_title
+            var known_skip = (GLOBAL_known_skip_page.includes(page_designator))
+            if (! known_skip) {
+                console.warn('Skip', page_designator)
+                GLOBAL_known_skip_page.push(page_designator)
+            }
             return
         }
         if (GLOBAL_pane_title == 'dyson swarms and sphere') {
