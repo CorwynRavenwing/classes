@@ -24,6 +24,30 @@ var GLOBAL_known_missing_tabs = []
 var GLOBAL_available_substances = []
 var GLOBAL_available_substances_by_page = {}
 
+function check_energy_levels() {
+    var energy_change_ob = $('#energyps')
+    var energy_falling_case = energy_change_ob.hasClass('red')
+
+    var energy_deficit_ob = $('#energyLow')
+    var energy_okay_case = energy_deficit_ob.hasClass('hidden')
+    var energy_deficit_case = (! energy_okay_case)
+
+    var game_ob = $('#game')
+    if (energy_deficit_case) {
+        game_ob.addClass('energy-deficit')
+        game_ob.removeClass('energy-falling')
+        game_ob.removeClass('energy-okay')
+    } else if (energy_falling_case) {
+        game_ob.addClass('energy-falling')
+        game_ob.removeClass('energy-deficit')
+        game_ob.removeClass('energy-okay')
+    } else {
+        game_ob.addClass('energy-okay')
+        game_ob.removeClass('energy-deficit')
+        game_ob.removeClass('energy-falling')
+    }
+}
+
 function get_available_substances(maxes) {
     var answer = []
     var NONLOCAL_tab_desc
@@ -656,6 +680,8 @@ var tick_id;
 
 function tick() {
     // console.log('tick', tick_id)
+    check_energy_levels()
+
     GLOBAL_tabs_available = get_tabs_available()
     // console.log('GLOBAL_tabs_available:', GLOBAL_tabs_available)
     var maxes = get_maxes()

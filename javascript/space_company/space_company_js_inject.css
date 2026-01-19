@@ -40,3 +40,19 @@
     background-color:#CBC3E3;       /* pastel purple */
 }
 
+.energy-deficit {
+    border: 5px solid red;
+}
+
+.energy-falling {
+    border: 5px solid orange;
+}
+
+.energy-okay {
+    border: 5px solid lightgreen;
+}
+
+button.destroy {
+    color: red;
+    background-color: red;
+}
