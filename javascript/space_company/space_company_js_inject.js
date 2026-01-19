@@ -360,6 +360,8 @@ function check_tabs(maxes, available_substances) {
             return ""
         }
 
+        string = string.trim()
+
         var position = string.search(cost_flag)
         if (DEBUG) console.log('Costs Position:', position)
         if (position == -1) {
