@@ -38,12 +38,12 @@ function get_available_substances(maxes) {
             return
         }
         var tds = tr.children('td')
-        if (tds.length == 1) {
-            // "Collapse Group" control
-            return
-        }
         var first = $( tds[0] )
         if( first.children('img').length ) {
+            if (tds.length == 1) {
+                console.error('available_substances: image in only TD', tds)
+                return
+            }
             first = $( tds[1] )
         }
 
