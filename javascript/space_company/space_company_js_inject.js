@@ -300,7 +300,7 @@ function check_tabs(maxes, available_substances) {
         if (substance == 'gem') { substance = 'gems' }
         known_substance = (substance in maxes)
         if (! known_substance) {
-            GLOBAL_unknown_substances.push(substance)
+            GLOBAL_unknown_substances.push("'" + substance + "'")
             var seen = (GLOBAL_known_unknowns.includes(substance))
             if (! seen) {
                 GLOBAL_known_unknowns.push(substance)
