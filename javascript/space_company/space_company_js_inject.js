@@ -84,7 +84,7 @@ function get_available_substances(maxes) {
         }
         answer.push( text )
         if (DEBUG) console.log('TD:', text)
-        GLOBAL_available_substances_by_page[NONLOCAL_tab_desc].push(text)
+        GLOBAL_available_substances_by_page[NONLOCAL_tab_desc].push("'" + text + "'")
     }
 
     function scan_one_tab(tab_idx, tab) {
