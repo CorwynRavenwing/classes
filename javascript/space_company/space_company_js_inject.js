@@ -77,6 +77,7 @@ function get_available_substances(maxes) {
             .text()
             .trim()
             .toLowerCase()
+            .replace('comms', 'communication')
             .replace(': dormant', '')
             .replace(': activated', '')
             .replaceAll(' ', '_');
