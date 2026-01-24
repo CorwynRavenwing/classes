@@ -362,7 +362,7 @@ function check_tabs(maxes, available_substances) {
         string = string.replaceAll(/Improves relationship by [0-9.]+/g, '')
         string = string.replaceAll(/Improves relationship by/g, '')
 
-        if (GLOBAL_pane_title == "energy-mass conversion") {
+        if (GLOBAL_pane_title == "energy-mass_conversion") {
             // does not have Costs section
             return ""
         }
