@@ -22,6 +22,10 @@
     background-color: green;
 }
 
+.no_button {
+    background-color: lavender;
+}
+
 /* hyper-specific codes to override .info elements in cerulean-bootstrap.css */
 /* this only applies to the left sidebar */
 .table>thead>tr>td.info.bump_max,

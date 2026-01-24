@@ -472,12 +472,25 @@ function check_tabs(maxes, available_substances) {
         }
         // yes, repeat the prior question
         if (button) {
+            if (button.hasClass('btn-warning')) {
+                button = null
+            }
+        }
+        // yes, repeat the prior question
+        if (button) {
             var button_is_hidden = button
-                .parent()
                 .hasClass('hidden');
             if (button_is_hidden) {
-                // console.warn('button is hidden', button.parent())
+                // console.warn('button is hidden', button)
                 button = null
+            } else {
+                button_is_hidden = button
+                    .parent()
+                    .hasClass('hidden');
+                if (button_is_hidden) {
+                    // console.warn('button is hidden', button.parent())
+                    button = null
+                }
             }
         }
         var input = td
@@ -523,68 +536,74 @@ function check_tabs(maxes, available_substances) {
             'click_me',
             'clicking',
             'unknown_substance',
+            'no_button',
         ];
 
-        if (desired) {
-            if (! button) {
-                console.warn('Trying to click missing button', GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
-                cant_click = true
-            }
-            if (cant_click) {
-                set_class = 'cant_click'
-                pop_up.push("Missing Ingredients: " + red_ingredients.length)
-            } else {
-                if (GLOBAL_clicked_something) {
-                    set_class = 'click_me'
+        if (! button) {
+            set_class = 'no_button'
+        } else {
+            if (desired) {
+                if (! button) {
+                    console.warn('Trying to click missing button', GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
+                    cant_click = true
+                }
+                if (cant_click) {
+                    set_class = 'cant_click'
+                    pop_up.push("Missing Ingredients: " + red_ingredients.length)
                 } else {
-                    set_class = 'clicking'
+                    if (GLOBAL_clicked_something) {
+                        set_class = 'click_me'
+                    } else {
+                        set_class = 'clicking'
+                    }
+                }
+            }
+
+            if (GLOBAL_bump_specifics.length) {
+                set_class = 'bump_max'
+                pop_up.push("Bump:")
+                pop_up.push(...GLOBAL_bump_specifics)
+            }
+            if (GLOBAL_unknown_substances.length) {
+                pop_up.push("Unknown:")
+                pop_up.push(...GLOBAL_unknown_substances)
+                set_class = 'unknown_substance'
+            }
+            if (set_class == 'clicking') {
+                // if (red_ingredients.length) {
+                //     console.warn('red_ingredients', red_ingredients)
+                //     console.warn('cant_click:', cant_click)
+                // }
+                var click_time
+                click_time = Math.floor(new Date().getTime() / 1000)
+
+                var elapsed_s = (click_time - prior_cick_time)
+                var TIME = toHHMMSS(elapsed_s)
+                TIME = "(" + TIME.trim() + ")"
+                
+                button.click()
+                var new_current = current_ob.text().trim();
+                var VERIFY = false
+                if (VERIFY && (current != '') && (new_current == current)) {
+                    console.warn("ERROR: tried clicking", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, "no change", new_current, current)
+                    set_class = 'click_me'
+                    // need to remove click-me from removal list
+                } else {
+                    GLOBAL_clicked_something = true
+
+                    console.log('AUTO-CLICK', TIME, GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, '(' + desired + ')')
+
+                    prior_cick_time = click_time
+
+                    desired -= 1
+                    if (! desired) {
+                        desired = ''
+                    }
+                    input.val(desired)
                 }
             }
         }
 
-        if (GLOBAL_bump_specifics.length) {
-            set_class = 'bump_max'
-            pop_up.push("Bump:")
-            pop_up.push(...GLOBAL_bump_specifics)
-        }
-        if (GLOBAL_unknown_substances.length) {
-            pop_up.push("Unknown:")
-            pop_up.push(...GLOBAL_unknown_substances)
-            set_class = 'unknown_substance'
-        }
-        if (set_class == 'clicking') {
-            // if (red_ingredients.length) {
-            //     console.warn('red_ingredients', red_ingredients)
-            //     console.warn('cant_click:', cant_click)
-            // }
-            var click_time
-            click_time = Math.floor(new Date().getTime() / 1000)
-
-            var elapsed_s = (click_time - prior_cick_time)
-            var TIME = toHHMMSS(elapsed_s)
-            TIME = "(" + TIME.trim() + ")"
-            
-            button.click()
-            var new_current = current_ob.text().trim();
-            var VERIFY = false
-            if (VERIFY && (current != '') && (new_current == current)) {
-                console.warn("ERROR: tried clicking", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, "no change", new_current, current)
-                set_class = 'click_me'
-                // need to remove click-me from removal list
-            } else {
-                GLOBAL_clicked_something = true
-
-                console.log('AUTO-CLICK', TIME, GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, '(' + desired + ')')
-
-                prior_cick_time = click_time
-
-                desired -= 1
-                if (! desired) {
-                    desired = ''
-                }
-                input.val(desired)
-            }
-        }
         if (set_class) {
             tr.addClass(set_class)
         }
