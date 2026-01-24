@@ -500,7 +500,7 @@ function check_tabs(maxes, available_substances) {
         if (DEBUG) console.log('purchase:', GLOBAL_purchase)
         details = cleanup_costs(details)
         // if (DEBUG)  console.log('details:', details)
-        costs = details.split(', ')     // comma space
+        costs = details.split(', ')     // split on "comma space"
         if (DEBUG) console.log('costs:', costs)
         if (DETAIL) console.log(GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, costs)
         GLOBAL_unknown_substances = []
