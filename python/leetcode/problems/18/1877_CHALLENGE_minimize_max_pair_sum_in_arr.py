@@ -1,5 +1,6 @@
 class Solution:
     def minPairSum(self, nums: List[int]) -> int:
+
         # nums.sort()
         # max_sum = 0
         # while nums:
@@ -36,3 +37,9 @@ class Solution:
 # NOTE: Memory 31.16 MB Beats 6.69%
 
 # NOTE: 4x faster runtime; half-again more memory
+
+# NOTE: Acceptance Rate 81.7% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 883 ms Beats 65.25%
+# NOTE: Memory 33.65 MB Beats 16.10%
