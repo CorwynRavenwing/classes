@@ -248,6 +248,11 @@ function get_maxes() {
 
     rockets_max = 1_000     // NOTE: not sure how to compute this
 
+    dark_ob = $('#stargazeNavdarkMatter_count')
+    dark_value = dark_ob.text()
+    dark_value = to_number(dark_value)
+    dark_max = (10 * dark_value)      // actually unlimited
+
     var maxes = {
         science: science_max,
         // should pull these maxes from the Interstellar:Rockets page
@@ -257,6 +262,7 @@ function get_maxes() {
         // should pull these maxes from the Solar System tab
         rocket: rockets_max,
         rocket_fuel: fuel_max,
+        dark_matter: dark_max,      // NOTE: unclear why this is necessary
     }
 
     $.each(max_pairs, function(pair_idx, max_pair) {
