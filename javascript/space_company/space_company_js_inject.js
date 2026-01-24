@@ -23,6 +23,7 @@ var GLOBAL_tabs_available = []
 var GLOBAL_known_missing_tabs = []
 var GLOBAL_available_substances = []
 var GLOBAL_available_substances_by_page = {}
+var GLOBAL_known_skip_page = []
 
 function check_energy_levels() {
     var energy_change_ob = $('#energyps')
