@@ -98,17 +98,17 @@ function get_available_substances(maxes) {
         $.each(trs, get_one_available)
     }
 
-    $.each(pane_descriptors, function(desc_idx, tab_desc) {
-        var available = GLOBAL_tabs_available.includes(desc_idx)
+    $.each(pane_descriptors, function(pane_heading, tab_desc) {
+        var available = GLOBAL_tabs_available.includes(pane_heading)
         if (! available) {
-            if (DEBUG) console.warn('Skip unavailable tab', desc_idx)
+            if (DEBUG) console.warn('Skip unavailable tab', pane_heading)
             return
         }
-        if (DEBUG) console.log('Check tab', desc_idx)
+        if (DEBUG) console.log('Check tab', pane_heading)
 
         var tabs = $( tab_desc + ' > .container')
         if (DEBUG) console.warn('tabs:', tab_desc, tabs)
-        NONLOCAL_tab_desc = desc_idx
+        NONLOCAL_tab_desc = pane_heading
         GLOBAL_available_substances_by_page[NONLOCAL_tab_desc] = []
         $.each(tabs, scan_one_tab)
     });
