@@ -698,6 +698,11 @@ function get_panes_ob() {
     return panes_ob
 }
 
+function test() {
+    var panes_ob = get_panes_ob()
+    console.log('panes_ob:', panes_ob)
+}
+
 function colorize_one_max(tr, tab_data) {
     var tr = $( tr )
     var is_hidden = tr.hasClass('hidden')
