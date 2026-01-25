@@ -671,7 +671,6 @@ function check_tabs(maxes, available_substances) {
 
 function get_panes_ob(pane_descriptors) {
     pane_entries = Object.entries(pane_descriptors)
-    // console.log('pane_entries:', pane_entries)
 
     var panes_allowed = pane_entries.filter(function(entry) {
         var [pane_heading, pane_desc] = entry
