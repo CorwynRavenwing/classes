@@ -13,6 +13,7 @@ var pane_descriptors = {
     'Solar System':  '#solarSystem',
     Wonders:         '#wonder',
     'Sol Center':    '#solCenterPage',
+    'Nonexistent':   '#TestingOnly',
     // Machine:         '#machineTab',
     Interstellar:    '#interstellarTab_pane',
     Stargaze:        '#stargazeTab_pane',
