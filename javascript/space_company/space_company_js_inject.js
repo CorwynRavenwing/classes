@@ -623,7 +623,6 @@ function check_tabs(maxes, available_substances) {
     }
 
     function scan_one_pane(pane_idx, pane) {
-        // console.warn('B', pane_heading, DEBUG)
         pane = $(pane)
         var trs = pane.find("tr")
         var tr0 = $( trs[0] )
