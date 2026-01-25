@@ -658,23 +658,44 @@ function check_tabs(maxes, available_substances) {
         $.each(trs, scan_one_tr)
     }
 
-    $.each(pane_descriptors, function(desc_idx, pane_desc) {
-        // console.log('pane descriptor:', desc_idx, pane_desc)
-        var available = GLOBAL_tabs_available.includes(desc_idx)
-        if (! available) {
-            if (DEBUG) console.warn('Skip unavailable tab', desc_idx)
-            return
-        }
-        GLOBAL_pane_heading = desc_idx
+    var panes_ob = get_panes_ob()
+    $.each(panes_ob, function(pane_heading, panes) {
+        GLOBAL_pane_heading = pane_heading
         if (DEBUG) console.log('pane_heading:', GLOBAL_pane_heading)
-        // console.warn('A', pane_heading, DEBUG)
-        var panes = $( pane_desc + ' .tab-pane')
         if (DEBUG) console.warn('panes:', pane_desc, panes)
         $.each(panes, scan_one_pane)
-    })
+    });
 
     // console.log('overflow_reasons', GLOBAL_overflow_reasons)
     return GLOBAL_overflow_reasons
+}
+
+function get_panes_ob() {
+    pane_entries = Object.entries(pane_descriptors)
+    // console.log('pane_entries:', pane_entries)
+
+    var panes_allowed = pane_entries.filter(function(entry) {
+        var [pane_heading, pane_desc] = entry
+        // console.log('debug: entry', entry, 'values', pane_heading, pane_desc)
+
+        var available = GLOBAL_tabs_available.includes(pane_heading)
+        if (! available) {
+            if (DEBUG) console.warn('Skip unavailable tab', pane_heading)
+            return false
+        }
+        return true
+    });
+    // console.log('panes_allowed:', panes_allowed)
+
+    var panes_array = panes_allowed.map(function(entry) {
+        var [pane_heading, pane_desc] = entry
+        var panes = $( pane_desc + ' .tab-pane')
+        return [pane_heading, panes]
+    });
+    // console.log('panes_array:', panes_array)
+
+    var panes_ob = Object.fromEntries(panes_array)
+    return panes_ob
 }
 
 function colorize_one_max(tr, tab_data) {
