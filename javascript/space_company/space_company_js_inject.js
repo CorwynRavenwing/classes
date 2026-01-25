@@ -657,7 +657,7 @@ function check_tabs(maxes, available_substances) {
         $.each(trs, scan_one_tr)
     }
 
-    var panes_ob = get_panes_ob()
+    var panes_ob = get_panes_ob(pane_descriptors)
     $.each(panes_ob, function(pane_heading, panes) {
         GLOBAL_pane_heading = pane_heading
         if (DEBUG) console.log('pane_heading:', GLOBAL_pane_heading)
@@ -669,7 +669,7 @@ function check_tabs(maxes, available_substances) {
     return GLOBAL_overflow_reasons
 }
 
-function get_panes_ob() {
+function get_panes_ob(pane_descriptors) {
     pane_entries = Object.entries(pane_descriptors)
     // console.log('pane_entries:', pane_entries)
 
@@ -698,7 +698,7 @@ function get_panes_ob() {
 }
 
 function test() {
-    var panes_ob = get_panes_ob()
+    var panes_ob = get_panes_ob(pane_descriptors)
     console.log('panes_ob:', panes_ob)
 }
 
