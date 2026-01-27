@@ -628,7 +628,7 @@ function check_tabs(maxes, available_substances) {
         pane = $(pane)
         var trs = pane.find("tr")
         var tr0 = $( trs[0] )
-        h2 = tr0.find('h2')
+        var h2 = tr0.find('h2')
         GLOBAL_pane_title = h2
             .text()
             .trim()
