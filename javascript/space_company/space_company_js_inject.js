@@ -671,6 +671,29 @@ function check_tabs(maxes, available_substances) {
     return GLOBAL_overflow_reasons
 }
 
+
+function jQuery_to_array(thing) {
+    function filter_legal_item(line) {
+        var [index, item] = line
+        if (index == 'length') {
+            return false
+        }
+        if (index == 'prevObject') {
+            return false
+        }
+        return true
+    }
+    function map_second_value(line) {
+        var [index, item] = line
+        return item
+    }
+    var entries = Object.entries(thing)
+    var array = entries
+        .filter(filter_legal_item)
+        .map(map_second_value)
+        ;
+    return array
+}
 function get_panes_ob(pane_descriptors) {
     pane_entries = Object.entries(pane_descriptors)
 
