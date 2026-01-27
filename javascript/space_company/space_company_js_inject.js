@@ -671,6 +671,10 @@ function check_tabs(maxes, available_substances) {
     return GLOBAL_overflow_reasons
 }
 
+function test() {
+    var panes_ob = get_panes_ob(pane_descriptors)
+    // console.log('panes_ob:', panes_ob)
+}
 
 function jQuery_to_array(thing) {
     function filter_legal_item(line) {
@@ -788,11 +792,6 @@ function get_panes_ob(pane_descriptors) {
 
     var panes_ob = Object.fromEntries(panes_array)
     return panes_ob
-}
-
-function test() {
-    var panes_ob = get_panes_ob(pane_descriptors)
-    console.log('panes_ob:', panes_ob)
 }
 
 function colorize_one_max(tr, tab_data) {
