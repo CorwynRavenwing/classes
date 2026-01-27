@@ -694,6 +694,75 @@ function jQuery_to_array(thing) {
         ;
     return array
 }
+
+function get_trs_ob(panes_ob, available_substances) {
+    var NONLOCAL_pane_heading
+
+    function filter_not_hidden(tr, tr_idx) {
+        tr = $( tr )
+        is_hidden = tr.hasClass('hidden')
+        if (is_hidden) {
+            return false
+        }
+        return true
+    }
+
+    function map_pane_to_title_and_trs(pane, pane_idx) {
+        pane = $( pane )
+        var trs = pane.find("tr")
+        trs = jQuery_to_array(trs)
+        trs = trs.filter(filter_not_hidden);
+        var tr0 = trs[0]
+        var tr0 = $( tr0 )
+        var h2 = tr0.find('h2')
+        var pane_title = h2
+            .text()
+            .trim()
+            .toLowerCase()
+            .replace(/^inside the /, '')
+            .replace(/^the /, '')
+            .replaceAll(' ', '_')
+            ;
+        var known_title = (available_substances.includes(pane_title))
+        if (! known_title) {
+            var page_designator = NONLOCAL_pane_heading + '/' + pane_title
+            var known_skip = (GLOBAL_known_skip_page.includes(page_designator))
+            if (! known_skip) {
+                console.warn('Skip', page_designator)
+                GLOBAL_known_skip_page.push(page_designator)
+            }
+            return []
+        }
+        // NOTE: delete this section, move logic to next function
+        if (pane_title == 'dyson swarms and sphere') {
+            // console.warn('Ignore Dyson Swarm / Sphere pane')
+            return []
+        }
+        // NOTE: end deleted section
+
+        return [pane_title, trs]
+    }
+
+    function map_panes_ob_to_all_titles_and_trs(entry) {
+        var panes
+        [NONLOCAL_pane_heading, panes] = entry
+        var panes_array = jQuery_to_array(panes)
+        var pane_data = panes_array.map(map_pane_to_title_and_trs);
+        return pane_data
+    }
+
+    var panes_ob_array = Object.entries(panes_ob)
+    var trs_array = panes_ob_array
+        .map(map_panes_ob_to_all_titles_and_trs)
+        .flat()
+        ;
+    trs_array = trs_array.filter(function(row) {
+        return row.length > 0
+    });
+    var trs_ob = Object.fromEntries(trs_array)
+    return trs_ob
+}
+
 function get_panes_ob(pane_descriptors) {
     pane_entries = Object.entries(pane_descriptors)
 
