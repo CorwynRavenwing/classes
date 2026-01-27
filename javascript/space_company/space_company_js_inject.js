@@ -427,11 +427,13 @@ function check_tabs(maxes, available_substances) {
         if (! GLOBAL_purchase) {
             return
         }
+        // NOTE: delete next section:
         is_hidden = tr.hasClass('hidden')
         if (is_hidden) {
             if (DEBUG) console.warn(GLOBAL_pane_title, GLOBAL_purchase, 'HIDDEN')
             return
         }
+        // NOTE: end deleted section
         if (GLOBAL_purchase.includes('Swarm:')) {
             console.warn('Swarm (scan_one_tr)', GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
             console.warn('tr', tr)
