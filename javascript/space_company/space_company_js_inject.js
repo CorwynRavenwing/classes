@@ -672,8 +672,12 @@ function check_tabs(maxes, available_substances) {
 }
 
 function test() {
+    var maxes = get_maxes()
+    var available_substances = get_available_substances(maxes)
     var panes_ob = get_panes_ob(pane_descriptors)
     // console.log('panes_ob:', panes_ob)
+    var trs_ob = get_trs_ob(panes_ob, available_substances)
+    console.log('trs_ob:', trs_ob)
 }
 
 function jQuery_to_array(thing) {
