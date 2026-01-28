@@ -400,9 +400,10 @@ function cleanup_costs(orig_string, pane_heading, pane_title, purchase) {
 
         var position = string.search(cost_flag)
         if (DEBUG) console.log('Costs Position:', position)
-        if (position == -1) {
-            throw new Error("'Costs' not found:\n" + GLOBAL_pane_heading + "/" + GLOBAL_pane_title + "\n'" + orig_string + "'\n---\n'" + string + "'")
-        }
+    if (position == -1) {
+        var label = pane_heading + "/" + pane_title + "/" + purchase
+        throw new Error("'Costs' not found:\n" + label + "\n'" + orig_string + "'\n---\n'" + string + "'")
+    }
         position += cost_flag.length
         string = string
             .slice(position)        // delete up to after "Costs"
