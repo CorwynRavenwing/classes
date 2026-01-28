@@ -436,7 +436,7 @@ function cleanup_costs(orig_string, pane_heading, pane_title, purchase) {
         // NOTE: delete next section:
         is_hidden = tr.hasClass('hidden')
         if (is_hidden) {
-            if (DEBUG) console.warn(GLOBAL_pane_title, GLOBAL_purchase, 'HIDDEN')
+            /* if (DEBUG) */ console.warn(GLOBAL_pane_title, GLOBAL_purchase, 'HIDDEN')
             return
         }
         // NOTE: end deleted section
