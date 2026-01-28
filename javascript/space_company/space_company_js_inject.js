@@ -7,6 +7,8 @@ var DEBUG = false
 var DEBUG_tick = false
 var prior_cick_time
 
+var cost_flag = "Costs"     // actually a const, but the system freaks out about re-declaring them
+
 var pane_descriptors = {
     Resources:       '#resourceTabParent',
     Research:        '#research',
@@ -340,87 +342,6 @@ function check_tabs(maxes, available_substances) {
         GLOBAL_bump_specifics.push(substance)
     }
     
-function cleanup_costs(orig_string, pane_heading, pane_title, purchase) {
-        string = orig_string
-        // Wonder phrases before costs:
-        string = string.replace('He requires that you donate', cost_flag)
-        string = string.replace('He requests a pyramid containing', cost_flag)
-        string = string.replace('He requests a tower consisting of', cost_flag)
-        string = string.replace('The Overlord wishes for a cube made up of', cost_flag)
-
-        // alternate cost flag
-        string = string.replace('This requires', cost_flag)
-        string = string.replace('Cost:', cost_flag)
-
-        // Wonder phrases within costs:
-        string = string.replaceAll(' and ', ', ')
-
-        // Wonder phrases after costs:
-        string = string.replace(' for this knowledge', '')
-        string = string.replace(' to acquire his methods', '')
-        string = string.replace(' to unlock this technology', '')
-        string = string.replace(' to be given this technology', '')
-
-        // Wonder phrases to clean up:
-        string = string.replace('Donate Resources', '')
-        string = string.replace(/Activate .*/, '')
-        string = string.replace(/Rebuild .*/, '')
-        string = string.replace('Unlock Plasma Research', '')
-        string = string.replace('Unlock EMC Machine Research', '')
-        string = string.replace('Unlock Dyson Sphere Research', '')
-        string = string.replace(/[0-9.]+%$/, '')
-
-        // Dark Matter phrases to clean up:
-        string = string.replaceAll(/Improves relationship by [0-9.]+/g, '')
-    string = string.replaceAll(/Improves relationship by/g, '')
-
-    if (pane_title == "energy-mass_conversion") {
-        // does not have Costs section
-            return ""
-    }
-    if (pane_title == 'dyson swarms and sphere') {
-        // has non-standard Costs section
-        return ""
-    }
-    // if (pane_title == "rockets") {
-    //     // does not have Costs section
-    //     return ""
-    // }
-    if (pane_title == "travel") {
-        // Interstellar.
-            // does not have Costs section
-            return ""
-        }
-        if (string == '') {
-            // string is now blank: no costs
-            return ""
-        }
-
-        string = string.trim()
-
-        var position = string.search(cost_flag)
-        if (DEBUG) console.log('Costs Position:', position)
-    if (position == -1) {
-        var label = pane_heading + "/" + pane_title + "/" + purchase
-        throw new Error("'Costs' not found:\n" + label + "\n'" + orig_string + "'\n---\n'" + string + "'")
-    }
-        position += cost_flag.length
-        string = string
-            .slice(position)        // delete up to after "Costs"
-        .replace(/^:/, '')          // remove leading colon
-        .trim()                     // remove lead/trail spaces
-        .replace(/[.]+$/, '')       // remove trailing period
-        .replaceAll(/  +/g, ' ')    // no doubled spaces
-        ;
-
-        // if (GLOBAL_pane_title == 'inside the wonder station') {
-        //     console.log(orig_string)
-        //     console.log(string)
-        // }
-
-        return string
-    }
-
     function scan_one_tr(tr_idx, tr) {
         tr = $( tr )
         var h3 = tr.find('h3')
@@ -436,7 +357,7 @@ function cleanup_costs(orig_string, pane_heading, pane_title, purchase) {
         // NOTE: delete next section:
         is_hidden = tr.hasClass('hidden')
         if (is_hidden) {
-            /* if (DEBUG) */ console.warn(GLOBAL_pane_title, GLOBAL_purchase, 'HIDDEN')
+            if (DEBUG) console.warn(GLOBAL_pane_title, GLOBAL_purchase, 'HIDDEN')
             return
         }
         // NOTE: end deleted section
@@ -444,7 +365,7 @@ function cleanup_costs(orig_string, pane_heading, pane_title, purchase) {
             console.warn('Swarm (scan_one_tr)', GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
             console.warn('tr', tr)
         }
-        if (GLOBAL_pane_title == 'energy-mass_conversion') {
+        if (GLOBAL_pane_title == 'energy-mass conversion') {
             return
         }
         if (GLOBAL_pane_title == 'dyson swarms and sphere') {
@@ -653,7 +574,7 @@ function cleanup_costs(orig_string, pane_heading, pane_title, purchase) {
             }
             return
         }
-        if (GLOBAL_pane_title == 'dyson swarms and sphere') {
+        if (GLOBAL_pane_title == 'dyson_swarms_and_sphere') {
             // console.warn('Ignore Dyson Swarm / Sphere pane')
             return
         }
@@ -677,13 +598,375 @@ function cleanup_costs(orig_string, pane_heading, pane_title, purchase) {
     return GLOBAL_overflow_reasons
 }
 
+function cleanup_costs(orig_string, pane_heading, pane_title, purchase) {
+    const cost_flag = "Costs"
+    string = orig_string
+    // Wonder phrases before costs:
+    string = string.replace('He requires that you donate', cost_flag)
+    string = string.replace('He requests a pyramid containing', cost_flag)
+    string = string.replace('He requests a tower consisting of', cost_flag)
+    string = string.replace('The Overlord wishes for a cube made up of', cost_flag)
+
+    // alternate cost flag
+    string = string.replace('This requires', cost_flag)
+    string = string.replace('Cost:', cost_flag)
+
+    // Wonder phrases within costs:
+    string = string.replaceAll(' and ', ', ')
+
+    // Wonder phrases after costs:
+    string = string.replace(' for this knowledge', '')
+    string = string.replace(' to acquire his methods', '')
+    string = string.replace(' to unlock this technology', '')
+    string = string.replace(' to be given this technology', '')
+
+    // Wonder phrases to clean up:
+    string = string.replace('Donate Resources', '')
+    string = string.replace(/Activate .*/, '')
+    string = string.replace(/Rebuild .*/, '')
+    string = string.replace('Unlock Plasma Research', '')
+    string = string.replace('Unlock EMC Machine Research', '')
+    string = string.replace('Unlock Dyson Sphere Research', '')
+    string = string.replace(/[0-9.]+%$/, '')
+
+    // Dark Matter phrases to clean up:
+    string = string.replaceAll(/Improves relationship by [0-9.]+/g, '')
+    string = string.replaceAll(/Improves relationship by/g, '')
+
+    if (pane_title == "energy-mass_conversion") {
+        // does not have Costs section
+        return ""
+    }
+    if (pane_title == 'dyson swarms and sphere') {
+        // has non-standard Costs section
+        return ""
+    }
+    // if (pane_title == "rockets") {
+    //     // does not have Costs section
+    //     return ""
+    // }
+    if (pane_title == "travel") {
+        // Interstellar.
+        // does not have Costs section
+        return ""
+    }
+    if (string == '') {
+        // string is now blank: no costs
+        return ""
+    }
+
+    string = string.trim()
+
+    var position = string.search(cost_flag)
+    if (DEBUG) console.log('Costs Position:', position)
+    if (position == -1) {
+        var label = pane_heading + "/" + pane_title + "/" + purchase
+        throw new Error("'Costs' not found:\n" + label + "\n'" + orig_string + "'\n---\n'" + string + "'")
+    }
+    position += cost_flag.length
+    string = string
+        .slice(position)            // delete up to after "Costs"
+        .replace(/^:/, '')          // remove leading colon
+        .trim()                     // remove lead/trail spaces
+        .replace(/[.]+$/, '')       // remove trailing period
+        .replaceAll(/  +/g, ' ')    // no doubled spaces
+        ;
+
+    // if (GLOBAL_pane_title == 'inside the wonder station') {
+    //     console.log(orig_string)
+    //     console.log(string)
+    // }
+
+    return string
+}
+
 function test() {
+
+    // the following variables and functions have been copied in from check_tabs:
+    var GLOBAL_overflow_reasons = new Object;
+    var GLOBAL_pane_heading
+    var GLOBAL_pane_title
+    var GLOBAL_purchase
+    var GLOBAL_unknown_substances
+    var GLOBAL_bump_specifics
+    var GLOBAL_clicked_something = false
+
+    function scan_one_cost(cost_idx, cost_str) {
+        if (cost_str == "") {
+            // no costs (energy-mass conversion page): NOOP
+            return
+        }
+        // console.log('cost_str:', cost_idx, cost_str)
+        cost_split = cost_str
+            .replaceAll(' ', '_')       // any number of spaces -> underscore
+            .replace('_', ' ')          // first underscore -> space again
+            .split(' ', 2);             // split on that first space
+        // console.log('cost split:', cost_split)
+        var [needed, substance] = cost_split
+        needed = to_number(needed, cost_str)
+        substance = substance.toLowerCase()
+        if (substance == 'gem') { substance = 'gems' }
+        known_substance = (substance in maxes)
+        if (! known_substance) {
+            GLOBAL_unknown_substances.push("'" + substance + "'")
+            var seen = (GLOBAL_known_unknowns.includes(substance))
+            if (! seen) {
+                GLOBAL_known_unknowns.push(substance)
+                /* if (DEBUG) */ console.warn('cost of UNKNOWN SUBSTANCE:', GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, cost_idx, '"' + cost_str + '"', substance, needed)
+            }
+            return
+        }
+        max_value = maxes[substance]
+        if (needed <= max_value) {
+            // console.log('cost ok:', cost_idx, substance, needed, max_value)
+            return
+        }
+
+        if (GLOBAL_purchase.includes('Swarm:')) {
+            console.warn('Swarm (scan_one_cost)', GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
+            return
+        }
+
+        if (! (substance in GLOBAL_overflow_reasons)) {
+            GLOBAL_overflow_reasons[substance] = []
+        }
+        GLOBAL_overflow_reasons[substance].push(
+            GLOBAL_pane_heading + '/' + GLOBAL_pane_title + "/" + GLOBAL_purchase + ": " + from_number(needed)
+        )
+        GLOBAL_bump_specifics.push(substance)
+    }
+    
+    function scan_one_tr(tr_idx, tr) {
+        console.log('DEBUG s1t A tr raw', tr)
+        tr = $( tr )
+        console.log('DEBUG s1t B tr JQ', tr)
+        var h3 = tr.find('h3')
+        console.log('DEBUG s1t C h3', h3)
+        GLOBAL_purchase = h3
+            .text()
+            .trim()
+            .replace(/[/][0-9]*$/, '')  // remove "/NN" from end
+            .replace(/: [0-9]*$/, '')   // remove ": NN" from end
+            ;
+        console.log('DEBUG s1t D h3.text', GLOBAL_purchase)
+        if (! GLOBAL_purchase) {
+            return
+        }
+        // NOTE: delete next section:
+        is_hidden = tr.hasClass('hidden')
+        if (is_hidden) {
+            /* if (DEBUG) */ console.warn(GLOBAL_pane_title, GLOBAL_purchase, 'HIDDEN')
+            return
+        }
+        // NOTE: end deleted section
+        if (GLOBAL_purchase.includes('Swarm:')) {
+            console.warn('Swarm (scan_one_tr)', GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
+            console.warn('tr', tr)
+        }
+        if (GLOBAL_pane_title == 'energy-mass_conversion') {
+            return
+        }
+        if (GLOBAL_pane_title == 'dyson swarms and sphere') {
+            return
+        }
+        var cant_click = false
+        details = tr
+            .find('td > span')
+            .text()
+            .trim();
+        // console.log('DEBUG s1t E details', details)
+        var current_ob = h3
+            .find('span');
+        var current = current_ob
+            .text()
+            .trim();
+        console.log('DEBUG s1t F current', current)
+        var td = tr.find('td')
+        var button = td
+            .find('button')
+            [0];
+        if (! button) {
+            button = td
+                .find('div.btn')
+                [0];
+        }
+        if (button) {
+            button = $( button )
+        }
+        if (button) {
+            if (button.hasClass('destroy')) {
+                console.error('destroy button!', button)
+                button = null
+            }
+        }
+        // yes, repeat the prior question
+        if (button) {
+            if (button.hasClass('btn-warning')) {
+                button = null
+            }
+        }
+        // yes, repeat the prior question
+        if (button) {
+            var button_is_hidden = button
+                .hasClass('hidden');
+            if (button_is_hidden) {
+                // console.warn('button is hidden', button)
+                button = null
+            } else {
+                button_is_hidden = button
+                    .parent()
+                    .hasClass('hidden');
+                if (button_is_hidden) {
+                    // console.warn('button is hidden', button.parent())
+                    button = null
+                }
+            }
+        }
+        console.log('DEBUG s1t G button', button)
+        var input = td
+            .find('input.desired');
+        if (button && (input.length == 0)) {
+            // console.warn(GLOBAL_pane_title, GLOBAL_purchase, 'Creating input object:')
+            input = $('<input type="textbox" class="desired"/>')
+            td.append(input)
+        }
+        var desired = ''
+        if (input) {
+            var val = input.val()
+            if (val) {
+                desired = val.trim()
+            }
+        }
+        desired = to_number(desired)
+        console.log('DEBUG s1t H desired', desired)
+        // if (current && desired) {
+        //     console.log(pane_title, purchase, 'current', current, 'desired', desired)
+        // }
+        red_ingredients = tr
+            .find('td > span span.red');
+        if (red_ingredients.length) {
+            // console.log('red_ingredients', red_ingredients)
+            cant_click = true
+        }
+        DETAIL = false
+        if (DEBUG) console.log('purchase:', GLOBAL_purchase)
+        details = cleanup_costs(details, GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
+        // if (DEBUG)  console.log('details:', details)
+        costs = details.split(', ')     // split on "comma space"
+        if (DEBUG) console.log('costs:', costs)
+        if (DETAIL) console.log(GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, costs)
+        GLOBAL_unknown_substances = []
+        GLOBAL_bump_specifics = []
+        console.log('DEBUG s1t I scanning costs', costs)
+        $.each(costs, scan_one_cost)
+        pop_up = []
+        set_class = ''
+
+        var all_click_classes = [
+            'bump_max',
+            'cant_click',
+            'click_me',
+            'clicking',
+            'unknown_substance',
+            'no_button',
+        ];
+
+        if (! button) {
+            set_class = 'no_button'
+        } else {
+            if (desired) {
+                if (! button) {
+                    console.warn('Trying to click missing button', GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
+                    cant_click = true
+                }
+                if (cant_click) {
+                    set_class = 'cant_click'
+                    pop_up.push("Missing Ingredients: " + red_ingredients.length)
+                } else {
+                    if (GLOBAL_clicked_something) {
+                        set_class = 'click_me'
+                    } else {
+                        set_class = 'clicking'
+                    }
+                }
+            }
+
+            if (GLOBAL_bump_specifics.length) {
+                set_class = 'bump_max'
+                pop_up.push("Bump:")
+                pop_up.push(...GLOBAL_bump_specifics)
+            }
+            if (GLOBAL_unknown_substances.length) {
+                pop_up.push("Unknown:")
+                pop_up.push(...GLOBAL_unknown_substances)
+                set_class = 'unknown_substance'
+            }
+            if (set_class == 'clicking') {
+                // if (red_ingredients.length) {
+                //     console.warn('red_ingredients', red_ingredients)
+                //     console.warn('cant_click:', cant_click)
+                // }
+                var click_time
+                click_time = Math.floor(new Date().getTime() / 1000)
+
+                var elapsed_s = (click_time - prior_cick_time)
+                var TIME = toHHMMSS(elapsed_s)
+                TIME = "(" + TIME.trim() + ")"
+                
+                button.click()
+                var new_current = current_ob.text().trim();
+                var VERIFY = false
+                if (VERIFY && (current != '') && (new_current == current)) {
+                    console.warn("ERROR: tried clicking", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, "no change", new_current, current)
+                    set_class = 'click_me'
+                    // need to remove click-me from removal list
+                } else {
+                    GLOBAL_clicked_something = true
+
+                    console.log('AUTO-CLICK', TIME, GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, '(' + desired + ')')
+
+                    prior_cick_time = click_time
+
+                    desired -= 1
+                    if (! desired) {
+                        desired = ''
+                    }
+                    input.val(desired)
+                }
+            }
+        }
+
+        if (set_class) {
+            tr.addClass(set_class)
+        }
+        $.each(all_click_classes, function(remove_idx, remove_me) {
+            if (remove_me != set_class) {
+                tr.removeClass(remove_me)
+            }
+        });
+        if (pop_up.length) {
+            reasons = pop_up
+                .join("\n");
+            tr.prop('title', reasons)
+        } else {
+            tr.prop('title', '')
+        }
+    }
+    // end copied section
+
     var maxes = get_maxes()
     var available_substances = get_available_substances(maxes)
     var panes_ob = get_panes_ob(pane_descriptors)
     // console.log('panes_ob:', panes_ob)
     var trs_ob = get_trs_ob(panes_ob, available_substances)
     console.log('trs_ob:', trs_ob)
+
+    $.each(trs_ob, function(pane_title, trs) {
+        GLOBAL_pane_heading = 'UNKNOWN'
+        GLOBAL_pane_title = pane_title
+        console.warn('DEBUG: each trs_ob', GLOBAL_pane_title, 'trs:', trs)
+        $.each(trs, scan_one_tr)
+    });
 }
 
 function jQuery_to_array(thing) {
