@@ -444,7 +444,7 @@ function cleanup_costs(orig_string, pane_heading, pane_title, purchase) {
             console.warn('Swarm (scan_one_tr)', GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
             console.warn('tr', tr)
         }
-        if (GLOBAL_pane_title == 'energy-mass conversion') {
+        if (GLOBAL_pane_title == 'energy-mass_conversion') {
             return
         }
         if (GLOBAL_pane_title == 'dyson swarms and sphere') {
