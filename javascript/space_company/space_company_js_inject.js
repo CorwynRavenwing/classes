@@ -407,11 +407,11 @@ function cleanup_costs(orig_string, pane_heading, pane_title, purchase) {
         position += cost_flag.length
         string = string
             .slice(position)        // delete up to after "Costs"
-            .replace(/^:/, '')      // remove leading colon
-            .trim()                 // remove lead/trail spaces
-            .replace(/[.]+$/, '');  // remove trailing period
-
-        string = string.replaceAll(/  +/g, ' ')     // no doubled spaces
+        .replace(/^:/, '')          // remove leading colon
+        .trim()                     // remove lead/trail spaces
+        .replace(/[.]+$/, '')       // remove trailing period
+        .replaceAll(/  +/g, ' ')    // no doubled spaces
+        ;
 
         // if (GLOBAL_pane_title == 'inside the wonder station') {
         //     console.log(orig_string)
