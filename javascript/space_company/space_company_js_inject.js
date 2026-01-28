@@ -427,7 +427,9 @@ function cleanup_costs(orig_string, pane_heading, pane_title, purchase) {
         GLOBAL_purchase = h3
             .text()
             .trim()
-            .replace(/: [0-9]*$/, '')   // remove ": 37" from end
+            .replace(/[/][0-9]*$/, '')  // remove "/NN" from end
+            .replace(/: [0-9]*$/, '')   // remove ": NN" from end
+            ;
         if (! GLOBAL_purchase) {
             return
         }
