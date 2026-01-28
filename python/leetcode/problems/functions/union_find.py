@@ -42,5 +42,7 @@
                 mergeGroups(A, B)
 
             fixGroups()
-            return (NodeGroupMembers, getGroup sameGroup)
+            NodeGroupMembers = nodeGroupMembers()
+
+            return (NodeGroupMembers, getGroup, sameGroup)
 
