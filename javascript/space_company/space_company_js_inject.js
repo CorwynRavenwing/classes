@@ -78,7 +78,10 @@ function get_available_substances(maxes) {
             .text()
             .trim()
             .toLowerCase()
+            .replace('the ','')
             .replace('comms', 'communication')
+            .replace('stargate', 'stargate room')
+            .replace('dyson segments', 'dyson swarms and sphere')
             .replace(': dormant', '')
             .replace(': activated', '')
             .replaceAll(' ', '_');
