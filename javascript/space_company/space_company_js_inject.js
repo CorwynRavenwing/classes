@@ -340,7 +340,7 @@ function check_tabs(maxes, available_substances) {
         GLOBAL_bump_specifics.push(substance)
     }
     
-    function cleanup_costs(orig_string) {
+function cleanup_costs(orig_string, pane_heading, pane_title, purchase) {
         string = orig_string
         // Wonder phrases before costs:
         string = string.replace('He requires that you donate', cost_flag)
@@ -372,14 +372,14 @@ function check_tabs(maxes, available_substances) {
 
         // Dark Matter phrases to clean up:
         string = string.replaceAll(/Improves relationship by [0-9.]+/g, '')
-        string = string.replaceAll(/Improves relationship by/g, '')
+    string = string.replaceAll(/Improves relationship by/g, '')
 
-        if (GLOBAL_pane_title == "energy-mass_conversion") {
-            // does not have Costs section
+    if (pane_title == "energy-mass_conversion") {
+        // does not have Costs section
             return ""
-        }
-        if (GLOBAL_pane_title == 'dyson swarms and sphere') {
-            // has non-standard Costs section
+    }
+    if (pane_title == 'dyson swarms and sphere') {
+        // has non-standard Costs section
             return ""
         }
         if (GLOBAL_pane_title == "rockets") {
@@ -525,7 +525,7 @@ function check_tabs(maxes, available_substances) {
         }
         DETAIL = false
         if (DEBUG) console.log('purchase:', GLOBAL_purchase)
-        details = cleanup_costs(details)
+        details = cleanup_costs(details, GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
         // if (DEBUG)  console.log('details:', details)
         costs = details.split(', ')     // split on "comma space"
         if (DEBUG) console.log('costs:', costs)
