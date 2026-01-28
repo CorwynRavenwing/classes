@@ -380,14 +380,14 @@ function cleanup_costs(orig_string, pane_heading, pane_title, purchase) {
     }
     if (pane_title == 'dyson swarms and sphere') {
         // has non-standard Costs section
-            return ""
-        }
-        if (GLOBAL_pane_title == "rockets") {
-            // does not have Costs section
-            return ""
-        }
-        if (GLOBAL_pane_title == "travel") {
-            // Interstellar.
+        return ""
+    }
+    // if (pane_title == "rockets") {
+    //     // does not have Costs section
+    //     return ""
+    // }
+    if (pane_title == "travel") {
+        // Interstellar.
             // does not have Costs section
             return ""
         }
