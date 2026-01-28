@@ -49,34 +49,49 @@ class Solution:
                 if getValue((X, Y)) == value
             ]
 
-        def allCellsWithLowerValue(cell: Tuple[int,int]) -> List[Tuple[int,int]]:
-            value = getValue(cell)
+        def allCellsWithLowerValue(value: int) -> List[Tuple[int,int]]:
             return [
                 (X, Y)
                 for X in range(M)
                 for Y in range(N)
                 if getValue((X, Y)) <= value
-                if cell != (X, Y)
             ]
 
         origin = (0,0)
         target = (M-1, N-1)
 
         def min_not_none(L: list) -> int:
+            L = list(L)
             while None in L:
                 L.remove(None)
             return min(L, default=None)
         
-        def sum_not_none(L: list) -> int:
-            while None in L:
-                L.remove(None)
-            return (
-                sum(L)
-                if len(L)
-                else None
-            )
+        def sum_cascade_none(L: list) -> int:
+            if None in L:
+                return None
+            else:
+                return sum(L)
+        
+        # @cache
+        def teleport_unconditional(value: int, k: int) -> int:
+            cells = allCellsWithLowerValue(value)
+            print(f'teleport({value},{k}): {cells=}')
+            answers = [
+                DP(location, k - 1)
+                for location in cells
+            ]
+            retVal = min_not_none(answers)
+            print(f'teleport({value},{k}) = {retVal}<-{answers}')
+            return retVal
+
+        def teleport(value: int, k: int) -> int:
+            if k <= 0:
+                return None
+            else:
+                return teleport_unconditional(value, k)
 
         dp_inprog = set()
+
         @cache
         def DP(cell, k) -> int:
             if cell in dp_inprog:
@@ -85,24 +100,23 @@ class Solution:
             else:
                 dp_inprog.add(cell)
 
-            # print(f'DP({cell},{k})')
+            print(f'DP({cell},{k})')
             if cell == target:
-                # print(f'DP({cell},{k}): => 0')
+                print(f'DP({cell},{k}): => 0')
                 dp_inprog.remove(cell)
                 return 0
         
             answers = [
-                sum_not_none([getValue(neighbor), DP(neighbor, k)])
+                (getValue(neighbor), DP(neighbor, k))
                 for neighbor in neighborsOf(cell)
+            ] + [
+                (0, teleport(getValue(cell), k))
             ]
-            if k:
-                answers += [
-                    DP(teleport, k - 1)
-                    for teleport in allCellsWithLowerValue(cell)
-                ]
-            # print(f'DP({cell},{k}): {answers}')
+            print(f'DP({cell},{k}): {answers}')
+            answers = tuple(map(sum_cascade_none, answers))
+            print(f'DP({cell},{k}): -> {answers}')
             retVal = min_not_none(answers)
-            # print(f'DP({cell},{k}): -> {retVal}')
+            print(f'DP({cell},{k}): => {retVal}')
             dp_inprog.remove(cell)
             return retVal
 
@@ -110,4 +124,4 @@ class Solution:
 
 # NOTE: Acceptance Rate 20.0% (HARD)
 
-# NOTE: Wrong answer for certain inputs.
+# NOTE: Wrong Answer for some inputs
