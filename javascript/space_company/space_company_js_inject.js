@@ -641,10 +641,10 @@ function cleanup_costs(orig_string, pane_heading, pane_title, purchase) {
         // has non-standard Costs section
         return ""
     }
-    // if (pane_title == "rockets") {
-    //     // does not have Costs section
-    //     return ""
-    // }
+    if (purchase == "Rocket Ship: Built") {
+        // does not have Costs section anymore
+        return ""
+    }
     if (pane_title == "travel") {
         // Interstellar.
         // does not have Costs section
