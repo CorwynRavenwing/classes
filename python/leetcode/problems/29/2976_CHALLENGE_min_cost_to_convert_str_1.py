@@ -98,5 +98,12 @@ class Solution:
             totalCost = -1
 
         return totalCost
+
+# NOTE: Acceptance Rate 57.3% (medium)
+
 # NOTE: Runtime 1018 ms Beats 84.26%
 # NOTE: Memory 20.87 MB Beats 5.08%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 663 ms Beats 70.89%
+# NOTE: Memory 24.09 MB Beats 7.17%
