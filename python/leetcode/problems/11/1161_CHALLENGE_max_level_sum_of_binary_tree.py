@@ -30,5 +30,8 @@ class Solution:
         print(f'{levelsWithMaxSum=}')
 
         return min(levelsWithMaxSum)
+
+# NOTE: Acceptance Rate 69.9% (medium)
+
 # NOTE: Runtime 182 ms Beats 11.35%
 # NOTE: Memory 20.12 MB Beats 5.05%
