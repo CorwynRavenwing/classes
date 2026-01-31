@@ -454,8 +454,6 @@ function check_tabs(maxes, available_substances) {
         details = cleanup_details(details)
         // if (DEBUG)  console.log('details:', details)
         costs = extract_costs_from_details(details, GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
-        // if (DEBUG) console.log('costs:', costs)
-        costs = costs.split(', ')     // split on "comma space"
         if (DEBUG) console.log('costs:', costs)
         GLOBAL_unknown_substances = []
         GLOBAL_bump_specifics = []
@@ -717,7 +715,8 @@ function extract_costs_from_details(orig_string, pane_heading, pane_title, purch
     //     console.log(string)
     // }
 
-    return string
+    costs = string.split(', ')     // split on "comma space"
+    return costs
 }
 
 function prices_2_pair(cost_str) {
@@ -855,7 +854,6 @@ function tr_2_magic(tr, pane_title) {
     var costs = extract_costs_from_details(details, 'missing_pane_heading', pane_title, purchase)
 
     if (DEBUG) console.log('purchase:', purchase)
-    costs = costs.split(', ')     // split on "comma space"
     if (DEBUG) console.log('costs:', costs)
     costs = pricesist_2_pricesob(costs)
     if (DEBUG) console.log('costs:', costs)
