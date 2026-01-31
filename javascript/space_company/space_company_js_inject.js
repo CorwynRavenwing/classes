@@ -170,7 +170,7 @@ function to_number(orig_value, comment= '') {
     value = orig_value
     value = value.replaceAll(',', '')
     value = value.replaceAll('N/A', '')
-    value = value.replaceAll('/', '')  // Energy comes preceeded by '/' for some reason
+    value = value.replaceAll('/', '')   // Energy comes preceeded by '/' for some reason
     value = value.trim()                // and a million spaces
     if (value == '') {
         return ''
@@ -629,7 +629,12 @@ function uniqueId(ob) {
     return id
 }
 
+function cleanup_junk_from_details(orig_string, pane_heading, pane_title, purchase) {
+    ;
+}
+
 function extract_costs_from_details(orig_string, pane_heading, pane_title, purchase) {
+    cleanup_junk_from_details(orig_string, pane_heading, pane_title, purchase);
     const cost_flag = "Costs"
     string = orig_string
     // Wonder phrases before costs:
@@ -718,11 +723,11 @@ function cleanup_cost(cost_str) {
     // console.log('cost_str:', cost_str)
     var cost_split = cost_str
         .replaceAll(' ', '_')       // any number of spaces -> underscore
-            .replace('_', ' ')          // first underscore -> space again
-            .split(' ', 2);             // split on that first space
-        // console.log('cost split:', cost_split)
-        var [needed, substance] = cost_split
-        needed = to_number(needed, cost_str)
+        .replace('_', ' ')          // first underscore -> space again
+        .split(' ', 2);             // split on that first space
+    // console.log('cost split:', cost_split)
+    var [needed, substance] = cost_split
+    needed = to_number(needed, cost_str)
     substance = substance.toLowerCase()
     if (substance == 'gem') { substance = 'gems' }
     var cost = [substance, needed]
@@ -748,7 +753,7 @@ function tr_2_magic(tr, pane_title) {
     var purchase = h3
         .text()
         .trim()
-            .replace(/[/][0-9]*$/, '')  // remove "/NN" from end
+        .replace(/[/][0-9]*$/, '')  // remove "/NN" from end
         .replace(/: [0-9]*$/, '')   // remove ": NN" from end
         ;
 
@@ -784,45 +789,45 @@ function tr_2_magic(tr, pane_title) {
     magic.current = current
 
     var td = tr.find('td')
-        var button = td
-            .find('button')
+    var button = td
+        .find('button')
+        [0];
+    if (! button) {
+        button = td
+            .find('div.btn')
             [0];
-        if (! button) {
-            button = td
-                .find('div.btn')
-                [0];
     }
 
     if (button) {
-            button = $( button )
+        button = $( button )
+    }
+    if (button) {
+        if (button.hasClass('destroy')) {
+            console.error('destroy button!', button)
+            button = null
         }
-        if (button) {
-            if (button.hasClass('destroy')) {
-                console.error('destroy button!', button)
-                button = null
-            }
+    }
+    // yes, repeat the prior question
+    if (button) {
+        if (button.hasClass('btn-warning')) {
+            button = null
         }
-        // yes, repeat the prior question
-        if (button) {
-            if (button.hasClass('btn-warning')) {
-                button = null
-            }
     }
     // yes, repeat question again
     if (button) {
-            var button_is_hidden = button
+        var button_is_hidden = button
+            .hasClass('hidden');
+        if (button_is_hidden) {
+            // console.warn('button is hidden', button)
+            button = null
+        } else {
+            button_is_hidden = button
+                .parent()
                 .hasClass('hidden');
             if (button_is_hidden) {
-                // console.warn('button is hidden', button)
+                // console.warn('button is hidden', button.parent())
                 button = null
-            } else {
-                button_is_hidden = button
-                    .parent()
-                    .hasClass('hidden');
-                if (button_is_hidden) {
-                    // console.warn('button is hidden', button.parent())
-                    button = null
-                }
+            }
         }
     }
     magic.button = button
@@ -831,15 +836,15 @@ function tr_2_magic(tr, pane_title) {
         .find('input.desired');
     if (button && (input.length == 0)) {
         // console.warn(pane_title, purchase, 'Creating input object:')
-            input = $('<input type="textbox" class="desired"/>')
-            td.append(input)
+        input = $('<input type="textbox" class="desired"/>')
+        td.append(input)
+    }
+    var desired = ''
+    if (input) {
+        var val = input.val()
+        if (val) {
+            desired = val.trim()
         }
-        var desired = ''
-        if (input) {
-            var val = input.val()
-            if (val) {
-                desired = val.trim()
-            }
     }
     magic.input = input
     desired = to_number(desired)
@@ -1017,6 +1022,8 @@ function test() {
     //     $.each(trs, scan_one_tr)
     // });
 }
+
+// xyzzy
 
 function jQuery_to_array(thing) {
     function filter_legal_item(line) {
