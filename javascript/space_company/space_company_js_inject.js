@@ -711,108 +711,79 @@ function extract_costs_from_details(orig_string, pane_heading, pane_title, purch
     return string
 }
 
-function test() {
-
-    // the following variables and functions have been copied in from check_tabs:
-    var GLOBAL_overflow_reasons = new Object;
-    var GLOBAL_pane_heading
-    var GLOBAL_pane_title
-    var GLOBAL_purchase
-    var GLOBAL_unknown_substances
-    var GLOBAL_bump_specifics
-    var GLOBAL_clicked_something = false
-
-    function scan_one_cost(cost_idx, cost_str) {
-        if (cost_str == "") {
-            // no costs (energy-mass conversion page): NOOP
-            return
-        }
-        // console.log('cost_str:', cost_idx, cost_str)
-        cost_split = cost_str
-            .replaceAll(' ', '_')       // any number of spaces -> underscore
+function cleanup_cost(cost_str) {
+    if (cost_str == "") {
+        return []
+    }
+    // console.log('cost_str:', cost_str)
+    var cost_split = cost_str
+        .replaceAll(' ', '_')       // any number of spaces -> underscore
             .replace('_', ' ')          // first underscore -> space again
             .split(' ', 2);             // split on that first space
         // console.log('cost split:', cost_split)
         var [needed, substance] = cost_split
         needed = to_number(needed, cost_str)
-        substance = substance.toLowerCase()
-        if (substance == 'gem') { substance = 'gems' }
-        known_substance = (substance in maxes)
-        if (! known_substance) {
-            GLOBAL_unknown_substances.push("'" + substance + "'")
-            var seen = (GLOBAL_known_unknowns.includes(substance))
-            if (! seen) {
-                GLOBAL_known_unknowns.push(substance)
-                /* if (DEBUG) */ console.warn('cost of UNKNOWN SUBSTANCE:', GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, cost_idx, '"' + cost_str + '"', substance, needed)
-            }
-            return
-        }
-        max_value = maxes[substance]
-        if (needed <= max_value) {
-            // console.log('cost ok:', cost_idx, substance, needed, max_value)
-            return
-        }
+    substance = substance.toLowerCase()
+    if (substance == 'gem') { substance = 'gems' }
+    var cost = [substance, needed]
+    // console.log('cost:', cost)
+    return cost
+}
 
-        if (GLOBAL_purchase.includes('Swarm:')) {
-            console.warn('Swarm (scan_one_cost)', GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
-            return
-        }
+function cleanup_costs(cost_list) {
+    var cost_array = cost_list.map(function(cost_str, cost_idx) {
+        // console.warn('DEBUG: cleanup cost idx', cost_idx, 'str', cost_str)
+        return cleanup_cost(cost_str)
+    });
+    var cost_ob = Object.fromEntries(cost_array)
+    return cost_ob
+}
 
-        if (! (substance in GLOBAL_overflow_reasons)) {
-            GLOBAL_overflow_reasons[substance] = []
-        }
-        GLOBAL_overflow_reasons[substance].push(
-            GLOBAL_pane_heading + '/' + GLOBAL_pane_title + "/" + GLOBAL_purchase + ": " + from_number(needed)
-        )
-        GLOBAL_bump_specifics.push(substance)
-    }
-    
-    function scan_one_tr(tr_idx, tr) {
-        console.log('DEBUG s1t A tr raw', tr)
-        tr = $( tr )
-        console.log('DEBUG s1t B tr JQ', tr)
-        var h3 = tr.find('h3')
-        console.log('DEBUG s1t C h3', h3)
-        GLOBAL_purchase = h3
-            .text()
-            .trim()
+function tr_2_magic(tr, pane_title) {
+    var magic = {}
+    // console.log('tr2magic', tr)
+    tr = $( tr )
+    // console.log('->', tr)
+    var h3 = tr.find('h3')
+    var purchase = h3
+        .text()
+        .trim()
             .replace(/[/][0-9]*$/, '')  // remove "/NN" from end
-            .replace(/: [0-9]*$/, '')   // remove ": NN" from end
-            ;
-        console.log('DEBUG s1t D h3.text', GLOBAL_purchase)
-        if (! GLOBAL_purchase) {
-            return
-        }
-        // NOTE: delete next section:
-        is_hidden = tr.hasClass('hidden')
-        if (is_hidden) {
-            /* if (DEBUG) */ console.warn(GLOBAL_pane_title, GLOBAL_purchase, 'HIDDEN')
-            return
-        }
-        // NOTE: end deleted section
-        if (GLOBAL_purchase.includes('Swarm:')) {
-            console.warn('Swarm (scan_one_tr)', GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
-            console.warn('tr', tr)
-        }
-        if (GLOBAL_pane_title == 'energy-mass_conversion') {
-            return
-        }
-        if (GLOBAL_pane_title == 'dyson swarms and sphere') {
-            return
-        }
-        var cant_click = false
-        details = tr
-            .find('td > span')
-            .text()
-            .trim();
-        // console.log('DEBUG s1t E details', details)
-        var current_ob = h3
-            .find('span');
-        var current = current_ob
-            .text()
-            .trim();
-        console.log('DEBUG s1t F current', current)
-        var td = tr.find('td')
+        .replace(/: [0-9]*$/, '')   // remove ": NN" from end
+        ;
+
+    if (! purchase) {
+        return null
+    }
+    magic.name = purchase
+
+    is_hidden = tr.hasClass('hidden')
+    if (is_hidden) {
+        /* if (DEBUG) */ console.warn(pane_title, purchase, 'HIDDEN')
+        return
+    }
+
+    if (pane_title == 'energy-mass_conversion') {
+        return null
+    }
+    if (pane_title == 'dyson_swarms_and_sphere') {
+        return null
+    }
+
+    var details = tr
+        .find('td > span')
+        .text()
+        .trim()
+        ;
+
+    var current_ob = h3
+        .find('span');
+    var current = current_ob
+        .text()
+        .trim();
+    magic.current = current
+
+    var td = tr.find('td')
         var button = td
             .find('button')
             [0];
@@ -820,8 +791,9 @@ function test() {
             button = td
                 .find('div.btn')
                 [0];
-        }
-        if (button) {
+    }
+
+    if (button) {
             button = $( button )
         }
         if (button) {
@@ -835,9 +807,9 @@ function test() {
             if (button.hasClass('btn-warning')) {
                 button = null
             }
-        }
-        // yes, repeat the prior question
-        if (button) {
+    }
+    // yes, repeat question again
+    if (button) {
             var button_is_hidden = button
                 .hasClass('hidden');
             if (button_is_hidden) {
@@ -851,13 +823,14 @@ function test() {
                     // console.warn('button is hidden', button.parent())
                     button = null
                 }
-            }
         }
-        console.log('DEBUG s1t G button', button)
-        var input = td
-            .find('input.desired');
-        if (button && (input.length == 0)) {
-            // console.warn(GLOBAL_pane_title, GLOBAL_purchase, 'Creating input object:')
+    }
+    magic.button = button
+
+    var input = td
+        .find('input.desired');
+    if (button && (input.length == 0)) {
+        // console.warn(pane_title, purchase, 'Creating input object:')
             input = $('<input type="textbox" class="desired"/>')
             td.append(input)
         }
@@ -867,9 +840,61 @@ function test() {
             if (val) {
                 desired = val.trim()
             }
-        }
-        desired = to_number(desired)
-        console.log('DEBUG s1t H desired', desired)
+    }
+    magic.input = input
+    desired = to_number(desired)
+    magic.desired = desired
+
+    details = extract_costs_from_details(details, 'missing_pane_heading', pane_title, purchase)
+
+    if (DEBUG) console.log('purchase:', purchase)
+    var costs = details.split(', ')     // split on "comma space"
+    if (DEBUG) console.log('costs:', costs)
+    costs = cleanup_costs(costs)
+    if (DEBUG) console.log('costs:', costs)
+    magic.costs = costs
+
+    magic.tr_id = uniqueId(tr)
+
+    // ### MOVE TO HERE ... vvv
+
+
+    return magic
+}
+
+function trsob_2_magicsob(trs_ob) {
+    var trs_array = Object.entries(trs_ob)
+    var magics_array = trs_array.map(function([pane_title, trs]) {
+        if (DEBUG) console.log('DEBUG GMO', pane_title)
+        // console.log('DEBUG GMO', pane_title, trs)
+        var magics = trs.map(function(tr, tr_idx) {
+            // console.log('DEBUG idx', tr_idx, 'tr', tr)
+            magic = tr_2_magic(tr, pane_title)
+            return magic
+        }).filter((ob) => ob !== null)
+        return [pane_title, magics]
+    })
+    magics_ob = Object.fromEntries(magics_array)
+    return magics_ob
+}
+
+function test() {
+
+    // the following variables and functions have been copied in from check_tabs:
+    var GLOBAL_overflow_reasons = new Object;
+    var GLOBAL_pane_heading
+    var GLOBAL_pane_title
+    var GLOBAL_purchase
+    var GLOBAL_unknown_substances
+    var GLOBAL_bump_specifics
+    var GLOBAL_clicked_something = false
+    
+    function scan_one_tr(tr_idx, tr) {
+
+        // ### MOVE FROM HERE ... ^^^
+
+
+        var cant_click = false
         // if (current && desired) {
         //     console.log(pane_title, purchase, 'current', current, 'desired', desired)
         // }
@@ -879,16 +904,8 @@ function test() {
             // console.log('red_ingredients', red_ingredients)
             cant_click = true
         }
-        DETAIL = false
-        if (DEBUG) console.log('purchase:', GLOBAL_purchase)
-        details = cleanup_costs(details, GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
-        // if (DEBUG)  console.log('details:', details)
-        costs = details.split(', ')     // split on "comma space"
-        if (DEBUG) console.log('costs:', costs)
-        if (DETAIL) console.log(GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, costs)
         GLOBAL_unknown_substances = []
         GLOBAL_bump_specifics = []
-        console.log('DEBUG s1t I scanning costs', costs)
         $.each(costs, scan_one_cost)
         pop_up = []
         set_class = ''
@@ -987,17 +1004,18 @@ function test() {
 
     var maxes = get_maxes()
     var available_substances = get_available_substances(maxes)
-    var panes_ob = get_panes_ob(pane_descriptors)
-    // console.log('panes_ob:', panes_ob)
-    var trs_ob = get_trs_ob(panes_ob, available_substances)
-    console.log('trs_ob:', trs_ob)
+    var panes_ob = panesdesc_2_panesob(pane_descriptors)
+    var trs_ob = panesob_2_trsob(panes_ob, available_substances)
+    var magics_ob = trsob_2_magicsob(trs_ob)
 
-    $.each(trs_ob, function(pane_title, trs) {
-        GLOBAL_pane_heading = 'UNKNOWN'
-        GLOBAL_pane_title = pane_title
-        console.warn('DEBUG: each trs_ob', GLOBAL_pane_title, 'trs:', trs)
-        $.each(trs, scan_one_tr)
-    });
+    return magics_ob
+
+    // $.each(trs_ob, function(pane_title, trs) {
+    //     GLOBAL_pane_heading = 'UNKNOWN'
+    //     GLOBAL_pane_title = pane_title
+    //     console.warn('DEBUG: each trs_ob', GLOBAL_pane_title, 'trs:', trs)
+    //     $.each(trs, scan_one_tr)
+    // });
 }
 
 function jQuery_to_array(thing) {
@@ -1062,10 +1080,10 @@ function panesob_2_trsob(panes_ob, available_substances) {
             return []
         }
         // NOTE: delete this section, move logic to next function
-        if (pane_title == 'dyson swarms and sphere') {
-            // console.warn('Ignore Dyson Swarm / Sphere pane')
-            return []
-        }
+        // if (pane_title == 'dyson_swarms_and_sphere') {
+        //     // console.warn('Ignore Dyson Swarm / Sphere pane')
+        //     return []
+        // }
         // NOTE: end deleted section
 
         return [pane_title, trs]
