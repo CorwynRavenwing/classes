@@ -452,7 +452,7 @@ function check_tabs(maxes, available_substances) {
         }
         DETAIL = false
         if (DEBUG) console.log('purchase:', GLOBAL_purchase)
-        details = cleanup_costs(details, GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
+        details = extract_costs_from_details(details, GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
         // if (DEBUG)  console.log('details:', details)
         costs = details.split(', ')     // split on "comma space"
         if (DEBUG) console.log('costs:', costs)
@@ -589,7 +589,7 @@ function check_tabs(maxes, available_substances) {
         $.each(trs, scan_one_tr)
     }
 
-    var panes_ob = get_panes_ob(pane_descriptors)
+    var panes_ob = panesdesc_2_panesob(pane_descriptors)
     $.each(panes_ob, function(pane_heading, panes) {
         GLOBAL_pane_heading = pane_heading
         if (DEBUG) console.log('pane_heading:', GLOBAL_pane_heading)
@@ -601,7 +601,7 @@ function check_tabs(maxes, available_substances) {
     return GLOBAL_overflow_reasons
 }
 
-function cleanup_costs(orig_string, pane_heading, pane_title, purchase) {
+function extract_costs_from_details(orig_string, pane_heading, pane_title, purchase) {
     const cost_flag = "Costs"
     string = orig_string
     // Wonder phrases before costs:
@@ -995,7 +995,7 @@ function jQuery_to_array(thing) {
     return array
 }
 
-function get_trs_ob(panes_ob, available_substances) {
+function panesob_2_trsob(panes_ob, available_substances) {
     var NONLOCAL_pane_heading
 
     function filter_not_hidden(tr, tr_idx) {
@@ -1063,7 +1063,7 @@ function get_trs_ob(panes_ob, available_substances) {
     return trs_ob
 }
 
-function get_panes_ob(pane_descriptors) {
+function panesdesc_2_panesob(pane_descriptors) {
     pane_entries = Object.entries(pane_descriptors)
 
     var panes_allowed = pane_entries.filter(function(entry) {
