@@ -451,7 +451,7 @@ function check_tabs(maxes, available_substances) {
             cant_click = true
         }
         if (DEBUG) console.log('purchase:', GLOBAL_purchase)
-        details = cleanup_junk_from_details(details)
+        details = cleanup_details(details)
         details = extract_costs_from_details(details, GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
         // if (DEBUG)  console.log('details:', details)
         costs = details.split(', ')     // split on "comma space"
@@ -630,7 +630,7 @@ function uniqueId(ob) {
     return id
 }
 
-function cleanup_junk_from_details(string) {
+function cleanup_details(string) {
     const cost_flag = "Costs"
 
     // Wonder phrases before costs:
@@ -850,7 +850,7 @@ function tr_2_magic(tr, pane_title) {
     desired = to_number(desired)
     magic.desired = desired
 
-    details = cleanup_junk_from_details(details)
+    details = cleanup_details(details)
     details = extract_costs_from_details(details, 'missing_pane_heading', pane_title, purchase)
 
     if (DEBUG) console.log('purchase:', purchase)
