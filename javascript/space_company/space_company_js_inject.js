@@ -719,7 +719,7 @@ function extract_costs_from_details(orig_string, pane_heading, pane_title, purch
     return string
 }
 
-function cleanup_cost(cost_str) {
+function prices_2_pair(cost_str) {
     if (cost_str == "") {
         return []
     }
@@ -738,13 +738,10 @@ function cleanup_cost(cost_str) {
     return cost
 }
 
-function cleanup_costs(cost_list) {
-    var cost_array = cost_list.map(function(cost_str, cost_idx) {
-        // console.warn('DEBUG: cleanup cost idx', cost_idx, 'str', cost_str)
-        return cleanup_cost(cost_str)
-    });
-    var cost_ob = Object.fromEntries(cost_array)
-    return cost_ob
+function pricesist_2_pricesob(prices_list) {
+    var prices_arr = prices_list.map(prices_2_pair);
+    var prices_ob = Object.fromEntries(prices_arr)
+    return prices_ob
 }
 
 function tr_2_magic(tr, pane_title) {
@@ -858,7 +855,7 @@ function tr_2_magic(tr, pane_title) {
     if (DEBUG) console.log('purchase:', purchase)
     var costs = details.split(', ')     // split on "comma space"
     if (DEBUG) console.log('costs:', costs)
-    costs = cleanup_costs(costs)
+    costs = pricesist_2_pricesob(costs)
     if (DEBUG) console.log('costs:', costs)
     magic.costs = costs
 
