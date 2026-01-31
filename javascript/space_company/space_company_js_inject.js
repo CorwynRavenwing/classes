@@ -452,9 +452,10 @@ function check_tabs(maxes, available_substances) {
         }
         if (DEBUG) console.log('purchase:', GLOBAL_purchase)
         details = cleanup_details(details)
-        details = extract_costs_from_details(details, GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
         // if (DEBUG)  console.log('details:', details)
-        costs = details.split(', ')     // split on "comma space"
+        costs = extract_costs_from_details(details, GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
+        // if (DEBUG) console.log('costs:', costs)
+        costs = costs.split(', ')     // split on "comma space"
         if (DEBUG) console.log('costs:', costs)
         GLOBAL_unknown_substances = []
         GLOBAL_bump_specifics = []
@@ -851,10 +852,10 @@ function tr_2_magic(tr, pane_title) {
     magic.desired = desired
 
     details = cleanup_details(details)
-    details = extract_costs_from_details(details, 'missing_pane_heading', pane_title, purchase)
+    var costs = extract_costs_from_details(details, 'missing_pane_heading', pane_title, purchase)
 
     if (DEBUG) console.log('purchase:', purchase)
-    var costs = details.split(', ')     // split on "comma space"
+    costs = costs.split(', ')     // split on "comma space"
     if (DEBUG) console.log('costs:', costs)
     costs = pricesist_2_pricesob(costs)
     if (DEBUG) console.log('costs:', costs)
