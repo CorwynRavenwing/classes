@@ -629,14 +629,9 @@ function uniqueId(ob) {
     return id
 }
 
-function cleanup_junk_from_details(orig_string, pane_heading, pane_title, purchase) {
-    ;
-}
-
-function extract_costs_from_details(orig_string, pane_heading, pane_title, purchase) {
-    cleanup_junk_from_details(orig_string, pane_heading, pane_title, purchase);
+function cleanup_junk_from_details(string) {
     const cost_flag = "Costs"
-    string = orig_string
+
     // Wonder phrases before costs:
     string = string.replace('He requires that you donate', cost_flag)
     string = string.replace('He requests a pyramid containing', cost_flag)
@@ -669,6 +664,16 @@ function extract_costs_from_details(orig_string, pane_heading, pane_title, purch
     string = string.replaceAll(/Improves relationship by [0-9.]+/g, '')
     string = string.replaceAll(/Improves relationship by/g, '')
 
+    string = string.trim()
+
+    return string
+}
+
+function extract_costs_from_details(orig_string, pane_heading, pane_title, purchase) {
+    string = orig_string
+    var string = cleanup_junk_from_details(string);
+    const cost_flag = "Costs"
+
     if (pane_title == "energy-mass_conversion") {
         // does not have Costs section
         return ""
@@ -690,8 +695,6 @@ function extract_costs_from_details(orig_string, pane_heading, pane_title, purch
         // string is now blank: no costs
         return ""
     }
-
-    string = string.trim()
 
     var position = string.search(cost_flag)
     if (DEBUG) console.log('Costs Position:', position)
