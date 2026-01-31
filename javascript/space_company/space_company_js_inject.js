@@ -171,7 +171,10 @@ function to_number(orig_value, comment= '') {
     value = value.replaceAll(',', '')
     value = value.replaceAll('N/A', '')
     value = value.replaceAll('/', '')  // Energy comes preceeded by '/' for some reason
-    value = value.trim()            // and a million spaces
+    value = value.trim()                // and a million spaces
+    if (value == '') {
+        return ''
+    }
     var answer = parseFloat(value)
     multiplier_str = value.replace(/^[0-9.]*/, '')
     multiplier = 1
