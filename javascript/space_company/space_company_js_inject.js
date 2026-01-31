@@ -599,6 +599,36 @@ function check_tabs(maxes, available_substances) {
     return GLOBAL_overflow_reasons
 }
 
+// some logic from Underscore UNIQUEID.JS:
+var random_id_counter = 0
+function random_id(prefix) {
+    var id = ''
+    id = ++random_id_counter + '';
+    return prefix ? prefix + id : id;
+}
+
+function unused_random_id(prefix) {
+    var id = ''
+    while (id == '') {
+        id = random_id(prefix)
+        if ( $( '#' + id ).length ) {
+            console.warn('Skip used ID "' + id + '"')
+            id = ''
+        }
+    }
+    return id
+}
+
+function uniqueId(ob) {
+    const ID = 'id'
+    id = ob.attr(ID)
+    if (id === undefined) {
+        id = unused_random_id('uniq-')
+        ob.attr(ID, id)
+    }
+    return id
+}
+
 function extract_costs_from_details(orig_string, pane_heading, pane_title, purchase) {
     const cost_flag = "Costs"
     string = orig_string
