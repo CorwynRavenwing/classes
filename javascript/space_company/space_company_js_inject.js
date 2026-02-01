@@ -305,6 +305,10 @@ function check_tabs(maxes, available_substances) {
             // no costs (energy-mass conversion page): NOOP
             return
         }
+        if (cost_idx == 'format') {
+            // why are functions being passed in here ?!?
+            return
+        }
         // console.log('cost_str:', cost_idx, cost_str)
         cost_split = cost_str
             .replaceAll(' ', '_')       // any number of spaces -> underscore
