@@ -679,24 +679,24 @@ function extract_costs_from_details(orig_string, pane_heading, pane_title, purch
 
     if (pane_title == "energy-mass_conversion") {
         // does not have Costs section
-        return ""
+        return []
     }
     if (pane_title == 'dyson swarms and sphere') {
         // has non-standard Costs section
-        return ""
+        return []
     }
     if (purchase == "Rocket Ship: Built") {
         // does not have Costs section anymore
-        return ""
+        return []
     }
     if (pane_title == "travel") {
         // Interstellar.
         // does not have Costs section
-        return ""
+        return []
     }
     if (string == '') {
         // string is now blank: no costs
-        return ""
+        return []
     }
 
     var position = string.search(cost_flag)
