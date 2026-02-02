@@ -754,10 +754,135 @@ function priceslist_2_pricesob(prices_list) {
     return prices_ob
 }
 
+function get_button_id(td) {
+    var button = td
+        .find('button')
+        [0];
+
+    if (! button) {
+        button = td
+            .find('div.btn')
+            [0];
+    }
+
+    if (! button) {
+        return ''
+    }
+
+    button = $( button )
+
+    if (button.hasClass('destroy')) {
+        console.error('destroy button!', button)
+        return ''
+    }
+
+    if (button.hasClass('btn-warning')) {
+        return ''
+    }
+
+    var button_is_hidden = button
+        .hasClass('hidden');
+
+    if (button_is_hidden) {
+        // console.warn('button is hidden', button)
+        return ''
+    }
+
+    button_is_hidden = button
+        .parent()
+        .hasClass('hidden');
+
+    if (button_is_hidden) {
+        // console.warn('button parent is hidden', button.parent())
+        return ''
+    }
+
+    return uniqueId(button)
+}
+
+function inputid_2_desired(input_id) {
+    var desired = ''
+    if (input_id) {
+        var val = $('#' + input_id).val()
+        if (val) {
+            desired = val.trim()
+        }
+    }
+    return to_number(desired)
+}
+
+function create_input_and_get_id(td, button_id, debug_label) {
+    var input = td
+        .find('input.desired');
+
+    if (input.length == 0) {
+        // 'input' not found
+        if (! button_id) {
+            // no button or input --> okay
+            return
+        }
+        // button but no input: create input
+        // console.warn(debug_label, 'Creating input object:')
+        input = $('<input type="textbox" class="desired"/>')
+        td.append(input)
+    } else {
+        // 'input' is found
+        if (! button_id) {
+            // input but no button: input is obsolete
+            console.warn(debug_label, 'Destroying input object:')
+            input.remove()
+        // } else {
+        //     // both button and input: that's fine
+        }
+    }
+    return uniqueId(input)
+}
+
+function complain_about_unknown_substances_once(unknown_substances_list) {
+    for (const substance of unknown_substances_list){
+        var seen = (GLOBAL_known_unknowns.includes(substance))
+        if (! seen) {
+            GLOBAL_known_unknowns.push(substance)
+        }
+    }
+    return
+}
+
+function get_unknown_substances(costs_ob, maxes) {
+    var costs_list = Object.entries(costs_ob)
+
+    var unknown_substances_list = costs_list.map(function([substance, quant]) {
+        return substance
+    }).filter(function(substance) {
+        var known_substance = (substance in maxes)
+        return (! known_substance)
+    });
+
+    return unknown_substances_list
+}
+
+function get_bump_max_ob(costs_ob, maxes) {
+    var costs_list = Object.entries(costs_ob)
+
+    var bump_max_list = costs_list.filter(function([substance, needed]) {
+        var max_value = maxes[substance]
+        return (needed > max_value)
+    });
+    if (bump_max_list.length > 0) {
+        var bump_max_ob = Object.fromEntries(bump_max_list)
+        return bump_max_ob
+    } else {
+        return 0    // TODO: or maybe '', or maybe {}, or maybe []
+    }
+}
+
+// XYZZY:
 function tr_2_magic(tr, maxes, pane_title) {
     var magic = {}
     // console.log('tr2magic', tr)
     tr = $( tr )
+    magic.tr_id = uniqueId(tr)
+
     // console.log('->', tr)
     var h3 = tr.find('h3')
     var purchase = h3
@@ -796,68 +921,17 @@ function tr_2_magic(tr, maxes, pane_title) {
     var current = current_ob
         .text()
         .trim();
-    magic.current = current
+    magic.current = to_number(current)
 
     var td = tr.find('td')
-    var button = td
-        .find('button')
-        [0];
-    if (! button) {
-        button = td
-            .find('div.btn')
-            [0];
-    }
 
-    if (button) {
-        button = $( button )
-    }
-    if (button) {
-        if (button.hasClass('destroy')) {
-            console.error('destroy button!', button)
-            button = null
-        }
-    }
-    // yes, repeat the prior question
-    if (button) {
-        if (button.hasClass('btn-warning')) {
-            button = null
-        }
-    }
-    // yes, repeat question again
-    if (button) {
-        var button_is_hidden = button
-            .hasClass('hidden');
-        if (button_is_hidden) {
-            // console.warn('button is hidden', button)
-            button = null
-        } else {
-            button_is_hidden = button
-                .parent()
-                .hasClass('hidden');
-            if (button_is_hidden) {
-                // console.warn('button is hidden', button.parent())
-                button = null
-            }
-        }
-    }
-    magic.button = button
+    var button_id = get_button_id(td)
+    magic.button_id = button_id
 
-    var input = td
-        .find('input.desired');
-    if (button && (input.length == 0)) {
-        // console.warn(pane_title, purchase, 'Creating input object:')
-        input = $('<input type="textbox" class="desired"/>')
-        td.append(input)
-    }
-    var desired = ''
-    if (input) {
-        var val = input.val()
-        if (val) {
-            desired = val.trim()
-        }
-    }
-    magic.input = input
-    desired = to_number(desired)
+    var input_id = create_input_and_get_id(td, button_id, pane_title + '/' + purchase)
+    magic.input_id = input_id
+
+    var desired = inputid_2_desired(input_id)
     magic.desired = desired
 
     details = cleanup_details(details)
@@ -869,8 +943,28 @@ function tr_2_magic(tr, maxes, pane_title) {
     if (DEBUG) console.log('costs:', costs)
     magic.costs = costs
 
-    magic.tr_id = uniqueId(tr)
+    var unknown_substances = get_unknown_substances(costs, maxes)
+    magic.unknown = unknown_substances
+    complain_about_unknown_substances_once(unknown_substances)
+    if (unknown_substances.length) {
+        /* if (DEBUG) */ console.warn('cost of UNKNOWN SUBSTANCES:', pane_title, purchase, unknown_substances)
+    }
 
+
+    var bump_maxes = get_bump_max_ob(costs, maxes)
+    magic.bump_max = bump_maxes
+
+
+    if (magic.unknown_substances) {
+        magic.class = 'unknown_substance'
+    }
+    else if (magic.bump_max) {
+        magic.class = 'bump_max'
+    }
+    // ... more ...
+    else {
+        magic.class = 'OK'
+    }
     // ### MOVE TO HERE ... vvv
 
 
@@ -892,6 +986,12 @@ function trsob_2_magicsob(trs_ob, maxes) {
     return magics_ob
 }
 
+function check_known_substance(substance, maxes) {
+    if (! known_substance) {
+    }
+    return known_substance
+}
+
 function test() {
 
     // the following variables and functions have been copied in from check_tabs:
@@ -903,6 +1003,34 @@ function test() {
     var GLOBAL_bump_specifics
     var GLOBAL_clicked_something = false
     
+    function CONSUME_scan_one_cost(cost_idx, cost_str) {
+        if (cost_str == "") {
+            // no costs: NOOP
+            return
+        }
+        // console.log('cost_str:', cost_idx, cost_str)
+        var [substance, needed] = prices_2_pair(cost_str)
+
+        max_value = maxes[substance]
+        if (needed <= max_value) {
+            // console.log('cost ok:', cost_idx, substance, needed, max_value)
+            return
+        }
+
+        if (GLOBAL_purchase.includes('Swarm:')) {
+            console.warn('Swarm (scan_one_cost)', GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase)
+            return
+        }
+
+        if (! (substance in GLOBAL_overflow_reasons)) {
+            GLOBAL_overflow_reasons[substance] = []
+        }
+        GLOBAL_overflow_reasons[substance].push(
+            GLOBAL_pane_heading + '/' + GLOBAL_pane_title + "/" + GLOBAL_purchase + ": " + from_number(needed)
+        )
+        GLOBAL_bump_specifics.push(substance)
+    }
+
     function CONSUME_scan_one_tr(tr_idx, tr) {
 
         // ### MOVE FROM HERE ... ^^^
