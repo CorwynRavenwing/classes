@@ -622,7 +622,7 @@ function unused_random_id(prefix) {
     while (id == '') {
         id = random_id(prefix)
         if ( $( '#' + id ).length ) {
-            console.warn('Skip used ID "' + id + '"')
+            // console.warn('Skip used ID "' + id + '"')
             id = ''
         }
     }
@@ -881,7 +881,6 @@ function trsob_2_magicsob(trs_ob, maxes) {
     var trs_array = Object.entries(trs_ob)
     var magics_array = trs_array.map(function([pane_title, trs]) {
         if (DEBUG) console.log('DEBUG GMO', pane_title)
-        // console.log('DEBUG GMO', pane_title, trs)
         var magics = trs.map(function(tr, tr_idx) {
             // console.log('DEBUG idx', tr_idx, 'tr', tr)
             magic = tr_2_magic(tr, maxes, pane_title)
