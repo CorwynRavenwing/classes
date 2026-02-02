@@ -168,8 +168,14 @@ function from_number(value) {
 
 function to_number(orig_value, comment= '') {
     value = orig_value
+
+    if (value == 'Dormant') { return '' }
+    if (value == 'Activated') { return '' }
+    if (value == 'Not Built') { return '' }
+    if (value == 'Built') { return '' }
+    if (value == 'N/A') { return '' }
+
     value = value.replaceAll(',', '')
-    value = value.replaceAll('N/A', '')
     value = value.replaceAll('/', '')   // Energy comes preceeded by '/' for some reason
     value = value.trim()                // and a million spaces
     if (value == '') {
