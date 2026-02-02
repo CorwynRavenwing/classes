@@ -319,7 +319,7 @@ function check_tabs(maxes, available_substances) {
         needed = to_number(needed, cost_str)
         substance = substance.toLowerCase()
         if (substance == 'gem') { substance = 'gems' }
-        known_substance = (substance in maxes)
+        var known_substance = (substance in maxes)
         if (! known_substance) {
             GLOBAL_unknown_substances.push("'" + substance + "'")
             var seen = (GLOBAL_known_unknowns.includes(substance))
