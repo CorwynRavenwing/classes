@@ -742,7 +742,7 @@ function prices_2_pair(cost_str) {
     return cost
 }
 
-function pricesist_2_pricesob(prices_list) {
+function priceslist_2_pricesob(prices_list) {
     var prices_arr = prices_list.map(prices_2_pair);
     var prices_ob = Object.fromEntries(prices_arr)
     return prices_ob
