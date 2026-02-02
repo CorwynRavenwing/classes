@@ -748,7 +748,7 @@ function priceslist_2_pricesob(prices_list) {
     return prices_ob
 }
 
-function tr_2_magic(tr, pane_title) {
+function tr_2_magic(tr, maxes, pane_title) {
     var magic = {}
     // console.log('tr2magic', tr)
     tr = $( tr )
@@ -859,7 +859,7 @@ function tr_2_magic(tr, pane_title) {
 
     if (DEBUG) console.log('purchase:', purchase)
     if (DEBUG) console.log('costs:', costs)
-    costs = pricesist_2_pricesob(costs)
+    costs = priceslist_2_pricesob(costs)
     if (DEBUG) console.log('costs:', costs)
     magic.costs = costs
 
@@ -871,14 +871,14 @@ function tr_2_magic(tr, pane_title) {
     return magic
 }
 
-function trsob_2_magicsob(trs_ob) {
+function trsob_2_magicsob(trs_ob, maxes) {
     var trs_array = Object.entries(trs_ob)
     var magics_array = trs_array.map(function([pane_title, trs]) {
         if (DEBUG) console.log('DEBUG GMO', pane_title)
         // console.log('DEBUG GMO', pane_title, trs)
         var magics = trs.map(function(tr, tr_idx) {
             // console.log('DEBUG idx', tr_idx, 'tr', tr)
-            magic = tr_2_magic(tr, pane_title)
+            magic = tr_2_magic(tr, maxes, pane_title)
             return magic
         }).filter((ob) => ob !== null)
         return [pane_title, magics]
@@ -898,7 +898,7 @@ function test() {
     var GLOBAL_bump_specifics
     var GLOBAL_clicked_something = false
     
-    function scan_one_tr(tr_idx, tr) {
+    function CONSUME_scan_one_tr(tr_idx, tr) {
 
         // ### MOVE FROM HERE ... ^^^
 
@@ -1015,7 +1015,7 @@ function test() {
     var available_substances = get_available_substances(maxes)
     var panes_ob = panesdesc_2_panesob(pane_descriptors)
     var trs_ob = panesob_2_trsob(panes_ob, available_substances)
-    var magics_ob = trsob_2_magicsob(trs_ob)
+    var magics_ob = trsob_2_magicsob(trs_ob, maxes)
 
     return magics_ob
 
