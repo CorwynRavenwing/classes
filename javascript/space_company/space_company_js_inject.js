@@ -29,6 +29,73 @@ var GLOBAL_available_substances = [];
 var GLOBAL_available_substances_by_page = {};
 var GLOBAL_known_skip_page = [];
 
+function from_number(value) {
+    "use strict";
+    var mult_idx = 0;
+    while (value > 1000) {
+        mult_idx += 1;
+        value /= 1000;
+    }
+    value = Math.round(value * 1000) / 1000;    // round to 3 places
+    var value_int = Math.round(value);
+    if (value == value_int) {
+        value = value_int;       // convert to type int if exact value
+    }
+    const multipliers = ["", "K", "M", "B", "T", "???"];
+    var multiplier_str = multipliers[mult_idx];
+    var answer = value.toString() + multiplier_str;
+    return answer;
+}
+
+function to_number(orig_value, comment= "") {
+    "use strict";
+    var value = orig_value;
+
+    if (value == "Dormant") { return ""; }
+    if (value == "Activated") { return ""; }
+    if (value == "Not Built") { return ""; }
+    if (value == "Built") { return ""; }
+    if (value == "N/A") { return ""; }
+
+    value = value.replaceAll(",", "");
+    value = value.replaceAll("/", "");   // Energy comes preceeded by "/" for some reason
+    value = value.trim();                // and a million spaces
+    if (value == "") {
+        return "";
+    }
+    var answer = parseFloat(value);
+    var multiplier_str = value.replace(/^[0-9.]*/, "");
+    var multiplier = 1;
+    switch(multiplier_str) {
+        case "":    multiplier = 1;             break;  // 1 thousand
+        case "K":   multiplier = 1000;          break;  // 1 thousand
+        case "M":   multiplier = 1000000;       break;  // 1 million
+        case "B":   multiplier = 1000000000;    break;  // 1 billion
+        case "T":   multiplier = 1000000000000; break;  // 1 trillion
+        default:
+            throw new Error("to_number(): Invalid multiplier '" + multiplier_str + "' (" + orig_value + "->" + value + ") " + comment);
+    }
+    // if (DEBUG) console.log("to_number:", value, multiplier_str, multiplier, answer);
+    answer *= multiplier;
+    answer = Math.round(answer);
+    return answer;
+}
+
+function toHHMMSS(total_sec) {
+    "use strict";
+    var hours   = Math.floor(total_sec / 3600);
+    var minutes = Math.floor(total_sec / 60) % 60;
+    var seconds = total_sec % 60;
+
+    if (hours) { hours += " hour"; } else { hours = ""; }
+    if (minutes) { minutes += " min"; } else { minutes = ""; }
+    if (seconds) { seconds += " sec"; } else { seconds = ""; }
+
+    var answer = [hours,minutes,seconds];
+
+    return answer.join(" ");
+}
+
 function get_quantities() {
     "use strict";
     var pane_entries = Object.entries(pane_descriptors);
@@ -367,73 +434,6 @@ function get_tabs_available() {
     });
 
     return answer;
-}
-
-function from_number(value) {
-    "use strict";
-    var mult_idx = 0;
-    while (value > 1000) {
-        mult_idx += 1;
-        value /= 1000;
-    }
-    value = Math.round(value * 1000) / 1000;    // round to 3 places
-    var value_int = Math.round(value);
-    if (value == value_int) {
-        value = value_int;       // convert to type int if exact value
-    }
-    const multipliers = ["", "K", "M", "B", "T", "???"];
-    var multiplier_str = multipliers[mult_idx];
-    var answer = value.toString() + multiplier_str;
-    return answer;
-}
-
-function to_number(orig_value, comment= "") {
-    "use strict";
-    var value = orig_value;
-
-    if (value == "Dormant") { return ""; }
-    if (value == "Activated") { return ""; }
-    if (value == "Not Built") { return ""; }
-    if (value == "Built") { return ""; }
-    if (value == "N/A") { return ""; }
-
-    value = value.replaceAll(",", "");
-    value = value.replaceAll("/", "");   // Energy comes preceeded by "/" for some reason
-    value = value.trim();                // and a million spaces
-    if (value == "") {
-        return "";
-    }
-    var answer = parseFloat(value);
-    var multiplier_str = value.replace(/^[0-9.]*/, "");
-    var multiplier = 1;
-    switch(multiplier_str) {
-        case "":    multiplier = 1;                 break;
-        case "K":   multiplier = 1_000;             break;
-        case "M":   multiplier = 1_000_000;         break;
-        case "B":   multiplier = 1_000_000_000;     break;
-        case "T":   multiplier = 1_000_000_000_000; break;
-        default:
-            throw new Error("to_number(): Invalid multiplier '" + multiplier_str + "' (" + orig_value + "->" + value + ") " + comment);
-    }
-    // if (DEBUG) console.log("to_number:", value, multiplier_str, multiplier, answer);
-    answer *= multiplier;
-    answer = Math.round(answer);
-    return answer;
-}
-
-function toHHMMSS(total_sec) {
-    "use strict";
-    var hours   = Math.floor(total_sec / 3600);
-    var minutes = Math.floor(total_sec / 60) % 60;
-    var seconds = total_sec % 60;
-
-    if (hours) { hours += " hour"; } else { hours = ""; }
-    if (minutes) { minutes += " min"; } else { minutes = ""; }
-    if (seconds) { seconds += " sec"; } else { seconds = ""; }
-
-    var answer = [hours,minutes,seconds];
-
-    return answer.join(" ");
 }
 
 function get_one_max(tr, argument=null) {
