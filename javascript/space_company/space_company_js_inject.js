@@ -14,16 +14,16 @@ var prior_cick_time;
 var cost_flag = "Costs";    // actually a const, injector cant re-declare them
 
 var pane_descriptors = {
-    Interstellar:    "#interstellarTab_pane",
-    // Machine:         "#machineTab",
-    Nonexistent:     "#TestingOnly",
-    Research:        "#research",
-    Resources:       "#resourceTabParent",
-    "Sol Center":    "#solCenterPage",
-    "Solar System":  "#solarSystem",
-    Stargaze:        "#stargazeTab_pane",
-    Wonders:         "#wonder",
-    ZZZ:             "LAST: NO COMMA"
+    Interstellar:   "#interstellarTab_pane",
+    // Machine:     "#machineTab",
+    Nonexistent:    "#TestingOnly",
+    Research:       "#research",
+    Resources:      "#resourceTabParent",
+    "Sol Center":   "#solCenterPage",
+    "Solar System": "#solarSystem",
+    Stargaze:       "#stargazeTab_pane",
+    Wonders:        "#wonder",
+    ZZZ:            "LAST: NO COMMA"
 };
 
 var GLOBAL_known_unknowns = [];
@@ -189,6 +189,47 @@ function x_CONSUME_for_each_nav(fn, argument) {
     });
 
     return answer;
+}
+
+function for_each_nav(fn, argument) {
+    "use strict";
+    var answer = [];
+
+    var sidetabs = $("#resourceNavParent > tbody > tr");
+    $.each(sidetabs, function(index, value) {
+        var ob = $( value );
+        index = index;   // ignore
+        // is_sidetab = ob.hasClass("sideTab");
+        // if (! is_sidetab) {
+        //     return;
+        // }
+        answer.push( fn(ob, argument) );
+    });
+
+    return answer;
+}
+
+function get_one_max(tr) {
+    "use strict";
+    tr = $( tr );
+    var is_hidden = tr.hasClass("hidden");
+    if (is_hidden) {
+        // console.warn("max: hidden", tr);
+        return [];
+    }
+    // console.log(tr);
+    var tds = tr.children();
+    var label = $( tds[1] ).text().trim().toLowerCase();
+    if (! label) {
+        // console.warn("max: no label", label);
+        return [];
+    }
+    var values = $( tds[3] ).children();
+    var quant = $( values[1] ).text().trim();
+    quant = to_number(quant);
+
+    // console.log(label, "<=", quant);
+    return [label, quant];
 }
 
 function x_CONSUME_get_maxes() {
@@ -450,46 +491,6 @@ function get_tabs_available() {
     return answer;
 }
 
-function get_one_max(tr, argument=null) {
-    "use strict";
-    tr = $( tr );
-    var is_hidden = tr.hasClass("hidden");
-    if (is_hidden) {
-        // console.warn("max: hidden", tr);
-        return [];
-    }
-    // console.log(tr);
-    var tds = tr.children();
-    var label = $( tds[1] ).text().trim().toLowerCase();
-    if (! label) {
-        // console.warn("max: no label", label);
-        return [];
-    }
-    var values = $( tds[3] ).children();
-    var quant = $( values[1] ).text().trim();
-    quant = to_number(quant);
-
-    // console.log(label, "<=", quant);
-    return [label, quant];
-}
-
-function for_each_nav(fn, argument=null) {
-    "use strict";
-    var answer = [];
-
-    var sidetabs = $("#resourceNavParent > tbody > tr");
-    $.each(sidetabs, function(index, value) {
-        ob = $( value );
-        // is_sidetab = ob.hasClass("sideTab");
-        // if (! is_sidetab) {
-        //     return;
-        // }
-        answer.push( fn(ob, argument) );
-    });
-
-    return answer;
-}
-
 function get_maxes() {
     "use strict";
     var max_pairs = for_each_nav(get_one_max, null);
@@ -535,6 +536,126 @@ function get_maxes() {
         maxes[label] = quant;
     });
     return maxes;
+}
+
+function cleanup_details(string) {
+    "use strict";
+    // var cost_flag = "Costs";
+
+    // Wonder phrases before costs:
+    string = string.replace("He requires that you donate", cost_flag);
+    string = string.replace("He requests a pyramid containing", cost_flag);
+    string = string.replace("He requests a tower consisting of", cost_flag);
+    string = string.replace("The Overlord wishes for a cube made up of", cost_flag);
+
+    // alternate cost flag
+    string = string.replace("This requires", cost_flag);
+    string = string.replace("Cost:", cost_flag);
+
+    // Wonder phrases within costs:
+    string = string.replaceAll(" and ", ", ");
+
+    // Wonder phrases after costs:
+    string = string.replace(" for this knowledge", "");
+    string = string.replace(" to acquire his methods", "");
+    string = string.replace(" to unlock this technology", "");
+    string = string.replace(" to be given this technology", "");
+
+    // Wonder phrases to clean up:
+    string = string.replace("Donate Resources", "");
+    string = string.replace(/Activate\ .*/, "");
+    string = string.replace(/Rebuild\ .*/, "");
+    string = string.replace("Unlock Plasma Research", "");
+    string = string.replace("Unlock EMC Machine Research", "");
+    string = string.replace("Unlock Dyson Sphere Research", "");
+    string = string.replace(/[0-9.]+%$/, "");
+
+    // Dark Matter phrases to clean up:
+    string = string.replaceAll(/Improves\ relationship\ by\ [0-9.]+/g, "");
+    string = string.replaceAll(/Improves\ relationship\ by/g, "");
+
+    string = string.trim();
+
+    return string;
+}
+
+function extract_costs_from_details(orig_string, pane_heading, pane_title, purchase) {
+    "use strict";
+    var string = orig_string;
+    // const cost_flag = "Costs";
+
+    if (pane_title === "energy-mass_conversion") {
+        // does not have Costs section
+        return [];
+    }
+    if (pane_title === "dyson swarms and sphere") {
+        // has non-standard Costs section
+        return [];
+    }
+    if (purchase === "Rocket Ship: Built") {
+        // does not have Costs section anymore
+        return [];
+    }
+    if (pane_title === "travel") {
+        // Interstellar.
+        // does not have Costs section
+        return [];
+    }
+    if (string === "") {
+        // string is now blank: no costs
+        return [];
+    }
+
+    var position = string.search(cost_flag);
+    if (DEBUG) {console.log("Costs Position:", position);}
+    if (position === -1) {
+        var label = pane_heading + "/" + pane_title + "/" + purchase;
+        throw new Error("Costs not found:\n" + label + "\n'" + orig_string + "'\n---\n'" + string + "'");
+    }
+    position += cost_flag.length;
+    string = string
+        .slice(position)            // delete up to after "Costs"
+        .replace(/^:/, "")          // remove leading colon
+        .trim()                     // remove lead/trail spaces
+        .replace(/[.]+$/, "")       // remove trailing period
+        .replaceAll(/\ \ +/g, " ")  // no doubled spaces
+        ;
+
+    // if (GLOBAL_pane_title === "inside the wonder station") {
+    //     console.log(orig_string)
+    //     console.log(string)
+    // }
+
+    var costs = string.split(", ");     // split on "comma space"
+    return costs;
+}
+
+function panesdesc_2_panesob(pane_descriptors) {
+    "use strict";
+    var pane_entries = Object.entries(pane_descriptors);
+
+    var panes_allowed = pane_entries.filter(function(entry) {
+        const [pane_heading, pane_desc] = entry;
+        if (DEBUG) { console.log("debug: entry", entry, "values", pane_heading, pane_desc); }
+
+        var available = GLOBAL_tabs_available.includes(pane_heading);
+        if (! available) {
+            if (DEBUG) {console.warn("Skip unavailable tab", pane_heading);}
+            return false;
+        }
+        return true;
+    });
+    // console.log("panes_allowed:", panes_allowed)
+
+    var panes_array = panes_allowed.map(function(entry) {
+        const [pane_heading, pane_desc] = entry;
+        var panes = $( pane_desc + " .tab-pane");
+        return [pane_heading, panes];
+    });
+    // console.log("panes_array:", panes_array)
+
+    var panes_ob = Object.fromEntries(panes_array);
+    return panes_ob;
 }
 
 function check_tabs(maxes, available_substances) {
@@ -895,98 +1016,6 @@ function uniqueId(ob) {
     return id;
 }
 
-function cleanup_details(string) {
-    "use strict";
-    // var cost_flag = "Costs";
-
-    // Wonder phrases before costs:
-    string = string.replace("He requires that you donate", cost_flag);
-    string = string.replace("He requests a pyramid containing", cost_flag);
-    string = string.replace("He requests a tower consisting of", cost_flag);
-    string = string.replace("The Overlord wishes for a cube made up of", cost_flag);
-
-    // alternate cost flag
-    string = string.replace("This requires", cost_flag);
-    string = string.replace("Cost:", cost_flag);
-
-    // Wonder phrases within costs:
-    string = string.replaceAll(" and ", ", ");
-
-    // Wonder phrases after costs:
-    string = string.replace(" for this knowledge", "");
-    string = string.replace(" to acquire his methods", "");
-    string = string.replace(" to unlock this technology", "");
-    string = string.replace(" to be given this technology", "");
-
-    // Wonder phrases to clean up:
-    string = string.replace("Donate Resources", "");
-    string = string.replace(/Activate\ .*/, "");
-    string = string.replace(/Rebuild\ .*/, "");
-    string = string.replace("Unlock Plasma Research", "");
-    string = string.replace("Unlock EMC Machine Research", "");
-    string = string.replace("Unlock Dyson Sphere Research", "");
-    string = string.replace(/[0-9.]+%$/, "");
-
-    // Dark Matter phrases to clean up:
-    string = string.replaceAll(/Improves\ relationship\ by\ [0-9.]+/g, "");
-    string = string.replaceAll(/Improves\ relationship\ by/g, "");
-
-    string = string.trim();
-
-    return string;
-}
-
-function extract_costs_from_details(orig_string, pane_heading, pane_title, purchase) {
-    "use strict";
-    var string = orig_string;
-    // const cost_flag = "Costs";
-
-    if (pane_title == "energy-mass_conversion") {
-        // does not have Costs section
-        return [];
-    }
-    if (pane_title == "dyson swarms and sphere") {
-        // has non-standard Costs section
-        return [];
-    }
-    if (purchase == "Rocket Ship: Built") {
-        // does not have Costs section anymore
-        return [];
-    }
-    if (pane_title == "travel") {
-        // Interstellar.
-        // does not have Costs section
-        return [];
-    }
-    if (string == "") {
-        // string is now blank: no costs
-        return [];
-    }
-
-    var position = string.search(cost_flag);
-    if (DEBUG) {console.log("Costs Position:", position);}
-    if (position == -1) {
-        var label = pane_heading + "/" + pane_title + "/" + purchase;
-        throw new Error("Costs not found:\n" + label + "\n'" + orig_string + "'\n---\n'" + string + "'");
-    }
-    position += cost_flag.length;
-    string = string
-        .slice(position)            // delete up to after "Costs"
-        .replace(/^:/, "")          // remove leading colon
-        .trim()                     // remove lead/trail spaces
-        .replace(/[.]+$/, "")       // remove trailing period
-        .replaceAll(/\ \ +/g, " ")  // no doubled spaces
-        ;
-
-    // if (GLOBAL_pane_title == "inside the wonder station") {
-    //     console.log(orig_string)
-    //     console.log(string)
-    // }
-
-    costs = string.split(", ");     // split on "comma space"
-    return costs;
-}
-
 function prices_2_pair(cost_str) {
     "use strict";
     if (cost_str === "") {
@@ -1265,8 +1294,101 @@ function trsob_2_magicsob(trs_ob, maxes) {
 //     return known_substance;
 // }
 
+function jQuery_to_array(thing) {
     "use strict";
-    // }
+    function filter_legal_item(line) {
+        const [index, item] = line;
+        var _ = item;
+        _ = _;
+        if (index === "length") {
+            return false;
+        }
+        if (index === "prevObject") {
+            return false;
+        }
+        return true;
+    }
+    function map_second_value(line) {
+        const [index, item] = line;
+        var _ = index;
+        _ = _;
+        return item;
+    }
+    var entries = Object.entries(thing);
+    var array = entries
+        .filter(filter_legal_item)
+        .map(map_second_value)
+        ;
+    return array;
+}
+
+function panesob_2_trsob(panes_ob, available_substances) {
+    "use strict";
+    var NONLOCAL_pane_heading;
+
+    function filter_not_hidden(tr) {
+        tr = $( tr );
+        var is_hidden = tr.hasClass("hidden");
+        if (is_hidden) {
+            return false;
+        }
+        return true;
+    }
+
+    function map_pane_to_title_and_trs(pane) {
+        pane = $( pane );
+        var trs = pane.find("tr");
+        trs = jQuery_to_array(trs);
+        trs = trs.filter(filter_not_hidden);
+        var tr0 = trs[0];
+        tr0 = $( tr0 );
+        var h2 = tr0.find("h2");
+        var pane_title = h2
+            .text()
+            .trim()
+            .toLowerCase()
+            .replace(/^inside\ the\ /, "")
+            .replace(/^the\ /, "")
+            .replaceAll(" ", "_")
+            ;
+        var known_title = (available_substances.includes(pane_title));
+        if (! known_title) {
+            var page_designator = NONLOCAL_pane_heading + "/" + pane_title;
+            var known_skip = (GLOBAL_known_skip_page.includes(page_designator));
+            if (! known_skip) {
+                console.warn("Skip", page_designator);
+                GLOBAL_known_skip_page.push(page_designator);
+            }
+            return [];
+        }
+        // NOTE: delete this section, move logic to next function
+        // if (pane_title === "dyson_swarms_and_sphere") {
+        //     // console.warn("Ignore Dyson Swarm / Sphere pane");
+        //     return [];
+        // }
+        // NOTE: end deleted section
+
+        return [pane_title, trs];
+    }
+
+    function map_panes_ob_to_all_titles_and_trs(entry) {
+        const [pane_headingC, panesC] = entry;
+        NONLOCAL_pane_heading = pane_headingC;
+        var panes_array = jQuery_to_array(panesC);
+        var pane_data = panes_array.map(map_pane_to_title_and_trs);
+        return pane_data;
+    }
+
+    var panes_ob_array = Object.entries(panes_ob);
+    var trs_array = panes_ob_array
+        .map(map_panes_ob_to_all_titles_and_trs)
+        .flat()
+        ;
+    trs_array = trs_array.filter(function(row) {
+        return row.length > 0;
+    });
+    var trs_ob = Object.fromEntries(trs_array);
+    return trs_ob;
 }
 
 function test() {
@@ -1451,132 +1573,14 @@ function test() {
 
     if (true) { return magics_ob; }
 
-
-function jQuery_to_array(thing) {
-    "use strict";
-    function filter_legal_item(line) {
-        const [index, item] = line;
-        if (index == "length") {
-            return false;
-        }
-        if (index == "prevObject") {
-            return false;
-        }
-        return true;
-    }
-    function map_second_value(line) {
-        const [index, item] = line;
-        return item;
-    }
-    var entries = Object.entries(thing);
-    var array = entries
-        .filter(filter_legal_item)
-        .map(map_second_value)
-        ;
-    return array;
-}
-
-function panesob_2_trsob(panes_ob, available_substances) {
-    "use strict";
-    var NONLOCAL_pane_heading;
-
-    function filter_not_hidden(tr, tr_idx) {
-        tr = $( tr );
-        is_hidden = tr.hasClass("hidden");
-        if (is_hidden) {
-            return false;
-        }
-        return true;
-    }
-
-    function map_pane_to_title_and_trs(pane, pane_idx) {
-        pane = $( pane );
-        var trs = pane.find("tr");
-        trs = jQuery_to_array(trs);
-        trs = trs.filter(filter_not_hidden);
-        var tr0 = trs[0];
-        tr0 = $( tr0 );
-        var h2 = tr0.find("h2");
-        var pane_title = h2
-            .text()
-            .trim()
-            .toLowerCase()
-            .replace(/^inside\ the\ /, "")
-            .replace(/^the\ /, "")
-            .replaceAll(" ", "_")
-            ;
-        var known_title = (available_substances.includes(pane_title));
-        if (! known_title) {
-            var page_designator = NONLOCAL_pane_heading + "/" + pane_title;
-            var known_skip = (GLOBAL_known_skip_page.includes(page_designator));
-            if (! known_skip) {
-                console.warn("Skip", page_designator);
-                GLOBAL_known_skip_page.push(page_designator);
-            }
-            return [];
-        }
-        // NOTE: delete this section, move logic to next function
-        // if (pane_title == "dyson_swarms_and_sphere") {
-        //     // console.warn("Ignore Dyson Swarm / Sphere pane");
-        //     return [];
-        // }
-        // NOTE: end deleted section
-
-        return [pane_title, trs];
-    }
-
-    function map_panes_ob_to_all_titles_and_trs(entry) {
-        var panes;
-        [NONLOCAL_pane_heading, panes] = entry;
-        var panes_array = jQuery_to_array(panes);
-        var pane_data = panes_array.map(map_pane_to_title_and_trs);
-        return pane_data;
-    }
-
-    var panes_ob_array = Object.entries(panes_ob);
-    var trs_array = panes_ob_array
-        .map(map_panes_ob_to_all_titles_and_trs)
-        .flat()
-        ;
-    trs_array = trs_array.filter(function(row) {
-        return row.length > 0;
     $.each(trs_ob, function(pane_title, trs) {
         GLOBAL_pane_heading = "UNKNOWN";
         GLOBAL_pane_title = pane_title;
         console.warn("DEBUG: each trs_ob", GLOBAL_pane_title, "trs:", trs);
         $.each(trs, xCONSUME_scan_one_tr);
     });
-    var trs_ob = Object.fromEntries(trs_array);
-    return trs_ob;
 }
 
-function panesdesc_2_panesob(pane_descriptors) {
-    "use strict";
-    pane_entries = Object.entries(pane_descriptors);
-
-    var panes_allowed = pane_entries.filter(function(entry) {
-        const [pane_heading, pane_desc] = entry;
-        // console.log("debug: entry", entry, "values", pane_heading, pane_desc);
-
-        var available = GLOBAL_tabs_available.includes(pane_heading);
-        if (! available) {
-            if (DEBUG) {console.warn("Skip unavailable tab", pane_heading);}
-            return false;
-        }
-        return true;
-    });
-    // console.log("panes_allowed:", panes_allowed)
-
-    var panes_array = panes_allowed.map(function(entry) {
-        const [pane_heading, pane_desc] = entry;
-        var panes = $( pane_desc + " .tab-pane");
-        return [pane_heading, panes];
-    });
-    // console.log("panes_array:", panes_array)
-
-    var panes_ob = Object.fromEntries(panes_array);
-    return panes_ob;
-}
 // xyzzy
 
 function colorize_one_max(tr, tab_data) {
