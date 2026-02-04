@@ -1,6 +1,10 @@
 // JavaScript to auto-run the game "Space Company":
 // https://sparticle999.github.io/SpaceCompany/
 
+/*jslint devel*/        // allow console.log()
+/*jslint white */       // allow odd whitespace
+/*global $ */           // jQuery defines "$"
+
 var tick_seconds = 1;
 
 var DEBUG = false;
