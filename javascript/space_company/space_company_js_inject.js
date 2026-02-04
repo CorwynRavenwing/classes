@@ -38,7 +38,7 @@ function from_number(value) {
     }
     value = Math.round(value * 1000) / 1000;    // round to 3 places
     var value_int = Math.round(value);
-    if (value == value_int) {
+    if (value === value_int) {
         value = value_int;       // convert to type int if exact value
     }
     const multipliers = ["", "K", "M", "B", "T", "???"];
@@ -47,20 +47,20 @@ function from_number(value) {
     return answer;
 }
 
-function to_number(orig_value, comment= "") {
+function to_number(orig_value) {
     "use strict";
     var value = orig_value;
 
-    if (value == "Dormant") { return ""; }
-    if (value == "Activated") { return ""; }
-    if (value == "Not Built") { return ""; }
-    if (value == "Built") { return ""; }
-    if (value == "N/A") { return ""; }
+    if (value === "Dormant") { return ""; }
+    if (value === "Activated") { return ""; }
+    if (value === "Not Built") { return ""; }
+    if (value === "Built") { return ""; }
+    if (value === "N/A") { return ""; }
 
     value = value.replaceAll(",", "");
     value = value.replaceAll("/", "");   // Energy comes preceeded by "/" for some reason
     value = value.trim();                // and a million spaces
-    if (value == "") {
+    if (value === "") {
         return "";
     }
     var answer = parseFloat(value);
@@ -73,7 +73,7 @@ function to_number(orig_value, comment= "") {
         case "B":   multiplier = 1000000000;    break;  // 1 billion
         case "T":   multiplier = 1000000000000; break;  // 1 trillion
         default:
-            throw new Error("to_number(): Invalid multiplier '" + multiplier_str + "' (" + orig_value + "->" + value + ") " + comment);
+            throw new Error("to_number(): Invalid multiplier '" + multiplier_str + "' (" + orig_value + "->" + value + ") ");
     }
     // if (DEBUG) console.log("to_number:", value, multiplier_str, multiplier, answer);
     answer *= multiplier;
@@ -137,7 +137,7 @@ function x() {
 // var maxes = get_maxes()
 // var available_substances = get_available_substances(maxes)
 
-function CONSUME_get_one_max(tr, argument=null) {
+function x_CONSUME_get_one_max(tr) {
     "use strict";
     var is_hidden, tds, label, values, quant;
     tr = $( tr );
@@ -168,12 +168,15 @@ function CONSUME_get_one_max(tr, argument=null) {
     return [label, quant];
 }
 
-function CONSUME_for_each_nav(fn, argument=null) {
+function x_CONSUME_for_each_nav(fn, argument) {
     "use strict";
     var answer = [];
 
+    var sidetabs = $("#resourceNavParent > tbody > tr");
     $.each(sidetabs, function(index, value) {
-        ob = $( value );
+        var ob = $( value );
+        index = index;      // ignore
+        ob = ob;
         // is_sidetab = ob.hasClass("sideTab");
         // if (! is_sidetab) {
         //     return;
@@ -184,26 +187,26 @@ function CONSUME_for_each_nav(fn, argument=null) {
     return answer;
 }
 
-function CONSUME_get_maxes() {
+function x_CONSUME_get_maxes() {
     "use strict";
-    var max_pairs = for_each_nav(get_one_max);
+    var max_pairs = for_each_nav(get_one_max, null);
     // console.log(max_pairs);
-    science_ob = $("#science");
-    science_value = science_ob.text();
+    var science_ob = $("#science");
+    var science_value = science_ob.text();
     science_value = to_number(science_value);
-    science_max = (10 * science_value);      // actually unlimited
+    var science_max = (10 * science_value);      // actually unlimited
 
-    fuel_ob = $("#rocketFuel");
-    fuel_value = fuel_ob.text();
+    var fuel_ob = $("#rocketFuel");
+    var fuel_value = fuel_ob.text();
     fuel_value = to_number(fuel_value);
-    fuel_max = (10 * fuel_value);      // actually unlimited
+    var fuel_max = (10 * fuel_value);      // actually unlimited
 
-    rockets_max = 1000;     // NOTE: not sure how to compute this
+    var rockets_max = 1000;     // NOTE: not sure how to compute this
 
-    dark_ob = $("#stargazeNavdarkMatter_count");
-    dark_value = dark_ob.text();
+    var dark_ob = $("#stargazeNavdarkMatter_count");
+    var dark_value = dark_ob.text();
     dark_value = to_number(dark_value);
-    dark_max = (10 * dark_value);      // actually unlimited
+    var dark_max = (10 * dark_value);      // actually unlimited
 
     var maxes = {
         science: science_max,
@@ -219,7 +222,8 @@ function CONSUME_get_maxes() {
     };
 
     $.each(max_pairs, function(pair_idx, max_pair) {
-        if (max_pair.length == 0) {
+        pair_idx = pair_idx;    // ignore
+        if (max_pair.length === 0) {
             // console.log("get_maxes: SKIP", pair_idx, max_pair)
             return;
         }
@@ -230,16 +234,17 @@ function CONSUME_get_maxes() {
     return maxes;
 }
 
-function CONSUME_get_available_substances(maxes) {
+function x_CONSUME_get_available_substances(maxes) {
     "use strict";
     var answer = [];
     var NONLOCAL_tab_desc;
 
-    $.each(maxes, function(max_item, max_value) {
+    $.each(maxes, function(max_item) {
         answer.push(max_item);
     });
 
     function get_one_available(index, tr) {
+        index = index;  // ignore
         tr = $( tr );
         var is_hidden = tr.hasClass("hidden");
         if (is_hidden) {
@@ -248,7 +253,7 @@ function CONSUME_get_available_substances(maxes) {
         var tds = tr.children("td");
         var first = $( tds[0] );
         if( first.children("img").length ) {
-            if (tds.length == 1) {
+            if (tds.length === 1) {
                 console.error("available_substances: image in only TD", tds);
                 return;
             }
@@ -275,6 +280,7 @@ function CONSUME_get_available_substances(maxes) {
     }
 
     function scan_one_tab(tab_idx, tab) {
+        tab_idx = tab_idx;
         tab = $( tab );
         // console.log("DEBUG: tab", tab_idx, tab)
 
@@ -341,11 +347,12 @@ function get_available_substances(maxes) {
     var answer = [];
     var NONLOCAL_tab_desc;
 
-    $.each(maxes, function(max_item, max_value) {
+    $.each(maxes, function(max_item) {
         answer.push(max_item);
     });
 
     function get_one_available(index, tr) {
+        index = index;  // ignore
         tr = $( tr );
         var is_hidden = tr.hasClass("hidden");
         if (is_hidden) {
@@ -354,7 +361,7 @@ function get_available_substances(maxes) {
         var tds = tr.children("td");
         var first = $( tds[0] );
         if( first.children("img").length ) {
-            if (tds.length == 1) {
+            if (tds.length === 1) {
                 console.error("available_substances: image in only TD", tds);
                 return;
             }
@@ -382,6 +389,7 @@ function get_available_substances(maxes) {
     }
 
     function scan_one_tab(tab_idx, tab) {
+        tab_idx = tab_idx;
         tab = $( tab );
         // console.log("DEBUG: tab", tab_idx, tab);
 
@@ -413,7 +421,8 @@ function get_tabs_available() {
 
     var tabList = $("#tabList li");
     $.each(tabList, function(index, value) {
-        ob = $( value );
+        index = index;
+        var ob = $( value );
         var hidden = ob.is(":hidden");
         if (hidden) {
             return;
@@ -424,7 +433,8 @@ function get_tabs_available() {
         }
         var label = ob.text().trim();
         answer.push(label);
-        var known_label = (label in pane_descriptors);
+
+        var known_label = Object.keys(pane_descriptors).includes(label);
         if (! known_label) {
             if (! GLOBAL_known_missing_tabs.includes(label)) {
                 console.log("VISIBLE TAB, UNKNOWN LABEL:", label);
@@ -478,24 +488,24 @@ function for_each_nav(fn, argument=null) {
 
 function get_maxes() {
     "use strict";
-    var max_pairs = for_each_nav(get_one_max);
+    var max_pairs = for_each_nav(get_one_max, null);
     // console.log(max_pairs);
-    science_ob = $("#science");
-    science_value = science_ob.text();
+    var science_ob = $("#science");
+    var science_value = science_ob.text();
     science_value = to_number(science_value);
-    science_max = (10 * science_value);      // actually unlimited
+    var science_max = (10 * science_value);      // actually unlimited
 
-    fuel_ob = $("#rocketFuel");
-    fuel_value = fuel_ob.text();
+    var fuel_ob = $("#rocketFuel");
+    var fuel_value = fuel_ob.text();
     fuel_value = to_number(fuel_value);
-    fuel_max = (10 * fuel_value);      // actually unlimited
+    var fuel_max = (10 * fuel_value);      // actually unlimited
 
-    rockets_max = 1000;     // NOTE: not sure how to compute this
+    var rockets_max = 1000;     // NOTE: not sure how to compute this
 
-    dark_ob = $("#stargazeNavdarkMatter_count");
-    dark_value = dark_ob.text();
+    var dark_ob = $("#stargazeNavdarkMatter_count");
+    var dark_value = dark_ob.text();
     dark_value = to_number(dark_value);
-    dark_max = (10 * dark_value);      // actually unlimited
+    var dark_max = (10 * dark_value);      // actually unlimited
 
     var maxes = {
         science: science_max,
@@ -511,7 +521,8 @@ function get_maxes() {
     };
 
     $.each(max_pairs, function(pair_idx, max_pair) {
-        if (max_pair.length == 0) {
+        pair_idx = pair_idx;
+        if (max_pair.length === 0) {
             // console.log("get_maxes: SKIP", pair_idx, max_pair)
             return;
         }
@@ -536,26 +547,26 @@ function check_tabs(maxes, available_substances) {
     // console.log(panes)
 
     function scan_one_cost(cost_idx, cost_str) {
-        if (cost_str == "") {
+        if (cost_str === "") {
             // no costs (energy-mass conversion page): NOOP
             return;
         }
-        if (cost_idx == "format") {
+        if (cost_idx === "format") {
             // why are functions being passed in here ?!?
             return;
         }
         // console.log("cost_str:", cost_idx, cost_str)
-        cost_split = cost_str
+        var cost_split = cost_str
             .replaceAll(" ", "_")       // any number of spaces -> underscore
             .replace("_", " ")          // first underscore -> space again
             .split(" ", 2)              // split on that first space
             ;
         // console.log("cost split:", cost_split);
-        const [needed, substance] = cost_split;
-        needed = to_number(needed, cost_str);
-        substance = substance.toLowerCase();
-        if (substance == "gem") { substance = "gems"; }
-        var known_substance = (substance in maxes);
+        const [neededC, substanceC] = cost_split;
+        var needed = to_number(neededC);
+        var substance = substanceC.toLowerCase();
+        if (substance === "gem") { substance = "gems"; }
+        var known_substance = Object.keys(maxes).includes(substance);
         if (! known_substance) {
             GLOBAL_unknown_substances.push("'" + substance + "'");
             var seen = (GLOBAL_known_unknowns.includes(substance));
@@ -565,7 +576,7 @@ function check_tabs(maxes, available_substances) {
             }
             return;
         }
-        max_value = maxes[substance];
+        var max_value = maxes[substance];
         if (needed <= max_value) {
             // console.log("cost ok:", cost_idx, substance, needed, max_value);
             return;
@@ -576,7 +587,8 @@ function check_tabs(maxes, available_substances) {
             return;
         }
 
-        if (! (substance in GLOBAL_overflow_reasons)) {
+        var known_overflow_reasons = Object.keys(GLOBAL_overflow_reasons).includes(substance);
+        if (! known_overflow_reasons) {
             GLOBAL_overflow_reasons[substance] = [];
         }
         GLOBAL_overflow_reasons[substance].push(
@@ -586,6 +598,7 @@ function check_tabs(maxes, available_substances) {
     }
 
     function scan_one_tr(tr_idx, tr) {
+        tr_idx = tr_idx;
         tr = $( tr );
         var h3 = tr.find("h3");
         GLOBAL_purchase = h3
@@ -598,7 +611,7 @@ function check_tabs(maxes, available_substances) {
             return;
         }
         // NOTE: delete next section:
-        is_hidden = tr.hasClass("hidden");
+        var is_hidden = tr.hasClass("hidden");
         if (is_hidden) {
             if (DEBUG) { console.warn(GLOBAL_pane_title, GLOBAL_purchase, "HIDDEN"); }
             return;
@@ -608,15 +621,15 @@ function check_tabs(maxes, available_substances) {
             console.warn("Swarm (scan_one_tr)", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase);
             console.warn("tr", tr);
         }
-        if (GLOBAL_pane_title == "energy-mass_conversion") {
+        if (GLOBAL_pane_title === "energy-mass_conversion") {
             return;
         }
-        if (GLOBAL_pane_title == "dyson_swarms_and_sphere") {
+        if (GLOBAL_pane_title === "dyson_swarms_and_sphere") {
             return;
         }
         var cant_click = false;
         // console.log("tr:", tr_idx, tr);
-        details = tr
+        var details = tr
             .find("td > span")
             .text()
             .trim();
@@ -668,7 +681,7 @@ function check_tabs(maxes, available_substances) {
         }
         var input = td
             .find("input.desired");
-        if (button && (input.length == 0)) {
+        if (button && (input.length === 0)) {
             // console.warn(GLOBAL_pane_title, GLOBAL_purchase, "Creating input object:");
             input = $("<input type='textbox' class='desired'/>");
             td.append(input);
@@ -684,7 +697,7 @@ function check_tabs(maxes, available_substances) {
         // if (current && desired) {
         //     console.log(pane_title, purchase, "current", current, "desired", desired);
         // }
-        red_ingredients = tr
+        var red_ingredients = tr
             .find("td > span span.red");
         if (red_ingredients.length) {
             // console.log("red_ingredients", red_ingredients);
@@ -693,13 +706,13 @@ function check_tabs(maxes, available_substances) {
         if (DEBUG) { console.log("purchase:", GLOBAL_purchase); }
         details = cleanup_details(details);
         // if (DEBUG)  console.log("details:", details);
-        costs = extract_costs_from_details(details, GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase);
+        var costs = extract_costs_from_details(details, GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase);
         if (DEBUG) { console.log("costs:", costs); }
         GLOBAL_unknown_substances = [];
         GLOBAL_bump_specifics = [];
         $.each(costs, scan_one_cost);
-        pop_up = [];
-        set_class = "";
+        var pop_up = [];
+        var set_class = "";
 
         var all_click_classes = [
             "bump_max",
@@ -741,7 +754,7 @@ function check_tabs(maxes, available_substances) {
                 pop_up.push(...GLOBAL_unknown_substances);
                 set_class = "unknown_substance";
             }
-            if (set_class == "clicking") {
+            if (set_class === "clicking") {
                 // if (red_ingredients.length) {
                 //     console.warn("red_ingredients", red_ingredients)
                 //     console.warn("cant_click:", cant_click)
@@ -756,7 +769,7 @@ function check_tabs(maxes, available_substances) {
                 button.click();
                 var new_current = current_ob.text().trim();
                 var VERIFY = false;
-                if (VERIFY && (current != "") && (new_current == current)) {
+                if (VERIFY && (current !== "") && (new_current === current)) {
                     console.warn("ERROR: tried clicking", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, "no change", new_current, current);
                     set_class = "click_me";
                     // need to remove click-me from removal list
@@ -780,12 +793,13 @@ function check_tabs(maxes, available_substances) {
             tr.addClass(set_class);
         }
         $.each(all_click_classes, function(remove_idx, remove_me) {
-            if (remove_me != set_class) {
+            remove_idx = remove_idx;
+            if (remove_me !== set_class) {
                 tr.removeClass(remove_me);
             }
         });
         if (pop_up.length) {
-            reasons = pop_up
+            var reasons = pop_up
                 .join("\n");
             tr.prop("title", reasons);
         } else {
@@ -794,6 +808,7 @@ function check_tabs(maxes, available_substances) {
     }
 
     function scan_one_pane(pane_idx, pane) {
+        pane_idx = pane_idx;
         pane = $(pane);
         var trs = pane.find("tr");
         var tr0 = $( trs[0] );
@@ -806,7 +821,7 @@ function check_tabs(maxes, available_substances) {
             .replace(/^the\ /, "")
             .replaceAll(" ", "_")
             ;
-        known_title = (available_substances.includes(GLOBAL_pane_title));
+        var known_title = (available_substances.includes(GLOBAL_pane_title));
         if (! known_title) {
             var page_designator = GLOBAL_pane_heading + "/" + GLOBAL_pane_title;
             var known_skip = (GLOBAL_known_skip_page.includes(page_designator));
@@ -816,7 +831,7 @@ function check_tabs(maxes, available_substances) {
             }
             return;
         }
-        if (GLOBAL_pane_title == "dyson_swarms_and_sphere") {
+        if (GLOBAL_pane_title === "dyson_swarms_and_sphere") {
             // console.warn("Ignore Dyson Swarm / Sphere pane");
             return;
         }
@@ -834,7 +849,7 @@ function check_tabs(maxes, available_substances) {
     $.each(panes_ob, function(pane_heading, panes) {
         GLOBAL_pane_heading = pane_heading;
         if (DEBUG) {console.log("pane_heading:", GLOBAL_pane_heading);}
-        if (DEBUG) {console.warn("panes:", pane_desc, panes);}
+        if (DEBUG) {console.warn("panes:", panes);}
         $.each(panes, scan_one_pane);
     });
 
@@ -847,14 +862,15 @@ var random_id_counter = 0;
 function random_id(prefix) {
     "use strict";
     var id = "";
-    id = ++random_id_counter + "";
+    random_id_counter += 1;
+    id = random_id_counter + "";
     return prefix ? prefix + id : id;
 }
 
 function unused_random_id(prefix) {
     "use strict";
     var id = "";
-    while (id == "") {
+    while (id === "") {
         id = random_id(prefix);
         if ( $( "#" + id ).length ) {
             // console.warn("Skip used ID '" + id + "'");
@@ -867,7 +883,7 @@ function unused_random_id(prefix) {
 function uniqueId(ob) {
     "use strict";
     const ID = "id";
-    id = ob.attr(ID);
+    var id = ob.attr(ID);
     if (id === undefined) {
         id = unused_random_id("uniq-");
         ob.attr(ID, id);
@@ -969,7 +985,7 @@ function extract_costs_from_details(orig_string, pane_heading, pane_title, purch
 
 function prices_2_pair(cost_str) {
     "use strict";
-    if (cost_str == "") {
+    if (cost_str === "") {
         return [];
     }
     // console.log("cost_str:", cost_str)
@@ -978,10 +994,10 @@ function prices_2_pair(cost_str) {
         .replace("_", " ")          // first underscore -> space again
         .split(" ", 2);             // split on that first space
     // console.log("cost split:", cost_split)
-    const [needed, substance] = cost_split;
-    needed = to_number(needed, cost_str);
-    substance = substance.toLowerCase();
-    if (substance == "gem") { substance = "gems"; }
+    const [neededC, substanceC] = cost_split;
+    var needed = to_number(neededC);
+    var substance = substanceC.toLowerCase();
+    if (substance === "gem") { substance = "gems"; }
     var cost = [substance, needed];
     // console.log("cost:", cost);
     return cost;
@@ -1058,7 +1074,7 @@ function create_input_and_get_id(td, button_id, debug_label) {
     var input = td
         .find("input.desired");
 
-    if (input.length == 0) {
+    if (input.length === 0) {
         // "input" not found
         if (! button_id) {
             // no button or input --> okay
@@ -1083,14 +1099,15 @@ function create_input_and_get_id(td, button_id, debug_label) {
 
 function complain_about_unknown_substances_once(unknown_substances_list) {
     "use strict";
-    // for (const substance of unknown_substances_list){
-    var substance;
-    unknown_substances_list.each(function(substance) {
-        var seen = (GLOBAL_known_unknowns.includes(substance))
+    var answers = unknown_substances_list.map(function(substance) {
+        var seen = (GLOBAL_known_unknowns.includes(substance));
         if (! seen) {
             GLOBAL_known_unknowns.push(substance);
+            return true;
         }
+        return false;
     });
+    if (DEBUG) { console.warn('DEBUG: complain answers', answers); }
     return;
 }
 
@@ -1099,9 +1116,10 @@ function get_unknown_substances(costs_ob, maxes) {
     var costs_list = Object.entries(costs_ob);
 
     var unknown_substances_list = costs_list.map(function([substance, quant]) {
+        quant = quant;
         return substance;
     }).filter(function(substance) {
-        var known_substance = (substance in maxes);
+        var known_substance = Object.keys(maxes).includes(substance);
         return (! known_substance);
     });
 
@@ -1146,16 +1164,16 @@ function tr_2_magic(tr, maxes, pane_title) {
     }
     magic.name = purchase;
 
-    is_hidden = tr.hasClass("hidden");
+    var is_hidden = tr.hasClass("hidden");
     if (is_hidden) {
         /* if (DEBUG) */ console.warn(pane_title, purchase, "HIDDEN");
         return;
     }
 
-    if (pane_title == "energy-mass_conversion") {
+    if (pane_title === "energy-mass_conversion") {
         return null;
     }
-    if (pane_title == "dyson_swarms_and_sphere") {
+    if (pane_title === "dyson_swarms_and_sphere") {
         return null;
     }
 
@@ -1220,26 +1238,31 @@ function tr_2_magic(tr, maxes, pane_title) {
 
 function trsob_2_magicsob(trs_ob, maxes) {
     "use strict";
+    var magic;
     var trs_array = Object.entries(trs_ob);
     var magics_array = trs_array.map(function([pane_title, trs]) {
         if (DEBUG) {console.log("DEBUG GMO", pane_title);}
-        var magics = trs.map(function(tr, tr_idx) {
-            // console.log("DEBUG idx", tr_idx, "tr", tr)
+        var magics = trs.map(function(tr) {
+            // console.log("DEBUG idx", "tr", tr)
             magic = tr_2_magic(tr, maxes, pane_title);
             return magic;
         }).filter((ob) => ob !== null);
         return [pane_title, magics];
     });
-    magics_ob = Object.fromEntries(magics_array);
+    var magics_ob = Object.fromEntries(magics_array);
     return magics_ob;
 }
 
-function check_known_substance(substance, maxes) {
+// function check_known_substance(substance, maxes) {
+//     "use strict";
+//     // NOTE: BROKEN, BUT NOT CALLED FROM ANYWHERE
+//     // if (! known_substance) {
+//     // }
+//     return known_substance;
+// }
+
     "use strict";
-    // NOTE: BROKEN, BUT NOT CALLED FROM ANYWHERE
-    // if (! known_substance) {
     // }
-    return known_substance;
 }
 
 function test() {
@@ -1249,20 +1272,21 @@ function test() {
     var GLOBAL_overflow_reasons = {};
     var GLOBAL_pane_heading;
     var GLOBAL_pane_title;
-    var GLOBAL_purchase;
+    var GLOBAL_purchase = "h3.something.text.etc";
     var GLOBAL_unknown_substances;
     var GLOBAL_bump_specifics;
     var GLOBAL_clicked_something = false;
-    
-    function CONSUME_scan_one_cost(cost_idx, cost_str) {
-        if (cost_str == "") {
+
+    function xCONSUME_scan_one_cost(cost_idx, cost_str, maxes) {
+        cost_idx = cost_idx;
+        if (cost_str === "") {
             // no costs: NOOP
             return;
         }
         // console.log("cost_str:", cost_idx, cost_str);
         const [substance, needed] = prices_2_pair(cost_str);
 
-        max_value = maxes[substance];
+        var max_value = maxes[substance];
         if (needed <= max_value) {
             // console.log("cost ok:", cost_idx, substance, needed, max_value)
             return;
@@ -1273,7 +1297,8 @@ function test() {
             return;
         }
 
-        if (! (substance in GLOBAL_overflow_reasons)) {
+        var known_overflow_reasons = Object.keys(GLOBAL_overflow_reasons).includes(substance);
+        if (! known_overflow_reasons) {
             GLOBAL_overflow_reasons[substance] = [];
         }
         GLOBAL_overflow_reasons[substance].push(
@@ -1282,7 +1307,9 @@ function test() {
         GLOBAL_bump_specifics.push(substance);
     }
 
-    function CONSUME_scan_one_tr(tr_idx, tr) {
+    function xCONSUME_scan_one_tr(tr_idx, tr) {
+        tr_idx = tr_idx;
+        var costs = "defined in deleted section";
 
         // ### MOVE FROM HERE ... ^^^
 
@@ -1291,7 +1318,7 @@ function test() {
         // if (current && desired) {
         //     console.log(pane_title, purchase, "current", current, "desired", desired)
         // }
-        red_ingredients = tr
+        var red_ingredients = tr
             .find("td > span span.red");
         if (red_ingredients.length) {
             // console.log("red_ingredients", red_ingredients)
@@ -1299,9 +1326,9 @@ function test() {
         }
         GLOBAL_unknown_substances = [];
         GLOBAL_bump_specifics = [];
-        $.each(costs, scan_one_cost);
-        pop_up = [];
-        set_class = "";
+        $.each(costs, xCONSUME_scan_one_cost);
+        var pop_up = [];
+        var set_class = "";
 
         var all_click_classes = [
             "bump_max",
@@ -1312,6 +1339,12 @@ function test() {
             "no_button",
             "ZZZ_LAST_NO_COMMA"
         ];
+
+        var button = "defined in deleted section";
+        var desired = "defined in deleted section";
+        var current = "defined in deleted section";
+        var current_ob = "defined in deleted section";
+        var input = "defined in deleted section";
 
         if (! button) {
             set_class = "no_button";
@@ -1343,7 +1376,7 @@ function test() {
                 pop_up.push(...GLOBAL_unknown_substances);
                 set_class = "unknown_substance";
             }
-            if (set_class == "clicking") {
+            if (set_class === "clicking") {
                 // if (red_ingredients.length) {
                 //     console.warn("red_ingredients", red_ingredients)
                 //     console.warn("cant_click:", cant_click)
@@ -1358,7 +1391,7 @@ function test() {
                 button.click();
                 var new_current = current_ob.text().trim();
                 var VERIFY = false;
-                if (VERIFY && (current != "") && (new_current == current)) {
+                if (VERIFY && (current !== "") && (new_current === current)) {
                     console.warn("ERROR: tried clicking", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, "no change", new_current, current);
                     set_class = "click_me";
                     // need to remove click-me from removal list
@@ -1382,21 +1415,29 @@ function test() {
             tr.addClass(set_class);
         }
         $.each(all_click_classes, function(remove_idx, remove_me) {
-            if (remove_me != set_class) {
+            remove_idx = remove_idx;
+            if (remove_me !== set_class) {
                 tr.removeClass(remove_me);
             }
         });
         if (pop_up.length) {
-            reasons = pop_up
+            var reasons = pop_up
                 .join("\n");
             tr.prop("title", reasons);
         } else {
             tr.prop("title", "");
         }
     }
+
+    function xCONSUME() {
+        xCONSUME();
+        xCONSUME_scan_one_cost();
+        xCONSUME_scan_one_tr();
+    }
     // end copied section
 
     var quantities = get_quantities();
+    quantities = quantities;            // WRITE ME
 
     var maxes = get_maxes();
     var available_substances = get_available_substances(maxes);
@@ -1404,17 +1445,8 @@ function test() {
     var trs_ob = panesob_2_trsob(panes_ob, available_substances);
     var magics_ob = trsob_2_magicsob(trs_ob, maxes);
 
-    return magics_ob;
+    if (true) { return magics_ob; }
 
-    // $.each(trs_ob, function(pane_title, trs) {
-    //     GLOBAL_pane_heading = "UNKNOWN"
-    //     GLOBAL_pane_title = pane_title
-    //     console.warn("DEBUG: each trs_ob", GLOBAL_pane_title, "trs:", trs)
-    //     $.each(trs, scan_one_tr)
-    // });
-}
-
-// xyzzy
 
 function jQuery_to_array(thing) {
     "use strict";
@@ -1504,6 +1536,11 @@ function panesob_2_trsob(panes_ob, available_substances) {
         ;
     trs_array = trs_array.filter(function(row) {
         return row.length > 0;
+    $.each(trs_ob, function(pane_title, trs) {
+        GLOBAL_pane_heading = "UNKNOWN";
+        GLOBAL_pane_title = pane_title;
+        console.warn("DEBUG: each trs_ob", GLOBAL_pane_title, "trs:", trs);
+        $.each(trs, xCONSUME_scan_one_tr);
     });
     var trs_ob = Object.fromEntries(trs_array);
     return trs_ob;
@@ -1536,6 +1573,7 @@ function panesdesc_2_panesob(pane_descriptors) {
     var panes_ob = Object.fromEntries(panes_array);
     return panes_ob;
 }
+// xyzzy
 
 function colorize_one_max(tr, tab_data) {
     "use strict";
@@ -1551,7 +1589,7 @@ function colorize_one_max(tr, tab_data) {
         .trim()
         .toLowerCase()
         ;
-    var is_overflow = (label in tab_data);
+    var is_overflow = Object.keys(tab_data).includes(label);
     if (is_overflow) {
         tr.addClass("bump_max");
         var reasons = tab_data[label]
@@ -1583,7 +1621,7 @@ function tick() {
     var tab_data = check_tabs(maxes, available_substances);
     // console.log("tab_data", tab_data);
     var results = for_each_nav(colorize_one_max, tab_data);
-    // console.log("results", results);
+    if (DEBUG) {console.log("results", results);}
 }
 
 function tick_stop() {
@@ -1610,4 +1648,16 @@ if (DEBUG_tick) {
     tick();
 } else {
     tick_start();
+}
+
+function x_CONSUME() {
+    "use strict";
+    x_CONSUME();
+    x();
+    test();
+    x_CONSUME_get_one_max();
+    x_CONSUME_get_maxes();
+    x_CONSUME_for_each_nav();
+    x_CONSUME_get_available_substances();
+    GLOBAL_available_substances = GLOBAL_available_substances;
 }
