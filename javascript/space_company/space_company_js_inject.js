@@ -18,7 +18,7 @@ var pane_descriptors = {
     // Machine:     "#machineTab",
     Nonexistent:    "#TestingOnly",
     Research:       "#research",
-    Resources:      "#resourceTabParent",
+    Resources:      "#resources",
     "Sol Center":   "#solCenterPage",
     "Solar System": "#solarSystem",
     Stargaze:       "#stargazeTab_pane",
