@@ -55,10 +55,12 @@ function to_number(orig_value) {
     "use strict";
     var value = orig_value;
 
-    if (value === "Dormant") { return ""; }
-    if (value === "Activated") { return ""; }
-    if (value === "Not Built") { return ""; }
-    if (value === "Built") { return ""; }
+    if (value === "Dormant") { return 0; }
+    if (value === "Activated") { return 1; }
+
+    if (value === "Not Built") { return 0; }
+    if (value === "Built") { return 1; }
+
     if (value === "N/A") { return ""; }
 
     value = value.replaceAll(",", "");
