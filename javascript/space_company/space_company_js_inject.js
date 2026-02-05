@@ -103,6 +103,31 @@ function toHHMMSS(total_sec) {
 }
 
 function get_quantities() {
+function jQuery_to_array(jquery_object) {
+    "use strict";
+    function filter_legal_item(line) {
+        var index = line[0];
+        if (index === "length") {
+            return false;
+        }
+        if (index === "prevObject") {
+            return false;
+        }
+        return true;
+    }
+    function map_second_value(line) {
+        var item = line[1];
+        return item;
+    }
+    var entries = Object.entries(jquery_object);
+    var array = entries
+        .filter(filter_legal_item)
+        .map(map_second_value)
+        ;
+    return array;
+}
+
+
     "use strict";
     var pane_entries = Object.entries(pane_descriptors);
 
@@ -1296,33 +1321,6 @@ function trsob_2_magicsob(trs_ob, maxes) {
 //     return known_substance;
 // }
 
-function jQuery_to_array(thing) {
-    "use strict";
-    function filter_legal_item(line) {
-        const [index, item] = line;
-        var _ = item;
-        _ = _;
-        if (index === "length") {
-            return false;
-        }
-        if (index === "prevObject") {
-            return false;
-        }
-        return true;
-    }
-    function map_second_value(line) {
-        const [index, item] = line;
-        var _ = index;
-        _ = _;
-        return item;
-    }
-    var entries = Object.entries(thing);
-    var array = entries
-        .filter(filter_legal_item)
-        .map(map_second_value)
-        ;
-    return array;
-}
 
 function panesob_2_trsob(panes_ob, available_substances) {
     "use strict";
