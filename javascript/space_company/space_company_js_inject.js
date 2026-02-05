@@ -102,7 +102,6 @@ function toHHMMSS(total_sec) {
     return answer.join(" ");
 }
 
-function get_quantities() {
 function jQuery_to_array(jquery_object) {
     "use strict";
     function filter_legal_item(line) {
@@ -128,12 +127,173 @@ function jQuery_to_array(jquery_object) {
 }
 
 
+function panesdesc_2_allowed(pane_descriptors) {
     "use strict";
     var pane_entries = Object.entries(pane_descriptors);
 
-    var available_panes = pane_entries.filter(function(test_thingy) {
-        console.log("test_thingy", test_thingy);
+    var panes_allowed = pane_entries.filter(function(entry) {
+        const [pane_heading, pane_desc] = entry;
+        if (DEBUG) { console.log("debug: entry", entry, "values", pane_heading, pane_desc); }
+
+        var available = GLOBAL_tabs_available.includes(pane_heading);
+        if (! available) {
+            if (DEBUG) {console.warn("Skip unavailable tab", pane_heading);}
+            return false;
+        }
+        return true;
     });
+
+    return panes_allowed;
+}
+
+function panesdesc_2_left_trs() {
+    "use strict";
+
+    var panes_allowed = panesdesc_2_allowed(pane_descriptors);
+
+    var available_panes = panes_allowed.map(function(entry) {
+        const [pane_heading, pane_desc] = entry;
+        // console.log("pane_heading, pane_desc", pane_heading, pane_desc);
+        var tab = $( pane_desc + " > .container" );
+        // console.log('tab', tab);
+        var trs = tab
+            .children("table")
+            .children("tbody")
+            .children("tr")
+            ;
+        trs = jQuery_to_array(trs);
+        // console.log('trs', trs);
+        var tr_obs = trs.map(function(tr) {
+            return $( tr );
+        });
+        // console.log('tr_obs', tr_obs);
+        var trs_allowed = tr_obs.filter(function(tr) {
+            var is_hidden = tr.hasClass('hidden');
+            return (! is_hidden);
+        });
+
+        return [pane_heading, trs_allowed];
+    });
+
+    var leftbar = Object.fromEntries(available_panes);
+
+    return leftbar;
+}
+
+function tr_to_tds(tr) {
+    "use strict";
+    tr = $( tr );
+    var tds = tr.children('td');
+    tds = jQuery_to_array(tds);
+    return tds;
+}
+
+function td_to_spans(td) {
+    "use strict";
+    td = $( td );
+    var spans = td.children('span');
+    spans = jQuery_to_array(spans);
+    return spans;
+}
+
+function get_quantities() {
+    "use strict";
+    var leftbar = panesdesc_2_left_trs();
+
+    // console.log("leftbar:", leftbar);
+
+    var leftbar_entries = Object.entries(leftbar);
+
+    var magic_list_all = leftbar_entries.map(function(entry) {
+        const [pane_heading, trs] = entry;
+        // console.log('GQ(): pane_heading, trs', pane_heading, trs);
+        var tds_list = trs.map(function(tr) {
+            var tds = tr_to_tds(tr);
+            return tds;
+        });
+        // console.log('GQ() tds_list', tds_list);
+        var texts_list = tds_list.map(function(td) {
+            var spans = td_to_spans(td);
+            var texts = spans.map(function(span) {
+                span = $( span );
+                var text = span
+                    .text()
+                    .trim()
+                    .replace("/Sec", "")    // remove per-second from rate
+                    .replaceAll("/", "")    // Energy comes preceeded by "/"
+                    .trim()                 // and a million spaces
+                    ;
+                return text;
+            }).filter(function(span) {
+                // remove empty strings
+                return span.length > 0;
+            }); 
+            return texts;
+        }).filter(function(texts) {
+            // remove empty arrays
+            return texts.length > 0;
+        });
+
+        console.log('GQ() texts:', pane_heading, texts_list);
+        var magic_list = texts_list.map(function(texts) {
+            var magic = {};
+            var A, B;
+            switch (texts.length) {
+            case 1:
+                magic.name = texts[0];
+                // magic.count = 0;
+                // magic.rate = 0;
+                // magic.max = "";
+                break;
+            case 2:
+                magic.name = texts[0];
+                magic.count = to_number(texts[1]);
+                magic.rate = 0;
+                magic.max = "";
+                break;
+            case 3:
+                magic.name = texts[0];
+                A = to_number(texts[1]);
+                B = to_number(texts[2]);
+                switch (magic.name) {
+                case "Antimatter":
+                case "Rocket Fuel":
+                case "Science Production":
+                    magic.count = B;
+                    magic.rate = A;
+                    magic.max = "";
+                    break;
+                case "Dark Matter":
+                    magic.count = A;
+                    magic.rate = 0;
+                    magic.max = A + B;
+                    break;
+                default:
+                    console.error("GQ():", pane_heading, "3-element texts for invalid tab name '" + magic.name + "'", "texts", texts, "magic", magic);
+                    return null;
+                }
+                break;
+            case 4:
+                magic.name = texts[0];
+                magic.rate = to_number(texts[1]);
+                magic.count = to_number(texts[2]);
+                magic.max = to_number(texts[3]);
+                break;
+            default:
+                console.error('text list of invalid length', texts.length);
+                return null;
+                // break;
+            }
+            return magic;
+        });
+        console.warn('GQ() magic:', pane_heading, magic_list);
+        return magic_list;
+    });
+
+    console.log("magic_list_all:", magic_list_all);
+
+    // var leftbar = Object.fromEntries(panes_array);
+    return magic_list_all;
 
     // // $.each(pane_descriptors, function(pane_heading, tab_desc) {
     // //     var available = GLOBAL_tabs_available.includes(pane_heading)
@@ -156,7 +316,7 @@ function jQuery_to_array(jquery_object) {
 
     // // var sidetabs = $("#resourceNavParent > tbody > tr");
 
-    return available_panes;
+    // return available_panes;
 }
 
 function x() {
@@ -659,19 +819,7 @@ function extract_costs_from_details(orig_string, pane_heading, pane_title, purch
 
 function panesdesc_2_panesob(pane_descriptors) {
     "use strict";
-    var pane_entries = Object.entries(pane_descriptors);
-
-    var panes_allowed = pane_entries.filter(function(entry) {
-        const [pane_heading, pane_desc] = entry;
-        if (DEBUG) { console.log("debug: entry", entry, "values", pane_heading, pane_desc); }
-
-        var available = GLOBAL_tabs_available.includes(pane_heading);
-        if (! available) {
-            if (DEBUG) {console.warn("Skip unavailable tab", pane_heading);}
-            return false;
-        }
-        return true;
-    });
+    var panes_allowed = panesdesc_2_allowed(pane_descriptors);
     // console.log("panes_allowed:", panes_allowed)
 
     var panes_array = panes_allowed.map(function(entry) {
@@ -1320,7 +1468,6 @@ function trsob_2_magicsob(trs_ob, maxes) {
 //     // }
 //     return known_substance;
 // }
-
 
 function panesob_2_trsob(panes_ob, available_substances) {
     "use strict";
