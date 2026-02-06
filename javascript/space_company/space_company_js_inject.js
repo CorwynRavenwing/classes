@@ -234,7 +234,6 @@ function get_quantities() {
             return texts.length > 0;
         });
 
-        console.log('GQ() texts:', pane_heading, texts_list);
         var substance_list = texts_list.map(function(texts) {
             var substance = {};
             var A, B;
@@ -284,41 +283,15 @@ function get_quantities() {
                 return null;
                 // break;
             }
-        console.warn('GQ() magic:', pane_heading, magic_list);
             return substance;
     });
         return substance_list;
 
-    console.log("magic_list_all:", magic_list_all);
-
-    // var leftbar = Object.fromEntries(panes_array);
-
-    // // $.each(pane_descriptors, function(pane_heading, tab_desc) {
-    // //     var available = GLOBAL_tabs_available.includes(pane_heading)
-    // //     if (! available) {
-    // //         if (DEBUG) console.warn("Skip unavailable tab", pane_heading)
-    // //         return
-    // //     }
-    // //     if (DEBUG) console.log("Check tab", pane_heading)
-
-    // //     var tabs = $( tab_desc + " > .container")
-    // //     if (DEBUG) console.warn("tabs:", tab_desc, tabs)
-    // //     NONLOCAL_tab_desc = pane_heading
-    // //     GLOBAL_available_substances_by_page[NONLOCAL_tab_desc] = []
-    // //     $.each(tabs, scan_one_tab)
-    // // });
-
-
-
-
-
-    // // var sidetabs = $("#resourceNavParent > tbody > tr");
     var quantities_list = substance_list_all.map(function(substance) {
         var name_clean = cleanup_substance_name(substance.name);
         return [name_clean, substance];
     });
 
-    // return available_panes;
     var quantities = Object.fromEntries(quantities_list);
     return quantities;
 }
