@@ -1234,7 +1234,7 @@ function get_button_id(td) {
         return "";
     }
 
-    return uniqueId(button);
+    return uniqueId(button, 'btn');
 }
 
 function inputid_2_desired(input_id) {
@@ -1274,7 +1274,7 @@ function create_input_and_get_id(td, button_id, debug_label) {
         //     // both button and input: okay
         }
     }
-    return uniqueId(input);
+    return uniqueId(input, 'input');
 }
 
 function complain_about_unknown_substances_once(unknown_substances_list) {
@@ -1328,7 +1328,7 @@ function tr_2_magic(tr, maxes, pane_title) {
     var magic = {};
     // console.log("tr2magic", tr);
     tr = $( tr );
-    magic.tr_id = uniqueId(tr);
+    magic.tr_id = uniqueId(tr, 'tr-right');
 
     // console.log("->", tr);
     var h3 = tr.find("h3");
