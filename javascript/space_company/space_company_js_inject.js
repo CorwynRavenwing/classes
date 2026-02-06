@@ -70,7 +70,7 @@ function to_number(orig_value) {
         return "";
     }
     var answer = parseFloat(value);
-    var multiplier_str = value.replace(/^[0-9.]*/, "");
+    var multiplier_str = value.replace(/^-?[0-9.]*/, "");
     var multiplier = 1;
     switch(multiplier_str) {
         case "":    multiplier = 1;             break;  // 1 thousand
