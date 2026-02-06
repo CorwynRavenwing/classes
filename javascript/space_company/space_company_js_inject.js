@@ -302,6 +302,7 @@ function get_quantities() {
             return substance;
     });
         return substance_list;
+    }).flat();
 
     var quantities_list = substance_list_all.map(function(substance) {
         var name_clean = cleanup_substance_name(substance.name);
