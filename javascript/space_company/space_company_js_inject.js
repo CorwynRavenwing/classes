@@ -53,6 +53,10 @@ function from_number(value) {
 
 function to_number(orig_value) {
     "use strict";
+    if (typeof orig_value !== 'string') {
+        // console.log('to_number(): ignoring non-string', orig_value);
+        return orig_value;
+    } 
     var value = orig_value;
 
     if (value === "Dormant") { return 0; }
