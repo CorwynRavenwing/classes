@@ -203,7 +203,6 @@ function panesdesc_2_left_trs() {
         var tr_obs = trs.map(function(tr) {
             return $( tr );
         });
-        // console.log('tr_obs', tr_obs);
         var trs_allowed = tr_obs.filter(function(tr) {
             var is_hidden = tr.hasClass('hidden');
             return (! is_hidden);
@@ -252,46 +251,8 @@ function cleanup_substance_name(name) {
         ;
 }
 
-function get_quantities() {
     "use strict";
-    var leftbar = panesdesc_2_left_trs();
-
-    // console.log("leftbar:", leftbar);
-
-    var leftbar_entries = Object.entries(leftbar);
-
-    var substance_list_all = leftbar_entries.map(function(entry) {
-        const [pane_heading, trs] = entry;
-        // console.log('GQ(): pane_heading, trs', pane_heading, trs);
-        var tds_list = trs.map(function(tr) {
-            var tds = tr_to_tds(tr);
-            return tds;
-        });
-        // console.log('GQ() tds_list', tds_list);
-        var texts_list = tds_list.map(function(td) {
-            var spans = td_to_spans(td);
-            var texts = spans.map(function(span) {
-                span = $( span );
-                var text = span
-                    .text()
-                    .trim()
-                    .replace("/Sec", "")    // remove per-second from rate
-                    .replaceAll("/", "")    // Energy comes preceeded by "/"
-                    .trim()                 // and a million spaces
-                    ;
-                return text;
-            }).filter(function(span) {
-                // remove empty strings
-                return span.length > 0;
-            }); 
-            return texts;
-        }).filter(function(texts) {
-            // remove empty arrays
-            return texts.length > 0;
-        });
-
-        var substance_list = texts_list.map(function(texts) {
-            var substance = {};
+    var substance = {};
             var A, B;
             switch (texts.length) {
             case 1:
@@ -358,60 +319,6 @@ function x() {
     return get_quantities();
 }
 
-// get code from these two functions:
-// var maxes = get_maxes()
-// var available_substances = get_available_substances(maxes)
-
-function x_CONSUME_get_one_max(tr) {
-    "use strict";
-    var is_hidden, tds, label, values, quant;
-    tr = $( tr );
-    is_hidden = tr.hasClass("hidden");
-    if (is_hidden) {
-        // console.warn("max: hidden", tr)
-        return [];
-    }
-    // console.log(tr);
-    tds = tr.children();
-    label = $( tds[1] )
-        .text()
-        .trim()
-        .toLowerCase()
-        ;
-    if (! label) {
-        // console.warn("max: no label", label);
-        return [];
-    }
-    values = $( tds[3] ).children();
-    quant = $( values[1] )
-        .text()
-        .trim()
-        ;
-    quant = to_number(quant);
-
-    // console.log(label, "<=", quant);
-    return [label, quant];
-}
-
-function x_CONSUME_for_each_nav(fn, argument) {
-    "use strict";
-    var answer = [];
-
-    var sidetabs = $("#resourceNavParent > tbody > tr");
-    $.each(sidetabs, function(index, value) {
-        var ob = $( value );
-        index = index;      // ignore
-        ob = ob;
-        // is_sidetab = ob.hasClass("sideTab");
-        // if (! is_sidetab) {
-        //     return;
-        // }
-        answer.push( fn(ob, argument) );
-    });
-
-    return answer;
-}
-
 function for_each_nav(fn, argument) {
     "use strict";
     var answer = [];
@@ -453,124 +360,10 @@ function get_one_max(tr) {
     return [label, quant];
 }
 
-function x_CONSUME_get_maxes() {
-    "use strict";
-    var max_pairs = for_each_nav(get_one_max, null);
-    // console.log(max_pairs);
-    var science_ob = $("#science");
-    var science_value = science_ob.text();
-    science_value = to_number(science_value);
-    var science_max = (10 * science_value);      // actually unlimited
 
-    var fuel_ob = $("#rocketFuel");
-    var fuel_value = fuel_ob.text();
-    fuel_value = to_number(fuel_value);
-    var fuel_max = (10 * fuel_value);      // actually unlimited
-
-    var rockets_max = 1000;     // NOTE: not sure how to compute this
-
-    var dark_ob = $("#stargazeNavdarkMatter_count");
-    var dark_value = dark_ob.text();
-    dark_value = to_number(dark_value);
-    var dark_max = (10 * dark_value);      // actually unlimited
-
-    var maxes = {
-        science: science_max,
-        // should pull these maxes from the Interstellar:Rockets page
-        shield_plating: 50,
-        engine_unit: 25,
-        aerodynamic_sections: 15,
-        // should pull these maxes from the Solar System tab
-        rocket: rockets_max,
-        rocket_fuel: fuel_max,
-        dark_matter: dark_max,      // NOTE: unclear why this is necessary
-        ZZZ: "LAST: NO COMMA"
-    };
-
-    $.each(max_pairs, function(pair_idx, max_pair) {
-        pair_idx = pair_idx;    // ignore
-        if (max_pair.length === 0) {
-            // console.log("get_maxes: SKIP", pair_idx, max_pair)
-            return;
-        }
-        const [label, quant] = max_pair;
-        // console.log("get_maxes: ok", label, quant);
-        maxes[label] = quant;
-    });
-    return maxes;
-}
-
-function x_CONSUME_get_available_substances(maxes) {
-    "use strict";
-    var answer = [];
-    var NONLOCAL_tab_desc;
-
-    $.each(maxes, function(max_item) {
-        answer.push(max_item);
-    });
-
-    function get_one_available(index, tr) {
-        index = index;  // ignore
-        tr = $( tr );
-        var is_hidden = tr.hasClass("hidden");
-        if (is_hidden) {
-            return;
-        }
-        var tds = tr.children("td");
-        var first = $( tds[0] );
-        if( first.children("img").length ) {
-            if (tds.length === 1) {
-                console.error("available_substances: image in only TD", tds);
-                return;
-            }
-            first = $( tds[1] );
-        }
-
-        var text = cleanup_substance_name(
-            first.text()
-        );
-        if (! text) {
-            return;
-        }
-        answer.push( text );
-        if (DEBUG) { console.log("TD:", text); }
-        GLOBAL_available_substances_by_page[NONLOCAL_tab_desc].push("'" + text + "'");
-    }
-
-    function scan_one_tab(tab_idx, tab) {
-        tab_idx = tab_idx;
-        tab = $( tab );
-        // console.log("DEBUG: tab", tab_idx, tab)
-
-        var trs = tab
-            .children("table")
-            .children("tbody")
-            .children("tr")
-            ;
-        $.each(trs, get_one_available);
-    }
-
-    $.each(pane_descriptors, function(pane_heading, tab_desc) {
-        var available = GLOBAL_tabs_available.includes(pane_heading);
-        if (! available) {
-            if (DEBUG) { console.warn("Skip unavailable tab", pane_heading); }
-            return;
-        }
-        if (DEBUG) { console.log("Check tab", pane_heading); }
-
-        var tabs = $( tab_desc + " > .container");
-        if (DEBUG) { console.warn("tabs:", tab_desc, tabs); }
-        NONLOCAL_tab_desc = pane_heading;
-        GLOBAL_available_substances_by_page[NONLOCAL_tab_desc] = [];
-        $.each(tabs, scan_one_tab);
-    });
-
-    return answer;
-}
 
 
 /// ############################################################################
-
 
 
 
@@ -1785,9 +1578,5 @@ function x_CONSUME() {
     x_CONSUME();
     x();
     test();
-    x_CONSUME_get_one_max();
-    x_CONSUME_get_maxes();
-    x_CONSUME_for_each_nav();
-    x_CONSUME_get_available_substances();
     GLOBAL_available_substances = GLOBAL_available_substances;
 }
