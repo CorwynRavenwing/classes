@@ -196,6 +196,22 @@ function td_to_spans(td) {
     return spans;
 }
 
+function cleanup_substance_name(name) {
+    "use strict";
+    return name
+        .trim()
+        .toLowerCase()
+        .replace("inside the ", "")
+        .replace("the ","")
+        .replace("comms", "communication")
+        .replace("stargate", "stargate room")
+        .replace("dyson segments", "dyson swarms and sphere")
+        .replace(": dormant", "")
+        .replace(": activated", "")
+        .replaceAll(" ", "_")
+        ;
+}
+
 function get_quantities() {
     "use strict";
     var leftbar = panesdesc_2_left_trs();
@@ -469,17 +485,9 @@ function x_CONSUME_get_available_substances(maxes) {
             first = $( tds[1] );
         }
 
-        var text = first
-            .text()
-            .trim()
-            .toLowerCase()
-            .replace("the ","")
-            .replace("comms", "communication")
-            .replace("stargate", "stargate room")
-            .replace("dyson segments", "dyson swarms and sphere")
-            .replace(": dormant", "")
-            .replace(": activated", "")
-            .replaceAll(" ", "_");
+        var text = cleanup_substance_name(
+            first.text()
+        );
         if (! text) {
             return;
         }
@@ -577,18 +585,9 @@ function get_available_substances(maxes) {
             first = $( tds[1] );
         }
 
-        var text = first
-            .text()
-            .trim()
-            .toLowerCase()
-            .replace("the ","")
-            .replace("comms", "communication")
-            .replace("stargate", "stargate room")
-            .replace("dyson segments", "dyson swarms and sphere")
-            .replace(": dormant", "")
-            .replace(": activated", "")
-            .replaceAll(" ", "_")
-            ;
+        var text = cleanup_substance_name(
+            first.text()
+        );
         if (! text) {
             return;
         }
@@ -1090,14 +1089,10 @@ function check_tabs(maxes, available_substances) {
         var trs = pane.find("tr");
         var tr0 = $( trs[0] );
         var h2 = tr0.find("h2");
-        GLOBAL_pane_title = h2
-            .text()
-            .trim()
-            .toLowerCase()
-            .replace(/^inside\ the\ /, "")
-            .replace(/^the\ /, "")
-            .replaceAll(" ", "_")
-            ;
+        GLOBAL_pane_title = cleanup_substance_name(
+            h2.text()
+        );
+        
         var known_title = (available_substances.includes(GLOBAL_pane_title));
         if (! known_title) {
             var page_designator = GLOBAL_pane_heading + "/" + GLOBAL_pane_title;
@@ -1467,14 +1462,10 @@ function panesob_2_trsob(panes_ob, available_substances) {
         var tr0 = trs[0];
         tr0 = $( tr0 );
         var h2 = tr0.find("h2");
-        var pane_title = h2
-            .text()
-            .trim()
-            .toLowerCase()
-            .replace(/^inside\ the\ /, "")
-            .replace(/^the\ /, "")
-            .replaceAll(" ", "_")
-            ;
+        var pane_title = cleanup_substance_name(
+            h2.text()
+        );
+
         var known_title = (available_substances.includes(pane_title));
         if (! known_title) {
             var page_designator = NONLOCAL_pane_heading + "/" + pane_title;
