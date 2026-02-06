@@ -126,6 +126,39 @@ function jQuery_to_array(jquery_object) {
     return array;
 }
 
+// some logic from Underscore UNIQUEID.JS:
+var random_id_counter = 0;
+function random_id(prefix) {
+    "use strict";
+    var id = "";
+    random_id_counter += 1;
+    id = random_id_counter + "";
+    return prefix ? prefix + id : id;
+}
+
+function unused_random_id(prefix) {
+    "use strict";
+    var id = "";
+    while (id === "") {
+        id = random_id(prefix);
+        if ( $( "#" + id ).length ) {
+            // console.warn("Skip used ID '" + id + "'");
+            id = "";
+        }
+    }
+    return id;
+}
+
+function uniqueId(ob, prefix) {
+    "use strict";
+    const ID = "id";
+    var id = ob.attr(ID);
+    if (id === undefined) {
+        id = unused_random_id("uniq-" + prefix + '-');
+        ob.attr(ID, id);
+    }
+    return id;
+}
 
 function panesdesc_2_allowed(pane_descriptors) {
     "use strict";
@@ -1128,40 +1161,6 @@ function check_tabs(maxes, available_substances) {
 
     // console.log("overflow_reasons", GLOBAL_overflow_reasons);
     return GLOBAL_overflow_reasons;
-}
-
-// some logic from Underscore UNIQUEID.JS:
-var random_id_counter = 0;
-function random_id(prefix) {
-    "use strict";
-    var id = "";
-    random_id_counter += 1;
-    id = random_id_counter + "";
-    return prefix ? prefix + id : id;
-}
-
-function unused_random_id(prefix) {
-    "use strict";
-    var id = "";
-    while (id === "") {
-        id = random_id(prefix);
-        if ( $( "#" + id ).length ) {
-            // console.warn("Skip used ID '" + id + "'");
-            id = "";
-        }
-    }
-    return id;
-}
-
-function uniqueId(ob) {
-    "use strict";
-    const ID = "id";
-    var id = ob.attr(ID);
-    if (id === undefined) {
-        id = unused_random_id("uniq-");
-        ob.attr(ID, id);
-    }
-    return id;
 }
 
 function prices_2_pair(cost_str) {
