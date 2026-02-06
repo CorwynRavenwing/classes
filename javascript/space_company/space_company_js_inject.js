@@ -219,9 +219,10 @@ function panesdesc_2_left_trs() {
 function tr_to_tds(tr) {
     "use strict";
     tr = $( tr );
+    var tr_id = uniqueId(tr, 'tr-left');
     var tds = tr.children('td');
     tds = jQuery_to_array(tds);
-    return tds;
+    return [tr_id, tds];
 }
 
 function td_to_spans(td) {
@@ -251,66 +252,133 @@ function cleanup_substance_name(name) {
         ;
 }
 
+function textlist_2_substance(pane_heading, tr_id, texts) {
     "use strict";
     var substance = {};
-            var A, B;
-            switch (texts.length) {
-            case 1:
-                substance.name = texts[0];
-                substance.count = "";
-                // substance.rate = 0;
-                // substance.max = "";
-                break;
-            case 2:
-                substance.name = texts[0];
-                substance.count = to_number(texts[1]);
-                substance.rate = 0;
-                substance.max = "";
-                break;
-            case 3:
-                substance.name = texts[0];
-                A = to_number(texts[1]);
-                B = to_number(texts[2]);
-                switch (substance.name) {
-                case "Antimatter":
-                case "Rocket Fuel":
-                case "Science Production":
-                    substance.count = B;
-                    substance.rate = A;
-                    substance.max = "";
-                    break;
-                case "Dark Matter":
-                    substance.count = A;
-                    substance.rate = 0;
-                    substance.max = A + B;
-                    break;
-                default:
-                    console.error("GQ():", pane_heading, "3-element texts for invalid tab name '" + substance.name + "'", "texts", texts, "substance", substance);
-                    return null;
-                }
-                break;
-            case 4:
-                substance.name = texts[0];
-                substance.rate = to_number(texts[1]);
-                substance.count = to_number(texts[2]);
-                substance.max = to_number(texts[3]);
-                break;
-            default:
-                console.error('text list of invalid length', texts.length);
-                return null;
-                // break;
-            }
+    var A, B;
+    switch (texts.length) {
+    case 1:
+        substance.name = texts[0];
+        substance.count = "";
+        // substance.rate = 0;
+        // substance.max = "";
+        break;
+    case 2:
+        substance.name = texts[0];
+        substance.count = to_number(texts[1]);
+        substance.rate = 0;
+        substance.max = "";
+        break;
+    case 3:
+        substance.name = texts[0];
+        A = to_number(texts[1]);
+        B = to_number(texts[2]);
+        switch (substance.name) {
+        case "Antimatter":
+        case "Rocket Fuel":
+        case "Science Production":
+            substance.count = B;
+            substance.rate = A;
+            substance.max = "";
+            break;
+        case "Dark Matter":
+            substance.count = A;
+            substance.rate = 0;
+            substance.max = A + B;
+            break;
+        case "Shield Plating":
+        case "Engine Unit":
+        case "Aerodynamic Sections":
+            substance.count = A;
+            substance.rate = 0;
+            substance.max = B;
+            break;
+        default:
+            console.error("GQ():", pane_heading, "3-element texts for invalid tab name '" + substance.name + "'", "texts", texts, "substance", substance);
+            return null;
+        }
+        break;
+    case 4:
+        substance.name = texts[0];
+        substance.rate = to_number(texts[1]);
+        substance.count = to_number(texts[2]);
+        substance.max = to_number(texts[3]);
+        break;
+    default:
+        console.error('text list of invalid length', texts.length);
+        return null;
+        // break;
+    }
+    substance.tr_id = tr_id;
+    return substance;
+}
+
+function get_quantities() {
+    "use strict";
+    var leftbar = panesdesc_2_left_trs();
+
+    var leftbar_entries = Object.entries(leftbar);
+
+    var substance_list_all = leftbar_entries.map(function(entry) {
+        const [pane_heading, trs] = entry;
+        // console.log('GQ(): pane_heading, trs', pane_heading, trs);
+        var tds_list = trs.map(function(tr) {
+            var tds = tr_to_tds(tr);
+            return tds;
+        });
+        // console.log('GQ() tds_list', tds_list);
+
+        var texts_list = tds_list.map(function(entry) {
+            const [tr_id, td] = entry;
+            // console.warn('    gq(): tr_id', tr_id, 'td', td);
+            var spans = td_to_spans(td);
+            var texts = spans.map(function(span) {
+                span = $( span );
+                var text = span
+                    .text()
+                    .trim()
+                    .replace("/Sec", "")    // remove per-second from rate
+                    .replaceAll("/", "")    // Energy comes preceeded by "/"
+                    .trim()                 // and a million spaces
+                    ;
+                return text;
+            }).filter(function(span) {
+                // remove empty strings
+                return span.length > 0;
+            }); 
+            return [tr_id, texts];
+        }).filter(function(entry) {
+            const texts = entry[1];
+            // remove empty arrays
+            return texts.length > 0;
+        });
+
+        var substance_list = texts_list.map(function(entry) {
+            const [tr_id, texts] = entry;
+            var substance = textlist_2_substance(pane_heading, tr_id, texts);
             return substance;
         });
+
         return substance_list;
     }).flat();
+    // console.warn('GQ(): substance_list_all', substance_list_all);
+
+    // // should pull these counts from the Interstellar:Rockets page
+    var plating_count = 0;
+    var engine_count = 0;
+    var section_count = 0;
+    substance_list_all.push( textlist_2_substance("Rocket Parts (fake)", "NONE", ["Shield Plating", plating_count, 50]) );
+    substance_list_all.push( textlist_2_substance("Rocket Parts (fake)", "NONE", ["Engine Unit", engine_count, 25]) );
+    substance_list_all.push( textlist_2_substance("Rocket Parts (fake)", "NONE", ["Aerodynamic Sections", section_count, 15]) );
 
     var quantities_list = substance_list_all.map(function(substance) {
         var name_clean = cleanup_substance_name(substance.name);
         return [name_clean, substance];
     });
+    // console.warn('GQ(): quantities_list', quantities_list);
 
     var quantities = Object.fromEntries(quantities_list);
+    console.warn('GQ(): quantities', quantities);
     return quantities;
 }
 
