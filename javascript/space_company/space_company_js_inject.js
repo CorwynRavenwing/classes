@@ -242,9 +242,12 @@ function cleanup_substance_name(name) {
         .replace("the ","")
         .replace("comms", "communication")
         .replace("stargate", "stargate room")
+        .replace("room room", "room")
         .replace("dyson segments", "dyson swarms and sphere")
+        .replace(" production", "")
         .replace(": dormant", "")
         .replace(": activated", "")
+        .replaceAll("-", "_")
         .replaceAll(" ", "_")
         ;
 }
@@ -785,7 +788,7 @@ function extract_costs_from_details(orig_string, pane_heading, pane_title, purch
     var string = orig_string;
     // const cost_flag = "Costs";
 
-    if (pane_title === "energy-mass_conversion") {
+    if (pane_title === "energy_mass_conversion") {
         // does not have Costs section
         return [];
     }
@@ -935,7 +938,7 @@ function check_tabs(maxes, available_substances) {
             console.warn("Swarm (scan_one_tr)", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase);
             console.warn("tr", tr);
         }
-        if (GLOBAL_pane_title === "energy-mass_conversion") {
+        if (GLOBAL_pane_title === "energy_mass_conversion") {
             return;
         }
         if (GLOBAL_pane_title === "dyson_swarms_and_sphere") {
@@ -1354,7 +1357,7 @@ function tr_2_magic(tr, maxes, pane_title) {
         return;
     }
 
-    if (pane_title === "energy-mass_conversion") {
+    if (pane_title === "energy_mass_conversion") {
         return null;
     }
     if (pane_title === "dyson_swarms_and_sphere") {
