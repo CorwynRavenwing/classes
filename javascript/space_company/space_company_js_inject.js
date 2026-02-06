@@ -300,7 +300,7 @@ function get_quantities() {
                 // break;
             }
             return substance;
-    });
+        });
         return substance_list;
     }).flat();
 
