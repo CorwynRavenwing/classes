@@ -204,7 +204,7 @@ function get_quantities() {
 
     var leftbar_entries = Object.entries(leftbar);
 
-    var magic_list_all = leftbar_entries.map(function(entry) {
+    var substance_list_all = leftbar_entries.map(function(entry) {
         const [pane_heading, trs] = entry;
         // console.log('GQ(): pane_heading, trs', pane_heading, trs);
         var tds_list = trs.map(function(tr) {
@@ -235,65 +235,63 @@ function get_quantities() {
         });
 
         console.log('GQ() texts:', pane_heading, texts_list);
-        var magic_list = texts_list.map(function(texts) {
-            var magic = {};
+        var substance_list = texts_list.map(function(texts) {
+            var substance = {};
             var A, B;
             switch (texts.length) {
             case 1:
-                magic.name = texts[0];
-                // magic.count = 0;
-                // magic.rate = 0;
-                // magic.max = "";
+                substance.name = texts[0];
+                substance.count = "";
+                // substance.rate = 0;
+                // substance.max = "";
                 break;
             case 2:
-                magic.name = texts[0];
-                magic.count = to_number(texts[1]);
-                magic.rate = 0;
-                magic.max = "";
+                substance.name = texts[0];
+                substance.count = to_number(texts[1]);
+                substance.rate = 0;
+                substance.max = "";
                 break;
             case 3:
-                magic.name = texts[0];
+                substance.name = texts[0];
                 A = to_number(texts[1]);
                 B = to_number(texts[2]);
-                switch (magic.name) {
+                switch (substance.name) {
                 case "Antimatter":
                 case "Rocket Fuel":
                 case "Science Production":
-                    magic.count = B;
-                    magic.rate = A;
-                    magic.max = "";
+                    substance.count = B;
+                    substance.rate = A;
+                    substance.max = "";
                     break;
                 case "Dark Matter":
-                    magic.count = A;
-                    magic.rate = 0;
-                    magic.max = A + B;
+                    substance.count = A;
+                    substance.rate = 0;
+                    substance.max = A + B;
                     break;
                 default:
-                    console.error("GQ():", pane_heading, "3-element texts for invalid tab name '" + magic.name + "'", "texts", texts, "magic", magic);
+                    console.error("GQ():", pane_heading, "3-element texts for invalid tab name '" + substance.name + "'", "texts", texts, "substance", substance);
                     return null;
                 }
                 break;
             case 4:
-                magic.name = texts[0];
-                magic.rate = to_number(texts[1]);
-                magic.count = to_number(texts[2]);
-                magic.max = to_number(texts[3]);
+                substance.name = texts[0];
+                substance.rate = to_number(texts[1]);
+                substance.count = to_number(texts[2]);
+                substance.max = to_number(texts[3]);
                 break;
             default:
                 console.error('text list of invalid length', texts.length);
                 return null;
                 // break;
             }
-            return magic;
-        });
         console.warn('GQ() magic:', pane_heading, magic_list);
-        return magic_list;
+            return substance;
     });
+        return substance_list;
 
     console.log("magic_list_all:", magic_list_all);
 
     // var leftbar = Object.fromEntries(panes_array);
-    return magic_list_all;
 
     // // $.each(pane_descriptors, function(pane_heading, tab_desc) {
     // //     var available = GLOBAL_tabs_available.includes(pane_heading)
@@ -315,8 +313,14 @@ function get_quantities() {
 
 
     // // var sidetabs = $("#resourceNavParent > tbody > tr");
+    var quantities_list = substance_list_all.map(function(substance) {
+        var name_clean = cleanup_substance_name(substance.name);
+        return [name_clean, substance];
+    });
 
     // return available_panes;
+    var quantities = Object.fromEntries(quantities_list);
+    return quantities;
 }
 
 function x() {
