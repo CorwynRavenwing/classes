@@ -1426,15 +1426,8 @@ function test() {
             }
         }
 
-        if (set_class) {
-            tr.addClass(set_class);
-        }
-        $.each(all_click_classes, function(remove_idx, remove_me) {
-            remove_idx = remove_idx;
-            if (remove_me !== set_class) {
-                tr.removeClass(remove_me);
-            }
-        });
+        add_class_remove_others(tr, set_class, all_click_classes);
+
         if (pop_up.length) {
             var reasons = pop_up
                 .join("\n");
