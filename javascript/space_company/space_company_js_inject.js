@@ -1400,6 +1400,15 @@ function panesob_2_trsob(panes_ob, available_substances) {
     return trs_ob;
 }
 
+function get_magics_ob(pane_descriptors, tabs_available, available_substances, maxes, quantities) {
+    "use strict";
+    var panes_ob = panesdesc_2_panesob(pane_descriptors, tabs_available);
+    var trs_ob = panesob_2_trsob(panes_ob, available_substances);
+    var magics_ob = trsob_2_magicsob(trs_ob, maxes, quantities);
+
+    return magics_ob;
+}
+
 function test() {
     "use strict";
 
@@ -1579,10 +1588,10 @@ function test() {
     check_energy_levels(quantities);
 
     var maxes = get_maxes();
-    var available_substances = get_available_substances(maxes, tabs_available);
-    var panes_ob = panesdesc_2_panesob(pane_descriptors, tabs_available);
-    var trs_ob = panesob_2_trsob(panes_ob, available_substances);
-    var magics_ob = trsob_2_magicsob(trs_ob, maxes);
+    var available_substances = Object.keys(quantities);
+    available_substances = available_substances;
+
+    var magics_ob = get_magics_ob(pane_descriptors, tabs_available, available_substances, maxes, quantities);
 
     if (false) {
 
