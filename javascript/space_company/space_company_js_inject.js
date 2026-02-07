@@ -26,7 +26,6 @@ var pane_descriptors = {
 };
 
 var GLOBAL_known_unknowns = [];
-var GLOBAL_tabs_available = [];
 var GLOBAL_known_missing_tabs = [];
 var GLOBAL_available_substances = [];
 var GLOBAL_available_substances_by_page = {};
@@ -176,7 +175,7 @@ function add_class_remove_others(ob, className, classList) {
     });
 }
 
-function panesdesc_2_allowed(pane_descriptors) {
+function panesdesc_2_allowed(pane_descriptors, tabs_available) {
     "use strict";
     var pane_entries = Object.entries(pane_descriptors);
 
@@ -184,7 +183,7 @@ function panesdesc_2_allowed(pane_descriptors) {
         const [pane_heading, pane_desc] = entry;
         if (DEBUG) { console.log("debug: entry", entry, "values", pane_heading, pane_desc); }
 
-        var available = GLOBAL_tabs_available.includes(pane_heading);
+        var available = tabs_available.includes(pane_heading);
         if (! available) {
             if (DEBUG) {console.warn("Skip unavailable tab", pane_heading);}
             return false;
@@ -195,10 +194,10 @@ function panesdesc_2_allowed(pane_descriptors) {
     return panes_allowed;
 }
 
-function panesdesc_2_left_trs() {
+function panesdesc_2_left_trs(tabs_available) {
     "use strict";
 
-    var panes_allowed = panesdesc_2_allowed(pane_descriptors);
+    var panes_allowed = panesdesc_2_allowed(pane_descriptors, tabs_available);
 
     var available_panes = panes_allowed.map(function(entry) {
         const [pane_heading, pane_desc] = entry;
@@ -325,9 +324,9 @@ function textlist_2_substance(pane_heading, tr_id, texts) {
     return substance;
 }
 
-function get_quantities() {
+function get_quantities(tabs_available) {
     "use strict";
-    var leftbar = panesdesc_2_left_trs();
+    var leftbar = panesdesc_2_left_trs(tabs_available);
 
     var leftbar_entries = Object.entries(leftbar);
 
@@ -490,7 +489,7 @@ function check_energy_levels() {
     }
 }
 
-function get_available_substances(maxes) {
+function get_available_substances(maxes, tabs_available) {
     "use strict";
     var answer = [];
     var NONLOCAL_tab_desc;
@@ -537,7 +536,7 @@ function get_available_substances(maxes) {
     }
 
     $.each(pane_descriptors, function(pane_heading, tab_desc) {
-        var available = GLOBAL_tabs_available.includes(pane_heading);
+        var available = tabs_available.includes(pane_heading);
         if (! available) {
             if (DEBUG) { console.warn("Skip unavailable tab", pane_heading); }
             return;
@@ -723,9 +722,9 @@ function extract_costs_from_details(orig_string, pane_heading, pane_title, purch
     return costs;
 }
 
-function panesdesc_2_panesob(pane_descriptors) {
+function panesdesc_2_panesob(pane_descriptors, tabs_available) {
     "use strict";
-    var panes_allowed = panesdesc_2_allowed(pane_descriptors);
+    var panes_allowed = panesdesc_2_allowed(pane_descriptors, tabs_available);
     // console.log("panes_allowed:", panes_allowed)
 
     var panes_array = panes_allowed.map(function(entry) {
@@ -739,7 +738,7 @@ function panesdesc_2_panesob(pane_descriptors) {
     return panes_ob;
 }
 
-function check_tabs(maxes, available_substances) {
+function check_tabs(maxes, available_substances, tabs_available) {
     "use strict";
     // var cost_flag = "Costs";
     var GLOBAL_overflow_reasons = {};
@@ -1039,7 +1038,7 @@ function check_tabs(maxes, available_substances) {
         $.each(trs, scan_one_tr);
     }
 
-    var panes_ob = panesdesc_2_panesob(pane_descriptors);
+    var panes_ob = panesdesc_2_panesob(pane_descriptors, tabs_available);
     $.each(panes_ob, function(pane_heading, panes) {
         GLOBAL_pane_heading = pane_heading;
         if (DEBUG) {console.log("pane_heading:", GLOBAL_pane_heading);}
@@ -1568,8 +1567,8 @@ function test() {
     quantities = quantities;            // WRITE ME
 
     var maxes = get_maxes();
-    var available_substances = get_available_substances(maxes);
-    var panes_ob = panesdesc_2_panesob(pane_descriptors);
+    var available_substances = get_available_substances(maxes, tabs_available);
+    var panes_ob = panesdesc_2_panesob(pane_descriptors, tabs_available);
     var trs_ob = panesob_2_trsob(panes_ob, available_substances);
     var magics_ob = trsob_2_magicsob(trs_ob, maxes);
 
@@ -1619,16 +1618,19 @@ var tick_id;
 function tick() {
     "use strict";
     // console.log("tick", tick_id);
-    check_energy_levels();
 
-    GLOBAL_tabs_available = get_tabs_available();
-    // console.log("GLOBAL_tabs_available:", GLOBAL_tabs_available);
+    var tabs_available = get_tabs_available();
+    // console.log("tabs_available:", tabs_available);
+
+    var quantities = get_quantities(tabs_available);
+    check_energy_levels(quantities);
+
     var maxes = get_maxes();
     // console.log("maxes:", maxes);
-    var available_substances = get_available_substances(maxes);
+    var available_substances = get_available_substances(maxes, tabs_available);
     // console.log("available_substances:", available_substances);
     GLOBAL_available_substances = available_substances;
-    var tab_data = check_tabs(maxes, available_substances);
+    var tab_data = check_tabs(maxes, available_substances, tabs_available);
     // console.log("tab_data", tab_data);
     var results = for_each_nav(colorize_one_max, tab_data);
     if (DEBUG) {console.log("results", results);}
