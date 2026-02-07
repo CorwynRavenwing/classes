@@ -244,7 +244,7 @@ function td_to_spans(td) {
     return spans;
 }
 
-function cleanup_substance_name(name) {
+function cleanup_substance_name_simple(name) {
     "use strict";
     return name
         .trim()
@@ -261,6 +261,23 @@ function cleanup_substance_name(name) {
         .replaceAll("-", "_")
         .replaceAll(" ", "_")
         ;
+}
+
+function cleanup_substance_name(name, pane_heading) {
+    "use strict";
+    name = name.trim();
+
+    if (name === "Plasma") {
+        if (pane_heading === "Sol Center") {
+            // Disambiguate "Resource/Plasma" from "Sol Center/Plasma":
+            name += " Unlock";
+        }
+        if (TEST) {
+            console.error('Plasma', pane_heading, name);
+        }
+    }
+
+    return cleanup_substance_name_simple(name);
 }
 
 function textlist_2_substance(pane_heading, tr_id, texts) {
@@ -320,7 +337,9 @@ function textlist_2_substance(pane_heading, tr_id, texts) {
         return null;
         // break;
     }
+    substance.pane = pane_heading;
     substance.tr_id = tr_id;
+
     return substance;
 }
 
@@ -383,7 +402,7 @@ function get_quantities(tabs_available) {
     substance_list_all.push( textlist_2_substance("Rocket Parts (fake)", "NONE", ["Aerodynamic Sections", section_count, 15]) );
 
     var quantities_list = substance_list_all.map(function(substance) {
-        var name_clean = cleanup_substance_name(substance.name);
+        var name_clean = cleanup_substance_name(substance.name, substance.pane);
         return [name_clean, substance];
     });
     // console.warn('GQ(): quantities_list', quantities_list);
@@ -1332,7 +1351,8 @@ function panesob_2_trsob(panes_ob, available_substances) {
         tr0 = $( tr0 );
         var h2 = tr0.find("h2");
         var pane_title = cleanup_substance_name(
-            h2.text()
+            h2.text(),
+            pane_heading
         );
 
         var known_title = (available_substances.includes(pane_title));
@@ -1359,7 +1379,10 @@ function panesob_2_trsob(panes_ob, available_substances) {
         const [pane_headingC, panesC] = entry;
         NONLOCAL_pane_heading = pane_headingC;
         var panes_array = jQuery_to_array(panesC);
-        var pane_data = panes_array.map(map_pane_to_title_and_trs);
+        var pane_data = panes_array.map(function(pane) {
+            return map_pane_to_title_and_trs(pane, pane_headingC);
+        });
+
         return pane_data;
     }
 
