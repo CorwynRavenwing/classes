@@ -513,70 +513,6 @@ function check_energy_levels(quantities) {
     add_class_remove_others(game_ob, add_class, all_energy_classes);
 }
 
-function get_available_substances(maxes, tabs_available) {
-    "use strict";
-    var answer = [];
-    // var NONLOCAL_tab_desc;
-
-    $.each(maxes, function(max_item) {
-        answer.push(max_item);
-    });
-
-    function get_one_available(index, tr) {
-        index = index;  // ignore
-        tr = $( tr );
-        var is_hidden = tr.hasClass("hidden");
-        if (is_hidden) {
-            return;
-        }
-        var tds = tr.children("td");
-        var first = $( tds[0] );
-        if( first.children("img").length ) {
-            if (tds.length === 1) {
-                console.error("available_substances: image in only TD", tds);
-                return;
-            }
-            first = $( tds[1] );
-        }
-
-        var text = cleanup_substance_name_simple(
-            first.text()
-        );
-        if (! text) {
-            return;
-        }
-        answer.push( text );
-        if (DEBUG) { console.log("TD:", text); }
-        // GLOBAL_available_substances_by_page[NONLOCAL_tab_desc].push("'" + text + "'");
-    }
-
-    function scan_one_tab(tab_idx, tab) {
-        tab_idx = tab_idx;
-        tab = $( tab );
-        // console.log("DEBUG: tab", tab_idx, tab);
-
-        var trs = tab.children("table").children("tbody").children("tr");
-        $.each(trs, get_one_available);
-    }
-
-    $.each(pane_descriptors, function(pane_heading, tab_desc) {
-        var available = tabs_available.includes(pane_heading);
-        if (! available) {
-            if (DEBUG) { console.warn("Skip unavailable tab", pane_heading); }
-            return;
-        }
-        if (DEBUG) { console.log("Check tab", pane_heading); }
-
-        var tabs = $( tab_desc + " > .container");
-        if (DEBUG) { console.log("tabs:", tab_desc, tabs); }
-        // NONLOCAL_tab_desc = pane_heading;
-        // GLOBAL_available_substances_by_page[NONLOCAL_tab_desc] = [];
-        $.each(tabs, scan_one_tab);
-    });
-
-    return answer;
-}
-
 function get_tabs_available() {
     "use strict";
     var answer = [];
@@ -1202,7 +1138,7 @@ function complain_about_unknown_substances_once(unknown_substances_list) {
     return;
 }
 
-function get_unknown_substances(costs_ob, maxes) {
+function get_unknown_substances(costs_ob, quantities) {
     "use strict";
     var costs_list = Object.entries(costs_ob);
 
@@ -1210,25 +1146,19 @@ function get_unknown_substances(costs_ob, maxes) {
         quant = quant;
         return substance;
     }).filter(function(substance) {
-        var known_substance = Object.keys(maxes).includes(substance);
+        var known_substance = Object.keys(quantities).includes(substance);
         return (! known_substance);
     });
 
     return unknown_substances_list;
 }
 
-function get_bump_max_ob(costs_ob, maxes, quantities) {
+function get_bump_max_ob(costs_ob, quantities) {
     "use strict";
     var costs_list = Object.entries(costs_ob);
 
     var bump_max_list = costs_list.filter(function([substance, needed]) {
-        var max_value = maxes[substance];
-        var max_value_new = quantities[substance].max;
-        if (max_value !== max_value_new) {
-            console.warn('max_value different! substance', substance, 'maxes[]', max_value, 'quantities{}', max_value_new);
-        // } else {
-        //     console.warn('max_value same!', 'maxes[]', max_value, 'quantities{}', max_value_new);
-        }
+        var max_value = quantities[substance].max;
         return (needed > max_value);
     });
     if (bump_max_list.length > 0) {
@@ -1240,7 +1170,7 @@ function get_bump_max_ob(costs_ob, maxes, quantities) {
 }
 
 // XYZZY:
-function tr_2_magic(tr, maxes, pane_title, quantities) {
+function tr_2_magic(tr, pane_title, quantities) {
     "use strict";
     var magic = {};
     // console.log("tr2magic", tr);
@@ -1307,14 +1237,14 @@ function tr_2_magic(tr, maxes, pane_title, quantities) {
     if (DEBUG) {console.log("costs:", costs);}
     magic.costs = costs;
 
-    var unknown_substances = get_unknown_substances(costs, maxes);
+    var unknown_substances = get_unknown_substances(costs, quantities);
     magic.unknown = unknown_substances;
     complain_about_unknown_substances_once(unknown_substances);
     if (unknown_substances.length) {
         /* if (DEBUG) */ console.warn("cost of UNKNOWN SUBSTANCES:", pane_title, purchase, unknown_substances);
     }
 
-    var bump_maxes = get_bump_max_ob(costs, maxes, quantities);
+    var bump_maxes = get_bump_max_ob(costs, quantities);
     magic.bump_max = bump_maxes;
 
     if (magic.unknown_substances) {
@@ -1333,7 +1263,7 @@ function tr_2_magic(tr, maxes, pane_title, quantities) {
     return magic;
 }
 
-function trsob_2_magicsob(trs_ob, maxes, quantities) {
+function trsob_2_magicsob(trs_ob, quantities) {
     "use strict";
     var magic;
     var trs_array = Object.entries(trs_ob);
@@ -1341,7 +1271,7 @@ function trsob_2_magicsob(trs_ob, maxes, quantities) {
         if (DEBUG) {console.log("DEBUG GMO", pane_title);}
         var magics = trs.map(function(tr) {
             // console.log("DEBUG idx", "tr", tr)
-            magic = tr_2_magic(tr, maxes, pane_title, quantities);
+            magic = tr_2_magic(tr, pane_title, quantities);
             return magic;
         }).filter((ob) => ob !== null);
         return [pane_title, magics];
@@ -1413,11 +1343,11 @@ function panesob_2_trsob(panes_ob, available_substances) {
     return trs_ob;
 }
 
-function get_magics_ob(pane_descriptors, tabs_available, available_substances, maxes, quantities) {
+function get_magics_ob(pane_descriptors, tabs_available, available_substances, quantities) {
     "use strict";
     var panes_ob = panesdesc_2_panesob(pane_descriptors, tabs_available);
     var trs_ob = panesob_2_trsob(panes_ob, available_substances);
-    var magics_ob = trsob_2_magicsob(trs_ob, maxes, quantities);
+    var magics_ob = trsob_2_magicsob(trs_ob, quantities);
 
     return magics_ob;
 }
@@ -1600,11 +1530,11 @@ function test() {
     var quantities = get_quantities(tabs_available);
     check_energy_levels(quantities);
 
-    var maxes = get_maxes();
+    //var maxes = get_maxes();
     var available_substances = Object.keys(quantities);
     available_substances = available_substances;
 
-    var magics_ob = get_magics_ob(pane_descriptors, tabs_available, available_substances, maxes, quantities);
+    var magics_ob = get_magics_ob(pane_descriptors, tabs_available, available_substances, quantities);
 
     if (false) {
 
@@ -1668,9 +1598,8 @@ function tick() {
 
     var maxes = get_maxes();
     // console.log("maxes:", maxes);
-    var available_substances = get_available_substances(maxes, tabs_available);
+    var available_substances = Object.keys(quantities);
     // console.log("available_substances:", available_substances);
-    // GLOBAL_available_substances = available_substances;
     var tab_data = check_tabs(maxes, available_substances, tabs_available);
     // console.log("tab_data", tab_data);
     var results = for_each_nav(colorize_one_max, tab_data);
