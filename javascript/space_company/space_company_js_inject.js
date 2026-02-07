@@ -457,20 +457,22 @@ function check_energy_levels_old() {
     var energy_okay_case = energy_deficit_ob.hasClass("hidden");
     var energy_deficit_case = (! energy_okay_case);
 
+    var add_class;
+    var all_energy_classes = [
+        "energy-deficit",
+        "energy-falling",
+        "energy-okay"
+    ];
+
     var game_ob = $("#game");
     if (energy_deficit_case) {
-        game_ob.addClass("energy-deficit");
-        game_ob.removeClass("energy-falling");
-        game_ob.removeClass("energy-okay");
+        add_class = "energy-deficit";
     } else if (energy_falling_case) {
-        game_ob.addClass("energy-falling");
-        game_ob.removeClass("energy-deficit");
-        game_ob.removeClass("energy-okay");
+        add_class = "energy-falling";
     } else {
-        game_ob.addClass("energy-okay");
-        game_ob.removeClass("energy-deficit");
-        game_ob.removeClass("energy-falling");
+        add_class = "energy-okay";
     }
+    add_class_remove_others(game_ob, add_class, all_energy_classes);
 }
 
 function check_energy_levels_new() {
