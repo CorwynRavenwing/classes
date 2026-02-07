@@ -436,7 +436,7 @@ function get_one_max(tr) {
 
 
 
-function check_energy_levels() {
+function check_energy_levels_old() {
     "use strict";
     var energy_change_ob = $("#energyps");
     var energy_falling_case = energy_change_ob.hasClass("red");
@@ -458,6 +458,21 @@ function check_energy_levels() {
         game_ob.addClass("energy-okay");
         game_ob.removeClass("energy-deficit");
         game_ob.removeClass("energy-falling");
+    }
+}
+
+function check_energy_levels_new() {
+    "use strict";
+}
+
+function check_energy_levels() {
+    "use strict";   
+    var use_new = false;
+    
+    if (use_new) {
+        check_energy_levels_new();
+    } else {
+        check_energy_levels_old();
     }
 }
 
