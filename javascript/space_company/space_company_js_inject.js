@@ -442,37 +442,7 @@ function get_one_max(tr) {
 
 
 
-function check_energy_levels_old(quantities) {
-    "use strict";
-
-    quantities = quantities;    // ignore
-
-    var energy_change_ob = $("#energyps");
-    var energy_falling_case = energy_change_ob.hasClass("red");
-
-    var energy_deficit_ob = $("#energyLow");
-    var energy_okay_case = energy_deficit_ob.hasClass("hidden");
-    var energy_deficit_case = (! energy_okay_case);
-
-    var add_class;
-    var all_energy_classes = [
-        "energy-deficit",
-        "energy-falling",
-        "energy-okay"
-    ];
-
-    var game_ob = $("#game");
-    if (energy_deficit_case) {
-        add_class = "energy-deficit";
-    } else if (energy_falling_case) {
-        add_class = "energy-falling";
-    } else {
-        add_class = "energy-okay";
-    }
-    add_class_remove_others(game_ob, add_class, all_energy_classes);
-}
-
-function check_energy_levels_new(quantities) {
+function check_energy_levels(quantities) {
     "use strict";
 
     // console.warn('quantities:', quantities);
@@ -499,18 +469,6 @@ function check_energy_levels_new(quantities) {
         add_class = "energy-okay";
     }
     add_class_remove_others(game_ob, add_class, all_energy_classes);
-}
-
-var use_new = true;
-
-function check_energy_levels(quantities) {
-    "use strict";   
-
-    if (use_new) {
-        check_energy_levels_new(quantities);
-    } else {
-        check_energy_levels_old(quantities);
-    }
 }
 
 function get_available_substances(maxes, tabs_available) {
@@ -1590,7 +1548,7 @@ function test() {
     var tabs_available = get_tabs_available();
 
     var quantities = get_quantities(tabs_available);
-    check_energy_levels_new(quantities);
+    check_energy_levels(quantities);
 
     var maxes = get_maxes();
     var available_substances = get_available_substances(maxes, tabs_available);
