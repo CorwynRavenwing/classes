@@ -486,6 +486,11 @@ function check_energy_levels(quantities) {
     var energy = quantities.energy;
     // console.log('energy:', energy);
 
+    if (energy === undefined) {
+        // energy doesn't exist yet
+        return;
+    }
+
     var energy_falling_case = (energy.rate <= 0);
 
     var energy_deficit_case = (energy.count === 0);
