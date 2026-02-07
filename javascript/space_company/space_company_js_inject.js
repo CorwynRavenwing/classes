@@ -1196,7 +1196,7 @@ function get_unknown_substances(costs_ob, maxes) {
     return unknown_substances_list;
 }
 
-function get_bump_max_ob(costs_ob, maxes) {
+function get_bump_max_ob(costs_ob, maxes, quantities) {
     "use strict";
     var costs_list = Object.entries(costs_ob);
 
@@ -1213,7 +1213,7 @@ function get_bump_max_ob(costs_ob, maxes) {
 }
 
 // XYZZY:
-function tr_2_magic(tr, maxes, pane_title) {
+function tr_2_magic(tr, maxes, pane_title, quantities) {
     "use strict";
     var magic = {};
     // console.log("tr2magic", tr);
@@ -1287,7 +1287,7 @@ function tr_2_magic(tr, maxes, pane_title) {
         /* if (DEBUG) */ console.warn("cost of UNKNOWN SUBSTANCES:", pane_title, purchase, unknown_substances);
     }
 
-    var bump_maxes = get_bump_max_ob(costs, maxes);
+    var bump_maxes = get_bump_max_ob(costs, maxes, quantities);
     magic.bump_max = bump_maxes;
 
     if (magic.unknown_substances) {
@@ -1306,7 +1306,7 @@ function tr_2_magic(tr, maxes, pane_title) {
     return magic;
 }
 
-function trsob_2_magicsob(trs_ob, maxes) {
+function trsob_2_magicsob(trs_ob, maxes, quantities) {
     "use strict";
     var magic;
     var trs_array = Object.entries(trs_ob);
@@ -1314,7 +1314,7 @@ function trsob_2_magicsob(trs_ob, maxes) {
         if (DEBUG) {console.log("DEBUG GMO", pane_title);}
         var magics = trs.map(function(tr) {
             // console.log("DEBUG idx", "tr", tr)
-            magic = tr_2_magic(tr, maxes, pane_title);
+            magic = tr_2_magic(tr, maxes, pane_title, quantities);
             return magic;
         }).filter((ob) => ob !== null);
         return [pane_title, magics];
