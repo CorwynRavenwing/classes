@@ -624,7 +624,7 @@ function panesdesc_2_panesob(pane_descriptors, tabs_available) {
     return panes_ob;
 }
 
-function check_tabs(maxes, available_substances, tabs_available) {
+function check_tabs(available_substances, tabs_available, quantities) {
     "use strict";
     // var cost_flag = "Costs";
     var GLOBAL_overflow_reasons = {};
@@ -657,7 +657,7 @@ function check_tabs(maxes, available_substances, tabs_available) {
         var needed = to_number(neededC);
         var substance = substanceC.toLowerCase();
         if (substance === "gem") { substance = "gems"; }
-        var known_substance = Object.keys(maxes).includes(substance);
+        var known_substance = Object.keys(quantities).includes(substance);
         if (! known_substance) {
             GLOBAL_unknown_substances.push("'" + substance + "'");
             var seen = (GLOBAL_known_unknowns.includes(substance));
@@ -667,7 +667,7 @@ function check_tabs(maxes, available_substances, tabs_available) {
             }
             return;
         }
-        var max_value = maxes[substance];
+        var max_value = quantities[substance].max;
         if (needed <= max_value) {
             // console.log("cost ok:", cost_idx, substance, needed, max_value);
             return;
@@ -1523,7 +1523,7 @@ function tick() {
 
     var available_substances = Object.keys(quantities);
     // console.log("available_substances:", available_substances);
-    var tab_data = check_tabs(maxes, available_substances, tabs_available);
+    var tab_data = check_tabs(available_substances, tabs_available, quantities);
     // console.log("tab_data", tab_data);
     var results = for_each_nav(colorize_one_max, tab_data);
     if (DEBUG) {console.log("results", results);}
