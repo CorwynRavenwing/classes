@@ -1329,14 +1329,6 @@ function trsob_2_magicsob(trs_ob, maxes, quantities) {
     return magics_ob;
 }
 
-// function check_known_substance(substance, maxes) {
-//     "use strict";
-//     // NOTE: BROKEN, BUT NOT CALLED FROM ANYWHERE
-//     // if (! known_substance) {
-//     // }
-//     return known_substance;
-// }
-
 function panesob_2_trsob(panes_ob, available_substances) {
     "use strict";
     var NONLOCAL_pane_heading;
@@ -1373,12 +1365,6 @@ function panesob_2_trsob(panes_ob, available_substances) {
             }
             return [];
         }
-        // NOTE: delete this section, move logic to next function
-        // if (pane_title === "dyson_swarms_and_sphere") {
-        //     // console.warn("Ignore Dyson Swarm / Sphere pane");
-        //     return [];
-        // }
-        // NOTE: end deleted section
 
         return [pane_title, trs];
     }
@@ -1603,12 +1589,12 @@ function test() {
 
         var trs_ob = "set in deleted section";
         $.each(trs_ob, function(pane_title, trs) {
-        GLOBAL_pane_heading = "UNKNOWN";
-        GLOBAL_pane_title = pane_title;
-        console.warn("DEBUG: each trs_ob", GLOBAL_pane_title, "trs:", trs);
-        $.each(trs, xCONSUME_scan_one_tr);
-    });
-}
+            GLOBAL_pane_heading = "UNKNOWN";
+            GLOBAL_pane_title = pane_title;
+            console.warn("DEBUG: each trs_ob", GLOBAL_pane_title, "trs:", trs);
+            $.each(trs, xCONSUME_scan_one_tr);
+        });
+    }
     
     TEST = false;
     console.warn('test(): setting TEST to', TEST);
