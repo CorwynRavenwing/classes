@@ -164,6 +164,20 @@ function uniqueId(ob, prefix) {
     return id;
 }
 
+function add_class_remove_others(ob, className, classList) {
+    "use strict";
+    if (className) {
+        ob.addClass(className);
+    }
+
+    $.each(classList, function(remove_idx, remove_me) {
+        remove_idx = remove_idx;
+        if (remove_me !== className) {
+            ob.removeClass(remove_me);
+        }
+    });
+}
+
 function panesdesc_2_allowed(pane_descriptors) {
     "use strict";
     var pane_entries = Object.entries(pane_descriptors);
@@ -468,7 +482,7 @@ function check_energy_levels_new() {
 function check_energy_levels() {
     "use strict";   
     var use_new = false;
-    
+
     if (use_new) {
         check_energy_levels_new();
     } else {
@@ -982,15 +996,8 @@ function check_tabs(maxes, available_substances) {
             }
         }
 
-        if (set_class) {
-            tr.addClass(set_class);
-        }
-        $.each(all_click_classes, function(remove_idx, remove_me) {
-            remove_idx = remove_idx;
-            if (remove_me !== set_class) {
-                tr.removeClass(remove_me);
-            }
-        });
+        add_class_remove_others(tr, set_class, all_click_classes);
+
         if (pop_up.length) {
             var reasons = pop_up
                 .join("\n");
