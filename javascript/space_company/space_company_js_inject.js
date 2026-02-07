@@ -389,7 +389,7 @@ function get_quantities(tabs_available) {
     // console.warn('GQ(): quantities_list', quantities_list);
 
     var quantities = Object.fromEntries(quantities_list);
-    console.warn('GQ(): quantities', quantities);
+    // console.warn('GQ(): quantities', quantities);
     return quantities;
 }
 
