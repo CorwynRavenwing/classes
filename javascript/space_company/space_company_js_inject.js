@@ -5,6 +5,24 @@
 /*jslint white */       // allow odd whitespace
 /*global $ */           // jQuery defines "$"
 
+//
+// TERMS OF ART:
+//
+//      Header:
+//          the things at the top of the page (Resources, Solar System, ...)
+//      Item:
+//          the things down the left bar which appear when you click a Header
+//          (Metal, Gems; Science production, Technologies; ...)
+//          Called an Item b/c most of them are a physical good you possess
+//      Page:
+//          the things on the right side which appear when you click an Item
+//          Named after the corresponding Item (Metal, Gems, ...)
+//      Clack:
+//          the things on each Page that allow you to purchase something
+//          (Gain 1, Storage Upgrade, Miner, Heavy Drill ...)
+//
+// I will want to rename my functions and variables to match this list.
+
 var tick_seconds = 1;
 
 var DEBUG = false;
