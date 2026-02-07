@@ -9,6 +9,8 @@ var tick_seconds = 1;
 
 var DEBUG = false;
 var DEBUG_tick = false;
+var TEST = false;
+
 var prior_cick_time;
 
 var cost_flag = "Costs";    // actually a const, injector cant re-declare them
@@ -144,7 +146,7 @@ function unused_random_id(prefix) {
     while (id === "") {
         id = random_id(prefix);
         if ( $( "#" + id ).length ) {
-            // console.warn("Skip used ID '" + id + "'");
+            // console.log("Skip used ID '" + id + "'");
             id = "";
         }
     }
@@ -351,16 +353,16 @@ function get_quantities(tabs_available) {
 
     var substance_list_all = leftbar_entries.map(function(entry) {
         const [pane_heading, trs] = entry;
-        // console.log('GQ(): pane_heading, trs', pane_heading, trs);
+        if (TEST) {console.log('GQ(): pane_heading, trs', pane_heading, trs);}
         var tds_list = trs.map(function(tr) {
             var tds = tr_to_tds(tr);
             return tds;
         });
-        // console.log('GQ() tds_list', tds_list);
+        if (TEST) {console.log('GQ() tds_list', tds_list);}
 
         var texts_list = tds_list.map(function(entry) {
             const [tr_id, td] = entry;
-            // console.warn('    gq(): tr_id', tr_id, 'td', td);
+            if (TEST) {console.log('    gq(): tr_id', tr_id, 'td', td);}
             var spans = td_to_spans(td);
             var texts = spans.map(function(span) {
                 span = $( span );
@@ -391,7 +393,7 @@ function get_quantities(tabs_available) {
 
         return substance_list;
     }).flat();
-    // console.warn('GQ(): substance_list_all', substance_list_all);
+    if (TEST) {console.log('GQ(): substance_list_all', substance_list_all);}
 
     // // should pull these counts from the Interstellar:Rockets page
     var plating_count = 0;
@@ -405,10 +407,10 @@ function get_quantities(tabs_available) {
         var name_clean = cleanup_substance_name(substance.name, substance.pane);
         return [name_clean, substance];
     });
-    // console.warn('GQ(): quantities_list', quantities_list);
+    if (TEST) {console.log('GQ(): quantities_list', quantities_list);}
 
     var quantities = Object.fromEntries(quantities_list);
-    // console.warn('GQ(): quantities', quantities);
+    // IF (TEST) {console.log('GQ(): quantities', quantities);}
     return quantities;
 }
 
@@ -435,14 +437,14 @@ function get_one_max(tr) {
     tr = $( tr );
     var is_hidden = tr.hasClass("hidden");
     if (is_hidden) {
-        // console.warn("max: hidden", tr);
+        // console.log("max: hidden", tr);
         return [];
     }
     // console.log(tr);
     var tds = tr.children();
     var label = $( tds[1] ).text().trim().toLowerCase();
     if (! label) {
-        // console.warn("max: no label", label);
+        // console.log("max: no label", label);
         return [];
     }
     var values = $( tds[3] ).children();
@@ -464,7 +466,7 @@ function get_one_max(tr) {
 function check_energy_levels(quantities) {
     "use strict";
 
-    // console.warn('quantities:', quantities);
+    // console.log('quantities:', quantities);
     var energy = quantities.energy;
     // console.log('energy:', energy);
 
@@ -545,7 +547,7 @@ function get_available_substances(maxes, tabs_available) {
         if (DEBUG) { console.log("Check tab", pane_heading); }
 
         var tabs = $( tab_desc + " > .container");
-        if (DEBUG) { console.warn("tabs:", tab_desc, tabs); }
+        if (DEBUG) { console.log("tabs:", tab_desc, tabs); }
         NONLOCAL_tab_desc = pane_heading;
         GLOBAL_available_substances_by_page[NONLOCAL_tab_desc] = [];
         $.each(tabs, scan_one_tab);
@@ -789,7 +791,7 @@ function check_tabs(maxes, available_substances, tabs_available) {
         }
 
         if (GLOBAL_purchase.includes("Swarm:")) {
-            console.warn("Swarm (scan_one_cost)", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase);
+            console.log("Swarm (scan_one_cost)", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase);
             return;
         }
 
@@ -819,13 +821,13 @@ function check_tabs(maxes, available_substances, tabs_available) {
         // NOTE: delete next section:
         var is_hidden = tr.hasClass("hidden");
         if (is_hidden) {
-            if (DEBUG) { console.warn(GLOBAL_pane_title, GLOBAL_purchase, "HIDDEN"); }
+            if (DEBUG) { console.log(GLOBAL_pane_title, GLOBAL_purchase, "HIDDEN"); }
             return;
         }
         // NOTE: end deleted section
         if (GLOBAL_purchase.includes("Swarm:")) {
-            console.warn("Swarm (scan_one_tr)", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase);
-            console.warn("tr", tr);
+            console.log("Swarm (scan_one_tr)", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase);
+            console.log("tr", tr);
         }
         if (GLOBAL_pane_title === "energy_mass_conversion") {
             return;
@@ -873,14 +875,14 @@ function check_tabs(maxes, available_substances, tabs_available) {
             var button_is_hidden = button
                 .hasClass("hidden");
             if (button_is_hidden) {
-                // console.warn("button is hidden", button);
+                // console.log("button is hidden", button);
                 button = null;
             } else {
                 button_is_hidden = button
                     .parent()
                     .hasClass("hidden");
                 if (button_is_hidden) {
-                    // console.warn("button is hidden", button.parent());
+                    // console.log("button is hidden", button.parent());
                     button = null;
                 }
             }
@@ -888,7 +890,7 @@ function check_tabs(maxes, available_substances, tabs_available) {
         var input = td
             .find("input.desired");
         if (button && (input.length === 0)) {
-            // console.warn(GLOBAL_pane_title, GLOBAL_purchase, "Creating input object:");
+            // console.log(GLOBAL_pane_title, GLOBAL_purchase, "Creating input object:");
             input = $("<input type='textbox' class='desired'/>");
             td.append(input);
         }
@@ -961,8 +963,8 @@ function check_tabs(maxes, available_substances, tabs_available) {
             }
             if (set_class === "clicking") {
                 // if (red_ingredients.length) {
-                //     console.warn("red_ingredients", red_ingredients)
-                //     console.warn("cant_click:", cant_click)
+                //     console.log("red_ingredients", red_ingredients)
+                //     console.log("cant_click:", cant_click)
                 // }
                 var click_time;
                 click_time = Math.floor(new Date().getTime() / 1000);
@@ -1026,7 +1028,7 @@ function check_tabs(maxes, available_substances, tabs_available) {
             return;
         }
         if (GLOBAL_pane_title === "dyson_swarms_and_sphere") {
-            // console.warn("Ignore Dyson Swarm / Sphere pane");
+            // console.log("Ignore Dyson Swarm / Sphere pane");
             return;
         }
         if (DEBUG) {
@@ -1043,7 +1045,7 @@ function check_tabs(maxes, available_substances, tabs_available) {
     $.each(panes_ob, function(pane_heading, panes) {
         GLOBAL_pane_heading = pane_heading;
         if (DEBUG) {console.log("pane_heading:", GLOBAL_pane_heading);}
-        if (DEBUG) {console.warn("panes:", panes);}
+        if (DEBUG) {console.log("panes:", panes);}
         $.each(panes, scan_one_pane);
     });
 
@@ -1109,7 +1111,7 @@ function get_button_id(td) {
         .hasClass("hidden");
 
     if (button_is_hidden) {
-        // console.warn("button is hidden", button);
+        // console.log("button is hidden", button);
         return "";
     }
 
@@ -1118,7 +1120,7 @@ function get_button_id(td) {
         .hasClass("hidden");
 
     if (button_is_hidden) {
-        // console.warn("button parent is hidden", button.parent())
+        // console.log("button parent is hidden", button.parent())
         return "";
     }
 
@@ -1149,14 +1151,14 @@ function create_input_and_get_id(td, button_id, debug_label) {
             return;
         }
         // button but no input: create input
-        // console.warn(debug_label, "Creating input object:")
+        // console.log(debug_label, "Creating input object:")
         input = $("<input type='textbox' class='desired'/>");
         td.append(input);
     } else {
         // "input" is found
         if (! button_id) {
             // input but no button: input is obsolete
-            console.warn(debug_label, "Destroying input object:");
+            console.log(debug_label, "Destroying input object:");
             input.remove();
         // } else {
         //     // both button and input: okay
@@ -1175,7 +1177,7 @@ function complain_about_unknown_substances_once(unknown_substances_list) {
         }
         return false;
     });
-    if (DEBUG) { console.warn('DEBUG: complain answers', answers); }
+    if (DEBUG) { console.log('DEBUG: complain answers', answers); }
     return;
 }
 
@@ -1401,6 +1403,9 @@ function panesob_2_trsob(panes_ob, available_substances) {
 function test() {
     "use strict";
 
+    TEST = true;
+    console.warn('test(): setting TEST to', TEST);
+
     // the following variables and functions have been copied in from check_tabs:
     var GLOBAL_overflow_reasons = {};
     var GLOBAL_pane_heading;
@@ -1426,7 +1431,7 @@ function test() {
         }
 
         if (GLOBAL_purchase.includes("Swarm:")) {
-            console.warn("Swarm (scan_one_cost)", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase);
+            console.log("Swarm (scan_one_cost)", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase);
             return;
         }
 
@@ -1579,14 +1584,21 @@ function test() {
     var trs_ob = panesob_2_trsob(panes_ob, available_substances);
     var magics_ob = trsob_2_magicsob(trs_ob, maxes);
 
-    if (true) { return magics_ob; }
+    if (false) {
 
-    $.each(trs_ob, function(pane_title, trs) {
+        var trs_ob = "set in deleted section";
+        $.each(trs_ob, function(pane_title, trs) {
         GLOBAL_pane_heading = "UNKNOWN";
         GLOBAL_pane_title = pane_title;
         console.warn("DEBUG: each trs_ob", GLOBAL_pane_title, "trs:", trs);
         $.each(trs, xCONSUME_scan_one_tr);
     });
+}
+    
+    TEST = false;
+    console.warn('test(): setting TEST to', TEST);
+
+    return magics_ob;
 }
 
 // xyzzy
