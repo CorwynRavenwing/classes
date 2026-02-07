@@ -1202,6 +1202,12 @@ function get_bump_max_ob(costs_ob, maxes, quantities) {
 
     var bump_max_list = costs_list.filter(function([substance, needed]) {
         var max_value = maxes[substance];
+        var max_value_new = quantities[substance].max;
+        if (max_value !== max_value_new) {
+            console.warn('max_value different! substance', substance, 'maxes[]', max_value, 'quantities{}', max_value_new);
+        // } else {
+        //     console.warn('max_value same!', 'maxes[]', max_value, 'quantities{}', max_value_new);
+        }
         return (needed > max_value);
     });
     if (bump_max_list.length > 0) {
