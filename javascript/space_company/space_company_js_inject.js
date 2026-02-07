@@ -518,7 +518,7 @@ function get_available_substances(maxes, tabs_available) {
             first = $( tds[1] );
         }
 
-        var text = cleanup_substance_name(
+        var text = cleanup_substance_name_simple(
             first.text()
         );
         if (! text) {
@@ -1013,7 +1013,7 @@ function check_tabs(maxes, available_substances, tabs_available) {
         var trs = pane.find("tr");
         var tr0 = $( trs[0] );
         var h2 = tr0.find("h2");
-        GLOBAL_pane_title = cleanup_substance_name(
+        GLOBAL_pane_title = cleanup_substance_name_simple(
             h2.text()
         );
         
@@ -1344,7 +1344,7 @@ function panesob_2_trsob(panes_ob, available_substances) {
         return true;
     }
 
-    function map_pane_to_title_and_trs(pane) {
+    function map_pane_to_title_and_trs(pane, pane_heading) {
         pane = $( pane );
         var trs = pane.find("tr");
         trs = jQuery_to_array(trs);
