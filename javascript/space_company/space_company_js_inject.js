@@ -47,8 +47,6 @@ var pane_descriptors = {
 
 var GLOBAL_known_unknowns = [];
 var GLOBAL_known_missing_tabs = [];
-var GLOBAL_available_substances = [];
-var GLOBAL_available_substances_by_page = {};
 var GLOBAL_known_skip_page = [];
 
 function from_number(value) {
@@ -513,7 +511,7 @@ function check_energy_levels(quantities) {
 function get_available_substances(maxes, tabs_available) {
     "use strict";
     var answer = [];
-    var NONLOCAL_tab_desc;
+    // var NONLOCAL_tab_desc;
 
     $.each(maxes, function(max_item) {
         answer.push(max_item);
@@ -544,7 +542,7 @@ function get_available_substances(maxes, tabs_available) {
         }
         answer.push( text );
         if (DEBUG) { console.log("TD:", text); }
-        GLOBAL_available_substances_by_page[NONLOCAL_tab_desc].push("'" + text + "'");
+        // GLOBAL_available_substances_by_page[NONLOCAL_tab_desc].push("'" + text + "'");
     }
 
     function scan_one_tab(tab_idx, tab) {
@@ -566,8 +564,8 @@ function get_available_substances(maxes, tabs_available) {
 
         var tabs = $( tab_desc + " > .container");
         if (DEBUG) { console.log("tabs:", tab_desc, tabs); }
-        NONLOCAL_tab_desc = pane_heading;
-        GLOBAL_available_substances_by_page[NONLOCAL_tab_desc] = [];
+        // NONLOCAL_tab_desc = pane_heading;
+        // GLOBAL_available_substances_by_page[NONLOCAL_tab_desc] = [];
         $.each(tabs, scan_one_tab);
     });
 
@@ -1667,7 +1665,7 @@ function tick() {
     // console.log("maxes:", maxes);
     var available_substances = get_available_substances(maxes, tabs_available);
     // console.log("available_substances:", available_substances);
-    GLOBAL_available_substances = available_substances;
+    // GLOBAL_available_substances = available_substances;
     var tab_data = check_tabs(maxes, available_substances, tabs_available);
     // console.log("tab_data", tab_data);
     var results = for_each_nav(colorize_one_max, tab_data);
@@ -1704,5 +1702,5 @@ function x_CONSUME() {
     "use strict";
     x_CONSUME();
     test();
-    GLOBAL_available_substances = GLOBAL_available_substances;
+    // GLOBAL_available_substances = GLOBAL_available_substances;
 }
