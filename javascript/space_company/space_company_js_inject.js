@@ -447,8 +447,11 @@ function get_one_max(tr) {
 
 
 
-function check_energy_levels_old() {
+function check_energy_levels_old(quantities) {
     "use strict";
+
+    quantities = quantities;    // ignore
+
     var energy_change_ob = $("#energyps");
     var energy_falling_case = energy_change_ob.hasClass("red");
 
@@ -474,18 +477,19 @@ function check_energy_levels_old() {
     add_class_remove_others(game_ob, add_class, all_energy_classes);
 }
 
-function check_energy_levels_new() {
+function check_energy_levels_new(quantities) {
     "use strict";
 }
 
-function check_energy_levels() {
+var use_new = true;
+
+function check_energy_levels(quantities) {
     "use strict";   
-    var use_new = false;
 
     if (use_new) {
-        check_energy_levels_new();
+        check_energy_levels_new(quantities);
     } else {
-        check_energy_levels_old();
+        check_energy_levels_old(quantities);
     }
 }
 
@@ -1563,8 +1567,10 @@ function test() {
     }
     // end copied section
 
-    var quantities = get_quantities();
-    quantities = quantities;            // WRITE ME
+    var tabs_available = get_tabs_available();
+
+    var quantities = get_quantities(tabs_available);
+    check_energy_levels_new(quantities);
 
     var maxes = get_maxes();
     var available_substances = get_available_substances(maxes, tabs_available);
