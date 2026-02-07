@@ -22,8 +22,7 @@ var pane_descriptors = {
     "Sol Center":   "#solCenterPage",
     "Solar System": "#solarSystem",
     Stargaze:       "#stargazeTab_pane",
-    Wonders:        "#wonder",
-    ZZZ:            "LAST: NO COMMA"
+    Wonders:        "#wonder"
 };
 
 var GLOBAL_known_unknowns = [];
@@ -614,8 +613,7 @@ function get_maxes() {
         // should pull these maxes from the Solar System tab
         rocket: rockets_max,
         rocket_fuel: fuel_max,
-        dark_matter: dark_max,      // NOTE: unclear why this is necessary
-        ZZZ: "LAST: NO COMMA"
+        dark_matter: dark_max      // NOTE: unclear why this is necessary
     };
 
     $.each(max_pairs, function(pair_idx, max_pair) {
@@ -926,8 +924,7 @@ function check_tabs(maxes, available_substances) {
             "click_me",
             "clicking",
             "unknown_substance",
-            "no_button",
-            "ZZZ_LAST_NO_COMMA"
+            "no_button"
         ];
 
         if (! button) {
@@ -1466,8 +1463,7 @@ function test() {
             "click_me",
             "clicking",
             "unknown_substance",
-            "no_button",
-            "ZZZ_LAST_NO_COMMA"
+            "no_button"
         ];
 
         var button = "defined in deleted section";
