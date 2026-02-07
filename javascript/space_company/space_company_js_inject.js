@@ -170,8 +170,7 @@ function add_class_remove_others(ob, className, classList) {
         ob.addClass(className);
     }
 
-    $.each(classList, function(remove_idx, remove_me) {
-        remove_idx = remove_idx;
+    classList.forEach(function(remove_me) {
         if (remove_me !== className) {
             ob.removeClass(remove_me);
         }
