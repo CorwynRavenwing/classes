@@ -479,6 +479,31 @@ function check_energy_levels_old(quantities) {
 
 function check_energy_levels_new(quantities) {
     "use strict";
+
+    // console.warn('quantities:', quantities);
+    var energy = quantities.energy;
+    // console.log('energy:', energy);
+
+    var energy_falling_case = (energy.rate <= 0);
+
+    var energy_deficit_case = (energy.count === 0);
+
+    var add_class;
+    var all_energy_classes = [
+        "energy-deficit",
+        "energy-falling",
+        "energy-okay"
+    ];
+
+    var game_ob = $("#game");
+    if (energy_deficit_case) {
+        add_class = "energy-deficit";
+    } else if (energy_falling_case) {
+        add_class = "energy-falling";
+    } else {
+        add_class = "energy-okay";
+    }
+    add_class_remove_others(game_ob, add_class, all_energy_classes);
 }
 
 var use_new = true;
