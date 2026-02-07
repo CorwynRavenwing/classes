@@ -448,37 +448,6 @@ function for_each_nav(fn, argument) {
     return answer;
 }
 
-function get_one_max(tr) {
-    "use strict";
-    tr = $( tr );
-    var is_hidden = tr.hasClass("hidden");
-    if (is_hidden) {
-        // console.log("max: hidden", tr);
-        return [];
-    }
-    // console.log(tr);
-    var tds = tr.children();
-    var label = $( tds[1] ).text().trim().toLowerCase();
-    if (! label) {
-        // console.log("max: no label", label);
-        return [];
-    }
-    var values = $( tds[3] ).children();
-    var quant = $( values[1] ).text().trim();
-    quant = to_number(quant);
-
-    // console.log(label, "<=", quant);
-    return [label, quant];
-}
-
-
-
-
-/// ############################################################################
-
-
-
-
 function check_energy_levels(quantities) {
     "use strict";
 
@@ -544,52 +513,6 @@ function get_tabs_available() {
     return answer;
 }
 
-function get_maxes() {
-    "use strict";
-    var max_pairs = for_each_nav(get_one_max, null);
-    // console.log(max_pairs);
-    var science_ob = $("#science");
-    var science_value = science_ob.text();
-    science_value = to_number(science_value);
-    var science_max = (10 * science_value);      // actually unlimited
-
-    var fuel_ob = $("#rocketFuel");
-    var fuel_value = fuel_ob.text();
-    fuel_value = to_number(fuel_value);
-    var fuel_max = (10 * fuel_value);      // actually unlimited
-
-    var rockets_max = 1000;     // NOTE: not sure how to compute this
-
-    var dark_ob = $("#stargazeNavdarkMatter_count");
-    var dark_value = dark_ob.text();
-    dark_value = to_number(dark_value);
-    var dark_max = (10 * dark_value);      // actually unlimited
-
-    var maxes = {
-        science: science_max,
-        // should pull these maxes from the Interstellar:Rockets page
-        shield_plating: 50,
-        engine_unit: 25,
-        aerodynamic_sections: 15,
-        // should pull these maxes from the Solar System tab
-        rocket: rockets_max,
-        rocket_fuel: fuel_max,
-        dark_matter: dark_max      // NOTE: unclear why this is necessary
-    };
-
-    $.each(max_pairs, function(pair_idx, max_pair) {
-        pair_idx = pair_idx;
-        if (max_pair.length === 0) {
-            // console.log("get_maxes: SKIP", pair_idx, max_pair)
-            return;
-        }
-        const [label, quant] = max_pair;
-        // console.log("get_maxes: ok", label, quant);
-        maxes[label] = quant;
-    });
-    return maxes;
-}
-
 function cleanup_details(string) {
     "use strict";
     // var cost_flag = "Costs";
@@ -630,6 +553,14 @@ function cleanup_details(string) {
 
     return string;
 }
+
+
+
+
+/// ############################################################################
+
+
+
 
 function extract_costs_from_details(orig_string, pane_heading, pane_title, purchase) {
     "use strict";
@@ -672,11 +603,6 @@ function extract_costs_from_details(orig_string, pane_heading, pane_title, purch
         .replace(/[.]+$/, "")       // remove trailing period
         .replaceAll(/\ \ +/g, " ")  // no doubled spaces
         ;
-
-    // if (GLOBAL_pane_title === "inside the wonder station") {
-    //     console.log(orig_string)
-    //     console.log(string)
-    // }
 
     var costs = string.split(", ");     // split on "comma space"
     return costs;
@@ -1530,7 +1456,6 @@ function test() {
     var quantities = get_quantities(tabs_available);
     check_energy_levels(quantities);
 
-    //var maxes = get_maxes();
     var available_substances = Object.keys(quantities);
     available_substances = available_substances;
 
@@ -1596,8 +1521,6 @@ function tick() {
     var quantities = get_quantities(tabs_available);
     check_energy_levels(quantities);
 
-    var maxes = get_maxes();
-    // console.log("maxes:", maxes);
     var available_substances = Object.keys(quantities);
     // console.log("available_substances:", available_substances);
     var tab_data = check_tabs(maxes, available_substances, tabs_available);
