@@ -21,3 +21,8 @@ class Solution:
 
         return min(ToDeleteAt)
 
+# NOTE: Acceptance Rate 65.7% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 683 ms Beats 14.52%
+# NOTE: Memory 36.00 MB Beats 5.21%
