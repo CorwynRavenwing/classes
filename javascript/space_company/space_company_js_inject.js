@@ -393,11 +393,6 @@ function get_quantities(tabs_available) {
     return quantities;
 }
 
-function x() {
-    "use strict";
-    return get_quantities();
-}
-
 function for_each_nav(fn, argument) {
     "use strict";
     var answer = [];
@@ -1696,7 +1691,6 @@ if (DEBUG_tick) {
 function x_CONSUME() {
     "use strict";
     x_CONSUME();
-    x();
     test();
     GLOBAL_available_substances = GLOBAL_available_substances;
 }
