@@ -1087,14 +1087,25 @@ function get_bump_max_ob(costs_ob, quantities) {
     var costs_list = Object.entries(costs_ob);
 
     var bump_max_list = costs_list.filter(function([substance, needed]) {
-        var max_value = quantities[substance].max;
+        var item_ob = quantities[substance];
+        if (item_ob === undefined) {
+            // no such substance: problem
+            return true;
+        }
+        var max_value = item_ob.max;
+        if (max_value === "") {
+            // no max -> no problem
+            return false;
+        }
         return (needed > max_value);
     });
     if (bump_max_list.length > 0) {
         var bump_max_ob = Object.fromEntries(bump_max_list);
         return bump_max_ob;
     } else {
-        return "";   // or maybe {} or []
+        return "";
+    }
+}
     }
 }
 
