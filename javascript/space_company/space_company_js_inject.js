@@ -45,7 +45,7 @@ var pane_descriptors = {
     Wonders:        "#wonder"
 };
 
-var GLOBAL_known_unknowns = [];
+var GLOBAL_known_unknowns = [];         // TODO: move to just before use
 var GLOBAL_known_missing_tabs = [];
 var GLOBAL_known_skip_page = [];
 
@@ -1050,6 +1050,7 @@ function create_input_and_get_id(td, button_id, debug_label) {
     return uniqueId(input, 'input');
 }
 
+// var GLOBAL_known_unknowns = []
 function complain_about_unknown_substances_once(unknown_substances_list) {
     "use strict";
     var answers = unknown_substances_list.map(function(substance) {
