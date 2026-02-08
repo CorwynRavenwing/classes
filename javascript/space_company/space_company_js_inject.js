@@ -1203,8 +1203,8 @@ function tr_2_magic(tr, pane_title, quantities) {
     magic.desired = desired;
 
     details = cleanup_details(details);
-    var costs = extract_costs_from_details(details, "missing_pane_heading", pane_title, purchase);
 
+    var costs = extract_costs_from_details(details, "missing_pane_heading", pane_title, purchase);
     costs = priceslist_2_pricesob(costs);
     magic.costs = costs;
 
