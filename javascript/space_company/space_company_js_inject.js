@@ -290,7 +290,7 @@ function cleanup_substance_name(name, pane_heading) {
             // Disambiguate "Resource/Plasma" from "Sol Center/Plasma":
             name += " Unlock";
         }
-        if (TEST) {
+        if (DEBUG) {
             console.error('Plasma', pane_heading, name);
         }
     }
@@ -369,16 +369,16 @@ function get_quantities(tabs_available) {
 
     var substance_list_all = leftbar_entries.map(function(entry) {
         const [pane_heading, trs] = entry;
-        if (TEST) {console.log('GQ(): pane_heading, trs', pane_heading, trs);}
+        if (DEBUG) {console.log('GQ(): pane_heading, trs', pane_heading, trs);}
         var tds_list = trs.map(function(tr) {
             var tds = tr_to_tds(tr);
             return tds;
         });
-        if (TEST) {console.log('GQ() tds_list', tds_list);}
+        if (DEBUG) {console.log('GQ() tds_list', tds_list);}
 
         var texts_list = tds_list.map(function(entry) {
             const [tr_id, td] = entry;
-            if (TEST) {console.log('    gq(): tr_id', tr_id, 'td', td);}
+            if (DEBUG) {console.log('    gq(): tr_id', tr_id, 'td', td);}
             var spans = td_to_spans(td);
             var texts = spans.map(function(span) {
                 span = $( span );
@@ -409,7 +409,7 @@ function get_quantities(tabs_available) {
 
         return substance_list;
     }).flat();
-    if (TEST) {console.log('GQ(): substance_list_all', substance_list_all);}
+    if (DEBUG) {console.log('GQ(): substance_list_all', substance_list_all);}
 
     // // should pull these counts from the Interstellar:Rockets page
     var plating_count = 0;
@@ -423,10 +423,10 @@ function get_quantities(tabs_available) {
         var name_clean = cleanup_substance_name(substance.name, substance.pane);
         return [name_clean, substance];
     });
-    if (TEST) {console.log('GQ(): quantities_list', quantities_list);}
+    if (DEBUG) {console.log('GQ(): quantities_list', quantities_list);}
 
     var quantities = Object.fromEntries(quantities_list);
-    // IF (TEST) {console.log('GQ(): quantities', quantities);}
+    // IF (DEBUG) {console.log('GQ(): quantities', quantities);}
     return quantities;
 }
 
