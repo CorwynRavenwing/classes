@@ -1106,7 +1106,41 @@ function get_bump_max_ob(costs_ob, quantities) {
         return "";
     }
 }
+
+function get_high_cost_ob(costs_ob, quantities) {
+    "use strict";
+    var costs_list = Object.entries(costs_ob);
+
+    var high_cost_list = costs_list.filter(function([substance, needed]) {
+        var item_ob = quantities[substance];
+        if (item_ob === undefined) {
+            // no such substance: problem
+            return true;
+        }
+        var count_value = item_ob.count;
+        if (count_value === "") {
+            console.log('DEBUG: checking high cost for non-counted substance', substance, 'needed', needed, 'count', count_value);
+            // no count -> no problem
+            return false;
+        }
+        return (needed > count_value);
+    });
+    if (high_cost_list.length > 0) {
+        var high_cost_ob = Object.fromEntries(high_cost_list);
+        return high_cost_ob;
+    } else {
+        return "";
     }
+}
+
+function get_high_rate_ob(rates_ob, quantities) {
+    "use strict";
+
+    // WRITE ME
+
+    rates_ob = rates_ob;        // ignore
+    quantities = quantities;    // ignore
+    return "";
 }
 
 // XYZZY:
@@ -1184,8 +1218,12 @@ function tr_2_magic(tr, pane_title, quantities) {
         /* if (DEBUG) */ console.warn("cost of UNKNOWN SUBSTANCES:", pane_title, purchase, unknown_substances);
     }
 
-    var bump_maxes = get_bump_max_ob(costs, quantities);
-    magic.bump_max = bump_maxes;
+    magic.bump_max = get_bump_max_ob(costs, quantities);
+
+    magic.high_cost = get_high_cost_ob(costs, quantities);
+
+    var consume_per_sec = "WRITE ME";
+    magic.high_rate = get_high_rate_ob(consume_per_sec, quantities);
 
     if (magic.unknown_substances) {
         magic.clickable = "unknown_substance";
@@ -1193,7 +1231,12 @@ function tr_2_magic(tr, pane_title, quantities) {
     else if (magic.bump_max) {
         magic.clickable = "bump_max";
     }
-    // ... more ...
+    else if (magic.high_cost) {
+        magic.clickable = "high_cost";
+    }
+    else if (magic.high_rate) {
+        magic.clickable = "high_rate";
+    }
     else {
         magic.clickable = "OK";
     }
