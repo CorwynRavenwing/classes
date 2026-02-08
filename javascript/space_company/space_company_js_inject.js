@@ -668,6 +668,10 @@ function check_tabs(available_substances, tabs_available, quantities) {
             return;
         }
         var max_value = quantities[substance].max;
+        if (max_value === "") {
+            // console.log("cost ok:", cost_idx, substance, needed, max_value);
+            return;
+        }
         if (needed <= max_value) {
             // console.log("cost ok:", cost_idx, substance, needed, max_value);
             return;
