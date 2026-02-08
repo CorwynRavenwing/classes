@@ -1205,10 +1205,7 @@ function tr_2_magic(tr, pane_title, quantities) {
     details = cleanup_details(details);
     var costs = extract_costs_from_details(details, "missing_pane_heading", pane_title, purchase);
 
-    if (DEBUG) {console.log("purchase:", purchase);}
-    if (DEBUG) {console.log("costs:", costs);}
     costs = priceslist_2_pricesob(costs);
-    if (DEBUG) {console.log("costs:", costs);}
     magic.costs = costs;
 
     var unknown_substances = get_unknown_substances(costs, quantities);
@@ -1511,8 +1508,9 @@ function test() {
 
     var magics_ob = get_magics_ob(pane_descriptors, tabs_available, available_substances, quantities);
 
-    if (false) {
+    console.warn('magics_ob:', magics_ob);
 
+    if (false) {
         var trs_ob = "set in deleted section";
         $.each(trs_ob, function(pane_title, trs) {
             GLOBAL_pane_heading = "UNKNOWN";
