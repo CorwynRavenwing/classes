@@ -1175,14 +1175,14 @@ function tr_2_magic(tr, pane_title, quantities) {
     magic.bump_max = bump_maxes;
 
     if (magic.unknown_substances) {
-        magic.class = "unknown_substance";
+        magic.clickable = "unknown_substance";
     }
     else if (magic.bump_max) {
-        magic.class = "bump_max";
+        magic.clickable = "bump_max";
     }
     // ... more ...
     else {
-        magic.class = "OK";
+        magic.clickable = "OK";
     }
     // ### MOVE TO HERE ... vvv
 
