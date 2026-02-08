@@ -1071,12 +1071,10 @@ function complain_about_unknown_substances_once(unknown_substances_list) {
 
 function get_unknown_substances(costs_ob, quantities) {
     "use strict";
-    var costs_list = Object.entries(costs_ob);
 
-    var unknown_substances_list = costs_list.map(function([substance, quant]) {
-        quant = quant;
-        return substance;
-    }).filter(function(substance) {
+    var costs_list = Object.keys(costs_ob);
+
+    var unknown_substances_list = costs_list.filter(function(substance) {
         var known_substance = Object.keys(quantities).includes(substance);
         return (! known_substance);
     });
