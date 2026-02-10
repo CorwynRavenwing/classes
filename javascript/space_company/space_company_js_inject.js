@@ -1425,19 +1425,6 @@ function test() {
 
         // ### MOVE FROM HERE ... ^^^
 
-
-        var cant_click = false;
-        // if (current && desired) {
-        //     console.log(pane_title, purchase, "current", current, "desired", desired)
-        // }
-        var red_ingredients = tr
-            .find("td > span span.red");
-        if (red_ingredients.length) {
-            // console.log("red_ingredients", red_ingredients)
-            cant_click = true;
-        }
-        GLOBAL_unknown_substances = [];
-        GLOBAL_bump_specifics = [];
         $.each(costs, xCONSUME_scan_one_cost);
         var pop_up = [];
         var set_class = "";
@@ -1456,6 +1443,10 @@ function test() {
         var current = "defined in deleted section";
         var current_ob = "defined in deleted section";
         var input = "defined in deleted section";
+        var GLOBAL_unknown_substances = "deleted";
+        var GLOBAL_bump_specifics = "deleted";
+        var cant_click = "deleted";
+        var red_ingredients = "deleted";
 
         if (! button) {
             set_class = "no_button";
