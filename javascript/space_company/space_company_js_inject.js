@@ -1397,6 +1397,21 @@ function get_magics_ob(pane_descriptors, tabs_available, available_substances, q
     return magics_ob;
 }
 
+function filter_magics_by(magics_list, filter_column) {
+    "use strict";
+    var answer = {};
+
+    magics_list.forEach(function(magic) {
+        var filter = magic[filter_column];
+        if (answer[filter] === undefined) {
+            answer[filter] = [];
+        }
+        answer[filter].push(magic);
+    });
+
+    return answer;
+}
+
 function test() {
     "use strict";
 
