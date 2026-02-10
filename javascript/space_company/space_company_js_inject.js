@@ -574,12 +574,16 @@ function extract_costs_from_details(orig_string, pane_heading, pane_title, purch
     // const cost_flag = "Costs";
 
     if (pane_title === "energy_mass_conversion") {
-        // does not have Costs section
-        return [];
+        if (purchase !== "Research") {
+            // does not have Costs section
+            return [];
+        }
     }
     if (pane_title === "dyson swarms and sphere") {
-        // has non-standard Costs section
-        return [];
+        if (purchase !== "Research") {
+            // has non-standard Costs section
+            return [];
+        }
     }
     if (purchase === "Rocket Ship: Built") {
         // does not have Costs section anymore
@@ -1195,7 +1199,7 @@ function tr_2_magic(tr, pane_title, quantities) {
     var purchase = h3
         .text()
         .trim()
-        .replace(new RegExp("/[0-9]*$"), "")  // remove "/NN" from end
+        .replace(new RegExp("/[0-9]*$"), "")    // remove "/NN" from end
         .replace(new RegExp(": [0-9]*$"), "")   // remove ": NN" from end
         ;
 
@@ -1211,10 +1215,15 @@ function tr_2_magic(tr, pane_title, quantities) {
     }
 
     if (pane_title === "energy_mass_conversion") {
-        return null;
+        if (purchase !== "Research") {
+            return null;
+        }
     }
     if (pane_title === "dyson_swarms_and_sphere") {
-        return null;
+        if (purchase !== "Research") {
+            // this is where we wire in the special Dyson Sphere code
+            return null;
+        }
     }
 
     var details = tr
