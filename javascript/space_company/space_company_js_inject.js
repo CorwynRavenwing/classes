@@ -27,7 +27,7 @@ var tick_seconds = 1;
 
 var DEBUG = false;
 var DEBUG_tick = false;
-var TEST = false;
+// var TEST = false;
 
 var prior_cick_time;
 
@@ -1183,7 +1183,6 @@ function get_high_rate_ob(rates_ob, quantities) {
     return "";
 }
 
-// XYZZY:
 function tr_2_magic(tr, pane_title, quantities) {
     "use strict";
     var magic = {};
@@ -1374,16 +1373,16 @@ function get_magics_ob(pane_descriptors, tabs_available, available_substances, q
 function test() {
     "use strict";
 
-    TEST = true;
-    console.warn('test(): setting TEST to', TEST);
+    // TEST = true;
+    // console.warn('test(): setting TEST to', TEST);
 
     // the following variables and functions have been copied in from check_tabs:
     var GLOBAL_overflow_reasons = {};
     var GLOBAL_pane_heading;
     var GLOBAL_pane_title;
     var GLOBAL_purchase = "h3.something.text.etc";
-    var GLOBAL_unknown_substances;
-    var GLOBAL_bump_specifics;
+    // var GLOBAL_unknown_substances;
+    // var GLOBAL_bump_specifics;
     var GLOBAL_clicked_something = false;
 
     function xCONSUME_scan_one_cost(cost_idx, cost_str, maxes) {
@@ -1413,7 +1412,7 @@ function test() {
         GLOBAL_overflow_reasons[substance].push(
             GLOBAL_pane_heading + "/" + GLOBAL_pane_title + "/" + GLOBAL_purchase + ": " + from_number(needed)
         );
-        GLOBAL_bump_specifics.push(substance);
+        // GLOBAL_bump_specifics.push(substance);
     }
 
     function xCONSUME_scan_one_tr(tr_idx, tr) {
@@ -1540,7 +1539,6 @@ function test() {
     available_substances = available_substances;
 
     var magics_ob = get_magics_ob(pane_descriptors, tabs_available, available_substances, quantities);
-
     console.warn('magics_ob:', magics_ob);
 
     if (false) {
@@ -1553,8 +1551,8 @@ function test() {
         });
     }
     
-    TEST = false;
-    console.warn('test(): setting TEST to', TEST);
+    // TEST = false;
+    // console.warn('test(): setting TEST to', TEST);
 
     return magics_ob;
 }
