@@ -415,9 +415,15 @@ function get_quantities(tabs_available) {
     var plating_count = 0;
     var engine_count = 0;
     var section_count = 0;
-    substance_list_all.push( textlist_2_substance("Rocket Parts (fake)", "NONE", ["Shield Plating", plating_count, 50]) );
-    substance_list_all.push( textlist_2_substance("Rocket Parts (fake)", "NONE", ["Engine Unit", engine_count, 25]) );
-    substance_list_all.push( textlist_2_substance("Rocket Parts (fake)", "NONE", ["Aerodynamic Sections", section_count, 15]) );
+    var fake_substances = [
+        ["Shield Plating", plating_count, 50],
+        ["Engine Unit", engine_count, 25],
+        ["Aerodynamic Sections", section_count, 15]
+    ];
+    fake_substances.forEach(function(fake_item) {
+        var new_substance = textlist_2_substance("Rocket Parts (fake)", "NONE", fake_item);
+        substance_list_all.push( new_substance );
+    });
 
     var quantities_list = substance_list_all.map(function(substance) {
         var name_clean = cleanup_substance_name(substance.name, substance.pane);
