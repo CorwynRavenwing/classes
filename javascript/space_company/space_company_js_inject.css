@@ -10,8 +10,21 @@
     background-color: lightgray;
 }
 
+.high_cost {
+    background-color: yellow;
+}
+
+.high_rate {
+    background-color: orange;
+}
+
+/* deprecated: */
 .cant_click {
     background-color: yellow;
+}
+
+.click_me_maybe {
+    background-color: #E0FFFF;      /* Light Cyan, per https://cssgradient.io */
 }
 
 .click_me {

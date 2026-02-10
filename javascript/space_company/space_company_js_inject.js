@@ -812,7 +812,10 @@ function check_tabs(available_substances, tabs_available, quantities) {
         var all_click_classes = [
             "bump_max",
             "cant_click",
+            "high_cost",
+            "high_rate",
             "click_me",
+            "click_me_maybe",
             "clicking",
             "unknown_substance",
             "no_button"
