@@ -1239,6 +1239,7 @@ function tr_2_magic(tr, pane_title, quantities) {
     magic.input_id = input_id;
 
     magic.desired = inputid_2_desired(input_id);
+    magic.click_requested = ((magic.desired > 0) ? 1 : 0);
 
     details = cleanup_details(details);
 
