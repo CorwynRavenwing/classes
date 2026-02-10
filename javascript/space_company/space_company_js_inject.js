@@ -1574,6 +1574,146 @@ function test() {
     var magics_ob = get_magics_ob(pane_descriptors, tabs_available, available_substances, quantities);
     console.warn('magics_ob:', magics_ob);
 
+    var magics_list = Object.values(magics_ob).flat();
+    console.warn('magics_list:', magics_list);
+
+    var magic_by_clickable = filter_magics_by(magics_list, "clickable");
+    // console.warn('magic_by_clickable:', magic_by_clickable);
+
+    // magic_by_clickable =
+    //     {
+    //       "no_button": [ ... ],
+    //       "unknown": [ ... ],
+    //       "bump_max": [ ... ],
+    //       "high_cost": [ ... ],
+    //       "OK": [ ... ]
+    //     };
+
+    console.warn('magic_by_clickable[no_button]:', magic_by_clickable.no_button);
+    console.warn('magic_by_clickable[unknown]:', magic_by_clickable.unknown);
+    console.warn('magic_by_clickable[bump_max]:', magic_by_clickable.bump_max);
+    console.warn('magic_by_clickable[high_cost]:', magic_by_clickable.high_cost);
+    console.warn('magic_by_clickable[OK]:', magic_by_clickable.OK);
+
+    var all_click_classes = [
+        "bump_max",
+        "cant_click",   // deprecated
+        "high_cost",
+        "high_rate",
+        "click_me",
+        "click_me_maybe",
+        "clicking",
+        "unknown_substance",
+        "no_button"
+    ];
+
+    var filtered;
+
+    filtered = magic_by_clickable.no_button || [];
+    console.warn('filter: setting', filtered.length, 'items of type', "no_button", 'to class', "no_button");
+    filtered.forEach(function(magic) {
+        // console.log('debug; magic (no button)', magic);
+        var tr_id = magic.tr_id;
+        var tr = $( "#" + tr_id );
+        add_class_remove_others(tr, "no_button", all_click_classes);
+        // console.log("tr_id", tr_id, "class", "no_button", "tr", tr);
+        set_ob_title_by_string(tr, "No button");
+        // set_ob_title_blank(tr);
+    });
+
+    filtered = magic_by_clickable.unknown || [];
+    console.warn('filter: setting', filtered.length, 'items of type', "unknown", 'to class', "unknown_substance");
+    filtered.forEach(function(magic) {
+        // console.log('debug; magic (unknown)', magic);
+        var tr_id = magic.tr_id;
+        var tr = $( "#" + tr_id );
+        add_class_remove_others(tr, "unknown_substance", all_click_classes);
+        // console.log("tr_id", tr_id, "class", "unknown_substance", "tr", tr);
+
+        var pop_up = safeEntries(magic.unknown).map(function(entry) {
+            const [substance, count] = entry;
+            return "Unknown: " + substance + ": " + from_number(count);
+        });
+        set_ob_title_by_array(tr, pop_up);
+    });
+
+    filtered = magic_by_clickable.bump_max || [];
+    console.warn('filter: setting', filtered.length, 'items of type', "bump_max", 'to class', "bump_max");
+    filtered.forEach(function(magic) {
+        // console.log('debug; magic (bump max)', magic);
+        var tr_id = magic.tr_id;
+        var tr = $( "#" + tr_id );
+        add_class_remove_others(tr, "bump_max", all_click_classes);
+        // console.log("tr_id", tr_id, "class", "bump_max", "tr", tr);
+
+        var pop_up = safeEntries(magic.bump_max).map(function(entry) {
+            const [substance, count] = entry;
+            return "Bump max: " + substance + ": " + from_number(count);
+        });
+        set_ob_title_by_array(tr, pop_up);
+    });
+
+    filtered = magic_by_clickable.high_cost || [];
+    console.warn('filter: setting', filtered.length, 'items of type', "high_cost", 'to class', "high_cost");
+    filtered.forEach(function(magic) {
+        // console.log('debug; magic (high cost)', magic);
+        var tr_id = magic.tr_id;
+        var tr = $( "#" + tr_id );
+        add_class_remove_others(tr, "high_cost", all_click_classes);
+        // console.log("tr_id", tr_id, "class", "high_cost", "tr", tr);
+
+        var pop_up = safeEntries(magic.high_cost).map(function(entry) {
+            const [substance, count] = entry;
+            return "High cost: " + substance + ": " + from_number(count);
+        });
+        set_ob_title_by_array(tr, pop_up);
+    });
+
+    filtered = magic_by_clickable.high_rate || [];
+    console.warn('filter: setting', filtered.length, 'items of type', "high_rate", 'to class', "high_rate");
+    filtered.forEach(function(magic) {
+        // console.log('debug; magic (high rate/sec)', magic);
+        var tr_id = magic.tr_id;
+        var tr = $( "#" + tr_id );
+        add_class_remove_others(tr, "high_rate", all_click_classes);
+        // console.log("tr_id", tr_id, "class", "high_rate", "tr", tr);
+
+        var pop_up = safeEntries(magic.high_rate).map(function(entry) {
+            const [substance, count] = entry;
+            return "High rate/sec: " + substance + ": " + from_number(count);
+        });
+        set_ob_title_by_array(tr, pop_up);
+    });
+
+    var magic_by_requested = filter_magics_by(magic_by_clickable.OK, "click_requested");
+    console.warn('magic_by_requested:', magic_by_requested);
+
+    filtered = magic_by_requested[1] || [];
+    console.warn('filter: setting', filtered.length, 'items of type', "requested: yes", 'to class', "click_me");
+    filtered.forEach(function(magic) {
+        // console.log('debug; magic (requested yes)', magic);
+        var tr_id = magic.tr_id;
+        var tr = $( "#" + tr_id );
+        add_class_remove_others(tr, "click_me", all_click_classes);
+        console.log("tr_id", tr_id, "class", "click_me", "tr", tr);
+
+        set_ob_title_by_string(tr, "Okay: requested");
+        // set_ob_title_blank(tr);
+    });
+
+    filtered = magic_by_requested[0] || [];
+    console.warn('filter: setting', filtered.length, 'items of type', "requested: no", 'to class', "click_me_maybe");
+    filtered.forEach(function(magic) {
+        // console.log('debug; magic (requested no)', magic);
+        var tr_id = magic.tr_id;
+        var tr = $( "#" + tr_id );
+        add_class_remove_others(tr, "click_me_maybe", all_click_classes);
+        console.log("tr_id", tr_id, "class", "click_me_maybe", "tr", tr);
+
+        set_ob_title_by_string(tr, "Okay: NOT requested");
+        // set_ob_title_blank(tr);
+    });
+
     if (false) {
         var trs_ob = "set in deleted section";
         $.each(trs_ob, function(pane_title, trs) {
