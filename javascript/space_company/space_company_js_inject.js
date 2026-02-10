@@ -1091,6 +1091,9 @@ function create_input_and_get_id(td, button_id, debug_label) {
 // var GLOBAL_known_unknowns = []
 function complain_about_unknown_substances_once(unknown_substances_list) {
     "use strict";
+    if (! unknown_substances_list) {
+        return;
+    }
     var answers = unknown_substances_list.map(function(substance) {
         var seen = (GLOBAL_known_unknowns.includes(substance));
         if (! seen) {
@@ -1112,8 +1115,11 @@ function get_unknown_substances(costs_ob, quantities) {
         var known_substance = Object.keys(quantities).includes(substance);
         return (! known_substance);
     });
-
-    return unknown_substances_list;
+    if (unknown_substances_list.length > 0) {
+        return unknown_substances_list;
+    } else {
+        return "";
+    }
 }
 
 function get_bump_max_ob(costs_ob, quantities) {
