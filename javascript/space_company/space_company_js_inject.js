@@ -1261,8 +1261,11 @@ function tr_2_magic(tr, pane_title, quantities) {
     var consume_per_sec = "WRITE ME";
     magic.high_rate = get_high_rate_ob(consume_per_sec, quantities);
 
-    if (magic.unknown_substances) {
-        magic.clickable = "unknown_substance";
+    if (magic.button_id === "") {
+        magic.clickable = "no_button";
+    }
+    else if (magic.unknown !== "") {
+        magic.clickable = "unknown";
     }
     else if (magic.bump_max) {
         magic.clickable = "bump_max";
