@@ -1239,8 +1239,7 @@ function tr_2_magic(tr, pane_title, quantities) {
     var input_id = create_input_and_get_id(td, button_id, pane_title + "/" + purchase);
     magic.input_id = input_id;
 
-    var desired = inputid_2_desired(input_id);
-    magic.desired = desired;
+    magic.desired = inputid_2_desired(input_id);
 
     details = cleanup_details(details);
 
