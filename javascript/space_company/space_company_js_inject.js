@@ -1281,7 +1281,30 @@ function tr_2_magic(tr, pane_title, quantities) {
     }
     // ### MOVE TO HERE ... vvv
 
+    /*
+        magic = {
+          "name": "Storage Upgrade",
 
+          "current": 0,
+          "desired": 25,        // == actually "how many MORE should we get"
+          "click_requested": 1, // == 1 if desired > 0
+
+          "costs": {
+            "helium": 50,
+            "lunarite": 20
+          },
+
+          "unknown": [],
+          "bump_max": "",
+          "high_cost": "",
+          "high_rate": "",
+          "clickable": "OK"
+
+          "button_id": "uniq-btn-28",
+          "input_id": "uniq-input-29",
+          "tr_id": "heliumStorageUpgrade",
+        };
+    */
     return magic;
 }
 
