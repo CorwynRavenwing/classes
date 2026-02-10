@@ -929,6 +929,8 @@ function check_tabs(tabs_available, quantities) {
         GLOBAL_pane_title = cleanup_substance_name_simple(
             h2.text()
         );
+
+        var available_substances = Object.keys(quantities);
         
         var known_title = (available_substances.includes(GLOBAL_pane_title));
         if (! known_title) {
@@ -1587,9 +1589,7 @@ function tick() {
     var quantities = get_quantities(tabs_available);
     check_energy_levels(quantities);
 
-    var available_substances = Object.keys(quantities);
-    // console.log("available_substances:", available_substances);
-    var tab_data = check_tabs(available_substances, tabs_available, quantities);
+    var tab_data = check_tabs(tabs_available, quantities);
     // console.log("tab_data", tab_data);
     var results = for_each_nav(colorize_one_max, tab_data);
     if (DEBUG) {console.log("results", results);}
