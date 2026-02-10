@@ -624,7 +624,36 @@ function panesdesc_2_panesob(pane_descriptors, tabs_available) {
     return panes_ob;
 }
 
-function check_tabs(available_substances, tabs_available, quantities) {
+function set_ob_title_by_string(ob, s) {
+    "use strict";
+    ob.prop("title", s);
+    console.log("Set ob title", s);
+}
+
+function set_ob_title_blank(ob) {
+    "use strict";
+    set_ob_title_by_string(ob, "");
+}
+
+function set_ob_title_by_array(ob, arr) {
+    "use strict";
+    if (arr.length) {
+        var s = arr.join("\n");
+        set_ob_title_by_string(ob, s);
+    } else {
+        set_ob_title_blank(ob);
+    }
+}
+
+function safeEntries(thing) {
+    "use strict";
+    if (thing === undefined) {
+        return [];
+    }
+    return Object.entries(thing);
+}
+
+function check_tabs(tabs_available, quantities) {
     "use strict";
     // var cost_flag = "Costs";
     var GLOBAL_overflow_reasons = {};
@@ -888,13 +917,7 @@ function check_tabs(available_substances, tabs_available, quantities) {
 
         add_class_remove_others(tr, set_class, all_click_classes);
 
-        if (pop_up.length) {
-            var reasons = pop_up
-                .join("\n");
-            tr.prop("title", reasons);
-        } else {
-            tr.prop("title", "");
-        }
+        set_ob_title_by_array(tr, pop_up);
     }
 
     function scan_one_pane(pane_idx, pane) {
@@ -1485,13 +1508,7 @@ function test() {
 
         add_class_remove_others(tr, set_class, all_click_classes);
 
-        if (pop_up.length) {
-            var reasons = pop_up
-                .join("\n");
-            tr.prop("title", reasons);
-        } else {
-            tr.prop("title", "");
-        }
+        set_ob_title_by_array(tr, pop_up);
     }
 
     function xCONSUME() {
@@ -1548,13 +1565,11 @@ function colorize_one_max(tr, tab_data) {
     var is_overflow = Object.keys(tab_data).includes(label);
     if (is_overflow) {
         tr.addClass("bump_max");
-        var reasons = tab_data[label]
-            .join("\n");
-        tr.prop("title", reasons);
+        set_ob_title_by_array(tr, tab_data[label]);
         return [label, "yes"];
     } else {
         tr.removeClass("bump_max");
-        tr.prop("title", "");
+        set_ob_title_by_string(tr, "[nope]");
         return [label, "no"];
     }
 }
