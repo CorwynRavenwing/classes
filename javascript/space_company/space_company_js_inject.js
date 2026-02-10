@@ -1207,7 +1207,7 @@ function tr_2_magic(tr, pane_title, quantities) {
     var is_hidden = tr.hasClass("hidden");
     if (is_hidden) {
         /* if (DEBUG) */ console.warn(pane_title, purchase, "HIDDEN");
-        return;
+        return null;
     }
 
     if (pane_title === "energy_mass_conversion") {
