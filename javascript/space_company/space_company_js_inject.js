@@ -1353,7 +1353,7 @@ function trsob_2_magicsob(trs_ob, quantities) {
     return magics_ob;
 }
 
-function panesob_2_trsob(panes_ob, available_substances) {
+function panesob_2_trsob(panes_ob, quantities) {
     "use strict";
     var NONLOCAL_pane_heading;
 
@@ -1378,6 +1378,8 @@ function panesob_2_trsob(panes_ob, available_substances) {
             h2.text(),
             pane_heading
         );
+
+        var available_substances = Object.keys(quantities);
 
         var known_title = (available_substances.includes(pane_title));
         if (! known_title) {
@@ -1416,10 +1418,10 @@ function panesob_2_trsob(panes_ob, available_substances) {
     return trs_ob;
 }
 
-function get_magics_ob(pane_descriptors, tabs_available, available_substances, quantities) {
+function get_magics_ob(pane_descriptors, tabs_available, quantities) {
     "use strict";
     var panes_ob = panesdesc_2_panesob(pane_descriptors, tabs_available);
-    var trs_ob = panesob_2_trsob(panes_ob, available_substances);
+    var trs_ob = panesob_2_trsob(panes_ob, quantities);
     var magics_ob = trsob_2_magicsob(trs_ob, quantities);
 
     return magics_ob;
@@ -1755,10 +1757,8 @@ function test() {
     // TEST = false;
     // console.warn('test(): setting TEST to', TEST);
 
-    return magics_ob;
+    return quantities;
 }
-
-// xyzzy
 
 function colorize_one_max(tr, tab_data) {
     "use strict";
