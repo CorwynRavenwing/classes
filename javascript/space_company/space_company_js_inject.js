@@ -1307,11 +1307,15 @@ function tr_2_magic(tr, pane_title, quantities) {
     else {
         magic.clickable = "OK";
     }
+
+    magic.pane_title = pane_title;
+
     // ### MOVE TO HERE ... vvv
 
     /*
         magic = {
           "name": "Storage Upgrade",
+          "pane_title": "Metal"
 
           "current": 0,
           "desired": 25,        // == actually "how many MORE should we get"
