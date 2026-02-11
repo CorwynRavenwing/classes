@@ -637,7 +637,7 @@ function panesdesc_2_panesob(pane_descriptors, tabs_available) {
 function set_ob_title_by_string(ob, s) {
     "use strict";
     ob.prop("title", s);
-    console.log("Set ob title", s);
+    // console.log("Set ob title", s);
 }
 
 function set_ob_title_blank(ob) {
@@ -1279,7 +1279,7 @@ function tr_2_magic(tr, pane_title, quantities) {
     magic.unknown = unknown_substances;
     complain_about_unknown_substances_once(unknown_substances);
     if (unknown_substances.length) {
-        /* if (DEBUG) */ console.warn("cost of UNKNOWN SUBSTANCES:", pane_title, purchase, unknown_substances);
+        if (DEBUG) { console.warn("cost of UNKNOWN SUBSTANCES:", pane_title, purchase, unknown_substances); }
     }
 
     magic.bump_max = get_bump_max_ob(costs, quantities);
@@ -1640,7 +1640,7 @@ function test() {
     var filtered;
 
     filtered = magic_by_clickable.no_button || [];
-    console.warn('filter: setting', filtered.length, 'items of type', "no_button", 'to class', "no_button");
+    // console.warn('filter: setting', filtered.length, 'items of type', "no_button", 'to class', "no_button");
     filtered.forEach(function(magic) {
         // console.log('debug; magic (no button)', magic);
         var tr_id = magic.tr_id;
@@ -1652,7 +1652,7 @@ function test() {
     });
 
     filtered = magic_by_clickable.unknown || [];
-    console.warn('filter: setting', filtered.length, 'items of type', "unknown", 'to class', "unknown_substance");
+    // console.warn('filter: setting', filtered.length, 'items of type', "unknown", 'to class', "unknown_substance");
     filtered.forEach(function(magic) {
         // console.log('debug; magic (unknown)', magic);
         var tr_id = magic.tr_id;
@@ -1668,7 +1668,7 @@ function test() {
     });
 
     filtered = magic_by_clickable.bump_max || [];
-    console.warn('filter: setting', filtered.length, 'items of type', "bump_max", 'to class', "bump_max");
+    // console.warn('filter: setting', filtered.length, 'items of type', "bump_max", 'to class', "bump_max");
     filtered.forEach(function(magic) {
         // console.log('debug; magic (bump max)', magic);
         var tr_id = magic.tr_id;
@@ -1684,7 +1684,7 @@ function test() {
     });
 
     filtered = magic_by_clickable.high_cost || [];
-    console.warn('filter: setting', filtered.length, 'items of type', "high_cost", 'to class', "high_cost");
+    // console.warn('filter: setting', filtered.length, 'items of type', "high_cost", 'to class', "high_cost");
     filtered.forEach(function(magic) {
         // console.log('debug; magic (high cost)', magic);
         var tr_id = magic.tr_id;
@@ -1700,7 +1700,7 @@ function test() {
     });
 
     filtered = magic_by_clickable.high_rate || [];
-    console.warn('filter: setting', filtered.length, 'items of type', "high_rate", 'to class', "high_rate");
+    // console.warn('filter: setting', filtered.length, 'items of type', "high_rate", 'to class', "high_rate");
     filtered.forEach(function(magic) {
         // console.log('debug; magic (high rate/sec)', magic);
         var tr_id = magic.tr_id;
@@ -1725,7 +1725,7 @@ function test() {
         var tr_id = magic.tr_id;
         var tr = $( "#" + tr_id );
         add_class_remove_others(tr, "click_me", all_click_classes);
-        console.log("tr_id", tr_id, "class", "click_me", "tr", tr);
+        // console.log("tr_id", tr_id, "class", "click_me", "tr", tr);
 
         set_ob_title_by_string(tr, "Okay: requested");
         // set_ob_title_blank(tr);
@@ -1738,7 +1738,7 @@ function test() {
         var tr_id = magic.tr_id;
         var tr = $( "#" + tr_id );
         add_class_remove_others(tr, "click_me_maybe", all_click_classes);
-        console.log("tr_id", tr_id, "class", "click_me_maybe", "tr", tr);
+        // console.log("tr_id", tr_id, "class", "click_me_maybe", "tr", tr);
 
         set_ob_title_by_string(tr, "Okay: NOT requested");
         // set_ob_title_blank(tr);
