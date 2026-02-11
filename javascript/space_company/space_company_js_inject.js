@@ -875,6 +875,7 @@ function check_tabs(tabs_available, quantities) {
             "click_me",
             "click_me_maybe",
             "clicking",
+            "auto_request",
             "unknown_substance",
             "no_button"
         ];
