@@ -655,6 +655,8 @@ function set_ob_title_by_array(ob, arr) {
     }
 }
 
+// fails gently if passed a non-object, and
+// its output may always call .map or .filter:
 function safeEntries(thing) {
     "use strict";
     if (thing === undefined) {
@@ -662,6 +664,23 @@ function safeEntries(thing) {
     }
     return Object.entries(thing);
 }
+
+// creates an object whose keys are from column 1 and where *all* records
+// from column 2 are joined into an array:
+function arraysFromEntries(arr) {
+    "use strict";
+    var answer = {};
+    arr.forEach(function(entry) {
+        const [first, second] = entry;
+        if (answer[first] === undefined) {
+            answer[first] = [];
+        }
+        answer[first].push(second);
+    });
+    return answer;
+}
+
+// XYZZY
 
 function check_tabs(tabs_available, quantities) {
     "use strict";
