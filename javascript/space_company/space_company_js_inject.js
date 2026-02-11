@@ -1645,7 +1645,7 @@ function click_something(okay_and_requested, okay_but_not_requested, all_click_c
 
     } else if (okay_but_not_requested.length) {
         magic = choose_best_unrequested(okay_but_not_requested);
-        console.log("NO CLICK! fall back to:", magic.name, "(skip)");
+        // console.log("NO CLICK! fall back to:", magic.name, "(skip)");
 
         // tr = $( "#" + magic.tr_id );
         // add_class_remove_others(tr, "auto_request", all_click_classes);
