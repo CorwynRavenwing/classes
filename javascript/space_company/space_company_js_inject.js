@@ -45,7 +45,7 @@ var pane_descriptors = {
     Wonders:        "#wonder"
 };
 
-var GLOBAL_known_unknowns = [];         // TODO: move to just before use
+var obsolete_known_unknowns = [];         // TODO: move to just before use
 var GLOBAL_known_missing_tabs = [];
 var GLOBAL_known_skip_page = [];
 
@@ -699,9 +699,9 @@ function check_tabs(tabs_available, quantities) {
         var known_substance = Object.keys(quantities).includes(substance);
         if (! known_substance) {
             GLOBAL_unknown_substances.push("'" + substance + "'");
-            var seen = (GLOBAL_known_unknowns.includes(substance));
+            var seen = (obsolete_known_unknowns.includes(substance));
             if (! seen) {
-                GLOBAL_known_unknowns.push(substance);
+                obsolete_known_unknowns.push(substance);
                 /* if (DEBUG) */ console.warn("cost of UNKNOWN SUBSTANCE:", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, cost_idx, "'" + cost_str + "'", substance, needed);
             }
             return;
@@ -1092,7 +1092,7 @@ function create_input_and_get_id(td, button_id, debug_label) {
     return uniqueId(input, 'input');
 }
 
-// var GLOBAL_known_unknowns = []
+var GLOBAL_known_unknowns = [];
 function complain_about_unknown_substances_once(unknown_substances_list) {
     "use strict";
     if (! unknown_substances_list) {
