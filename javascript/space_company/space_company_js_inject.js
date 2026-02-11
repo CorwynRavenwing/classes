@@ -1434,183 +1434,45 @@ function get_magics_ob(pane_descriptors, tabs_available, quantities) {
 
 function filter_magics_by(magics_list, filter_column) {
     "use strict";
-    var answer = {};
 
-    magics_list.forEach(function(magic) {
+    var answer_list = magics_list.map(function(magic) {
         var filter = magic[filter_column];
-        if (answer[filter] === undefined) {
-            answer[filter] = [];
-        }
-        answer[filter].push(magic);
+        return [filter, magic];
     });
+
+    var answer = arraysFromEntries(answer_list);
 
     return answer;
 }
 
-function test() {
+function choose_best_requested(magics_list) {
+    "use strict";
+    // TODO: blindly picking the leftmost for now
+    return magics_list[0];
+}
+
+function choose_best_unrequested(magics_list) {
     "use strict";
 
-    // TEST = true;
-    // console.warn('test(): setting TEST to', TEST);
-
-    // the following variables and functions have been copied in from check_tabs:
-    var GLOBAL_overflow_reasons = {};
-    var GLOBAL_pane_heading;
-    var GLOBAL_pane_title;
-    var GLOBAL_purchase = "h3.something.text.etc";
-    // var GLOBAL_unknown_substances;
-    // var GLOBAL_bump_specifics;
-    var GLOBAL_clicked_something = false;
-
-    function xCONSUME_scan_one_cost(cost_idx, cost_str, maxes) {
-        cost_idx = cost_idx;
-        if (cost_str === "") {
-            // no costs: NOOP
-            return;
+    magics_list = magics_list.filter(function(magic) {
+        if (magic.name === "Storage Upgrade") {
+            // console.log('   ... skip Storage upgrade', magic);
+            return false;
         }
-        // console.log("cost_str:", cost_idx, cost_str);
-        const [substance, needed] = prices_2_pair(cost_str);
+        return true;
+    });
+    // TODO: blindly picking a random one for now
+    var i = Math.floor(Math.random() * magics_list.length);
+    return magics_list[i];
+}
 
-        var max_value = maxes[substance];
-        if (needed <= max_value) {
-            // console.log("cost ok:", cost_idx, substance, needed, max_value)
-            return;
-        }
-
-        if (GLOBAL_purchase.includes("Swarm:")) {
-            console.log("Swarm (scan_one_cost)", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase);
-            return;
-        }
-
-        var known_overflow_reasons = Object.keys(GLOBAL_overflow_reasons).includes(substance);
-        if (! known_overflow_reasons) {
-            GLOBAL_overflow_reasons[substance] = [];
-        }
-        GLOBAL_overflow_reasons[substance].push(
-            GLOBAL_pane_heading + "/" + GLOBAL_pane_title + "/" + GLOBAL_purchase + ": " + from_number(needed)
-        );
-        // GLOBAL_bump_specifics.push(substance);
-    }
-
-    function xCONSUME_scan_one_tr(tr_idx, tr) {
-        tr_idx = tr_idx;
-        var costs = "defined in deleted section";
-
-        // ### MOVE FROM HERE ... ^^^
-
-        $.each(costs, xCONSUME_scan_one_cost);
-        var pop_up = [];
-        var set_class = "";
-
-        var all_click_classes = [
-            "bump_max",
-            "cant_click",
-            "click_me",
-            "clicking",
-            "unknown_substance",
-            "no_button"
-        ];
-
-        var button = "defined in deleted section";
-        var desired = "defined in deleted section";
-        var current = "defined in deleted section";
-        var current_ob = "defined in deleted section";
-        var input = "defined in deleted section";
-        var GLOBAL_unknown_substances = "deleted";
-        var GLOBAL_bump_specifics = "deleted";
-        var cant_click = "deleted";
-        var red_ingredients = "deleted";
-
-        if (! button) {
-            set_class = "no_button";
-        } else {
-            if (desired) {
-                if (! button) {
-                    console.warn("Trying to click missing button", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase);
-                    cant_click = true;
-                }
-                if (cant_click) {
-                    set_class = "cant_click";
-                    pop_up.push("Missing Ingredients: " + red_ingredients.length);
-                } else {
-                    if (GLOBAL_clicked_something) {
-                        set_class = "click_me";
-                    } else {
-                        set_class = "clicking";
-                    }
-                }
-            }
-
-            if (GLOBAL_bump_specifics.length) {
-                set_class = "bump_max";
-                pop_up.push("Bump:");
-                pop_up.push(...GLOBAL_bump_specifics);
-            }
-            if (GLOBAL_unknown_substances.length) {
-                pop_up.push("Unknown:");
-                pop_up.push(...GLOBAL_unknown_substances);
-                set_class = "unknown_substance";
-            }
-            if (set_class === "clicking") {
-                // if (red_ingredients.length) {
-                //     console.warn("red_ingredients", red_ingredients)
-                //     console.warn("cant_click:", cant_click)
-                // }
-                var click_time;
-                click_time = Math.floor(new Date().getTime() / 1000);
-
-                var elapsed_s = (click_time - prior_cick_time);
-                var TIME = toHHMMSS(elapsed_s);
-                TIME = "(" + TIME.trim() + ")";
-
-                button.click();
-                var new_current = current_ob.text().trim();
-                var VERIFY = false;
-                if (VERIFY && (current !== "") && (new_current === current)) {
-                    console.warn("ERROR: tried clicking", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, "no change", new_current, current);
-                    set_class = "click_me";
-                    // need to remove click-me from removal list
-                } else {
-                    GLOBAL_clicked_something = true;
-
-                    console.log("AUTO-CLICK", TIME, GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, "(" + desired + ")");
-
-                    prior_cick_time = click_time;
-
-                    desired -= 1;
-                    if (! desired) {
-                        desired = "";
-                    }
-                    input.val(desired);
-                }
-            }
-        }
-
-        add_class_remove_others(tr, set_class, all_click_classes);
-
-        set_ob_title_by_array(tr, pop_up);
-    }
-
-    function xCONSUME() {
-        xCONSUME();
-        xCONSUME_scan_one_cost();
-        xCONSUME_scan_one_tr();
-    }
-    // end copied section
-
-    var tabs_available = get_tabs_available();
-
-    var quantities = get_quantities(tabs_available);
-    check_energy_levels(quantities);
-
-    var available_substances = Object.keys(quantities);
-    available_substances = available_substances;
-
-    var magics_ob = get_magics_ob(pane_descriptors, tabs_available, available_substances, quantities);
-    console.warn('magics_ob:', magics_ob);
+function get_magic_by_clickable(tabs_available, quantities) {
+    "use strict";
+    var magics_ob = get_magics_ob(pane_descriptors, tabs_available, quantities);
+    // console.warn('magics_ob:', magics_ob);
 
     var magics_list = Object.values(magics_ob).flat();
-    console.warn('magics_list:', magics_list);
+    // console.warn('magics_list:', magics_list);
 
     var magic_by_clickable = filter_magics_by(magics_list, "clickable");
     // console.warn('magic_by_clickable:', magic_by_clickable);
@@ -1624,23 +1486,11 @@ function test() {
     //       "OK": [ ... ]
     //     };
 
-    console.warn('magic_by_clickable[no_button]:', magic_by_clickable.no_button);
-    console.warn('magic_by_clickable[unknown]:', magic_by_clickable.unknown);
-    console.warn('magic_by_clickable[bump_max]:', magic_by_clickable.bump_max);
-    console.warn('magic_by_clickable[high_cost]:', magic_by_clickable.high_cost);
-    console.warn('magic_by_clickable[OK]:', magic_by_clickable.OK);
+    return magic_by_clickable;
+}
 
-    var all_click_classes = [
-        "bump_max",
-        "cant_click",   // deprecated
-        "high_cost",
-        "high_rate",
-        "click_me",
-        "click_me_maybe",
-        "clicking",
-        "unknown_substance",
-        "no_button"
-    ];
+function colorize_clacks_by_clickable(magic_by_clickable, all_click_classes) {
+    "use strict";
 
     var filtered;
 
@@ -1720,12 +1570,14 @@ function test() {
         set_ob_title_by_array(tr, pop_up);
     });
 
-    var magic_by_requested = filter_magics_by(magic_by_clickable.OK, "click_requested");
-    console.warn('magic_by_requested:', magic_by_requested);
+    return;
+}
 
-    filtered = magic_by_requested[1] || [];
-    console.warn('filter: setting', filtered.length, 'items of type', "requested: yes", 'to class', "click_me");
-    filtered.forEach(function(magic) {
+function colorize_clacks_by_requested(okay_and_requested, okay_but_not_requested, all_click_classes) {
+    "use strict";
+
+    // console.warn('filter: setting', okay_and_requested.length, 'items of type', "requested: yes", 'to class', "click_me");
+    okay_and_requested.forEach(function(magic) {
         // console.log('debug; magic (requested yes)', magic);
         var tr_id = magic.tr_id;
         var tr = $( "#" + tr_id );
@@ -1736,9 +1588,8 @@ function test() {
         // set_ob_title_blank(tr);
     });
 
-    filtered = magic_by_requested[0] || [];
-    console.warn('filter: setting', filtered.length, 'items of type', "requested: no", 'to class', "click_me_maybe");
-    filtered.forEach(function(magic) {
+    // console.warn('filter: setting', okay_but_not_requested.length, 'items of type', "requested: no", 'to class', "click_me_maybe");
+    okay_but_not_requested.forEach(function(magic) {
         // console.log('debug; magic (requested no)', magic);
         var tr_id = magic.tr_id;
         var tr = $( "#" + tr_id );
@@ -1749,16 +1600,196 @@ function test() {
         // set_ob_title_blank(tr);
     });
 
-    if (false) {
-        var trs_ob = "set in deleted section";
-        $.each(trs_ob, function(pane_title, trs) {
-            GLOBAL_pane_heading = "UNKNOWN";
-            GLOBAL_pane_title = pane_title;
-            console.warn("DEBUG: each trs_ob", GLOBAL_pane_title, "trs:", trs);
-            $.each(trs, xCONSUME_scan_one_tr);
-        });
+    return;
+}
+
+function click_something(okay_and_requested, okay_but_not_requested, all_click_classes) {
+    "use strict";
+
+    var magic;
+    var tr;
+    var button;
+    var input;
+    var desired;
+
+    if (okay_and_requested.length) {
+        magic = choose_best_requested(okay_and_requested);
+        // console.log('CLICK ON:', magic);
+
+        tr = $( "#" + magic.tr_id );
+        add_class_remove_others(tr, "clicking", all_click_classes);
+        button = $( "#" + magic.button_id );
+        input = $( "#" + magic.input_id );
+        desired = magic.desired;
+        // console.log('... tr', tr, 'desired', desired, 'button', button, 'input', input);
+
+        var click_time;
+        click_time = Math.floor(new Date().getTime() / 1000);
+
+        var elapsed_s = (click_time - prior_cick_time);
+        var TIME = toHHMMSS(elapsed_s);
+        TIME = "(" + TIME.trim() + ")";
+
+        button.click();
+
+        prior_cick_time = click_time;
+
+        desired -= 1;
+        if (! desired) {
+            desired = "";
+        }
+
+        console.log("AUTO-CLICK", TIME, /* GLOBAL_pane_heading, **/ magic.pane_title, magic.name, "(" + magic.desired + "->" + desired + ")");
+
+        input.val(desired);
+
+    } else if (okay_but_not_requested.length) {
+        magic = choose_best_unrequested(okay_but_not_requested);
+        console.log("NO CLICK! fall back to:", magic.name, "(skip)");
+
+        // tr = $( "#" + magic.tr_id );
+        // add_class_remove_others(tr, "auto_request", all_click_classes);
+        // // button = $( "#" + magic.button_id );
+        // input = $( "#" + magic.input_id );
+        // console.log('... tr', tr, 'desired', magic.desired, 'input', input);
+        // if (magic.desired) {
+        //     console.error("Error!  'desired' is not zero/blank!", magic.desired);
+        //     // return, maybe?
+        // } else {
+        //     desired = 1;
+        //     console.log("AUTO-REQUEST", /* TIME, */ magic.pane_title, magic.name, "(" + magic.desired + "->" + desired + ")");
+        //     input.val(desired);
+        // }
+
+    } else {
+        console.log("NO CLICK, no fallback");
     }
-    
+
+    return;
+}
+
+function get_bump_reasons(magic_by_clickable) {
+    "use strict";
+
+    var bump_max = magic_by_clickable.bump_max || [];
+    // console.warn('bump_max:', bump_max);
+
+    var bump_max_data = bump_max.map(
+        function(magic) {
+            var pane_title = magic.pane_title;
+            var pane_name = magic.name;
+            var bump_max_items = safeEntries(magic.bump_max);
+            var bump_max_arr = bump_max_items.map(function(entry) {
+                const [substance, count] = entry;
+                var pane_heading = "Unknown";
+                return [substance, [pane_heading + '/' + pane_title + '/' + pane_name, count]];
+            });
+            // console.log('debug: bump_max_arr', bump_max_arr);
+            return bump_max_arr;
+        }
+    )
+    .flat();
+
+    // console.log('debug: bump_max_data', bump_max_data);
+
+    var overflow_reasons = arraysFromEntries(bump_max_data);
+    // console.log('debug: overflow_reasons', overflow_reasons);
+
+    return overflow_reasons;
+}
+
+function doublings_between(from_val, to_val) {
+    "use strict";
+    var answer = 0;
+    while (from_val < to_val) {
+        from_val *= 2;
+        answer += 1;
+    }
+    return answer;
+}
+
+function colorize_left_bar(quantities, overflow_reasons) {
+    "use strict";
+
+    var all_overflow_classes = ["bump_max"];
+
+    safeEntries(quantities).forEach(function(quant) {
+        const [substance, leftbar_tab] = quant;
+
+        if (leftbar_tab.pane !== "Resources") {
+            // console.warn('debug: overflow SKIP substance', substance);
+            return;
+        }
+        // console.warn('debug: overflow substance', substance);
+        // console.log('debug: overflow leftbar_tab', leftbar_tab);
+
+        var overflow_reasons_arr = overflow_reasons[substance] || [];
+        // var overflow_reasons_arr = overflow_reasons ? (overflow_reasons[substance] || []) : [];
+        // console.log('debug: overflow overflow_reasons_arr', overflow_reasons_arr);
+
+        var reason_arr = overflow_reasons_arr.map(function(item) {
+            const [reason, count] = item;
+            var max = leftbar_tab.max;
+            if (! max) { return "[no max]"; }
+            max = to_number(max);
+            var multiplier = doublings_between(max, count);
+            return reason + ": " + from_number(count) + " (" + multiplier + " x)";
+        });
+        // console.log('debug: overflow reason_arr', reason_arr);
+
+        var tr = $( '#' + leftbar_tab.tr_id );
+        var overflow_class = (reason_arr.length ? "bump_max" : "");
+        // console.log('debug: overflow overflow_class', overflow_class);
+        add_class_remove_others(tr, overflow_class, all_overflow_classes);
+
+        set_ob_title_by_array(tr, reason_arr);
+    });
+
+    return;
+}
+
+function test() {
+    "use strict";
+
+    // TEST = true;
+    // console.warn('test(): setting TEST to', TEST);
+
+    var tabs_available = get_tabs_available();
+
+    var quantities = get_quantities(tabs_available);
+    check_energy_levels(quantities);
+
+    var magic_by_clickable = get_magic_by_clickable(tabs_available, quantities);
+
+    var all_click_classes = [
+        "bump_max",
+        "cant_click",   // deprecated
+        "high_cost",
+        "high_rate",
+        "click_me",
+        "click_me_maybe",
+        "clicking",
+        "auto_request",
+        "unknown_substance",
+        "no_button"
+    ];
+
+    colorize_clacks_by_clickable(magic_by_clickable, all_click_classes);
+
+    var magic_by_requested = filter_magics_by(magic_by_clickable.OK, "click_requested");
+    // console.warn('magic_by_requested:', magic_by_requested);
+
+    var okay_and_requested     = magic_by_requested[1] || [];
+    var okay_but_not_requested = magic_by_requested[0] || [];
+
+    colorize_clacks_by_requested(okay_and_requested, okay_but_not_requested, all_click_classes);
+
+    click_something(okay_and_requested, okay_but_not_requested, all_click_classes);
+
+    var overflow_reasons = get_bump_reasons(magic_by_clickable);
+
+    colorize_left_bar(quantities, overflow_reasons);
+
     // TEST = false;
     // console.warn('test(): setting TEST to', TEST);
 
@@ -1798,16 +1829,24 @@ function tick() {
     "use strict";
     // console.log("tick", tick_id);
 
-    var tabs_available = get_tabs_available();
-    // console.log("tabs_available:", tabs_available);
+    var new_way = true;
 
-    var quantities = get_quantities(tabs_available);
-    check_energy_levels(quantities);
+    if (new_way) {
+        test();
+    } else {
+        var tabs_available = get_tabs_available();
+        // console.log("tabs_available:", tabs_available);
 
-    var tab_data = check_tabs(tabs_available, quantities);
-    // console.log("tab_data", tab_data);
-    var results = for_each_nav(colorize_one_max, tab_data);
-    if (DEBUG) {console.log("results", results);}
+        var quantities = get_quantities(tabs_available);
+        check_energy_levels(quantities);
+
+        var tab_data = check_tabs(tabs_available, quantities);
+        // console.log("tab_data", tab_data);
+        var results = for_each_nav(colorize_one_max, tab_data);
+        if (DEBUG) {console.log("results", results);}
+    }
+
+    return;
 }
 
 function tick_stop() {
