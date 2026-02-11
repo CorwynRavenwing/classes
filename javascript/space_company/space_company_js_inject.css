@@ -35,6 +35,10 @@
     background-color: green;
 }
 
+.auto_request {
+    background-color: red;
+}
+
 .no_button {
     background-color: lavender;
 }
