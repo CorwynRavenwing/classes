@@ -611,30 +611,31 @@ function extract_costs_from_details(orig_string, pane_title, purchase, label) {
     if (pane_title === "energy_mass_conversion") {
         if (purchase !== "Research") {
             // does not have Costs section
-            return [];
+            return "";
         }
     }
     if (pane_title === "dyson swarms and sphere") {
         if (purchase !== "Research") {
             // has non-standard Costs section
-            return [];
+            return "";
         }
     }
     if (purchase === "Rocket Ship: Built") {
         // does not have Costs section anymore
-        return [];
+        return "";
     }
     if (pane_title === "travel") {
         // Interstellar.
         // does not have Costs section
-        return [];
+        return "";
     }
-    if (string === "") {
+    if (orig_string === "") {
         // string is now blank: no costs
-        return [];
+        return "";
     }
 
     var string = extract_text_between(orig_string, start_needle, end_needle_list);
+    if (string === null) {
         throw new Error("Costs not found:\n" + label + "\n'" + orig_string + "'\n---\n'" + string + "'");
     }
 
