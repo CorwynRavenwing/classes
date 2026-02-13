@@ -1210,6 +1210,7 @@ function trsob_2_magicsob(trs_ob, quantities) {
     return magics_ob;
 }
 
+var GLOBAL_known_skip_page = [];
 function panesob_2_trsob(panes_ob, quantities) {
     "use strict";
     var NONLOCAL_pane_heading;
