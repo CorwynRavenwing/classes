@@ -603,9 +603,7 @@ function extract_text_between(haystack, start_needle, end_needle_list) {
     return answer;
 }
 
-
-
-function extract_costs_from_details(orig_string, pane_heading, pane_title, purchase) {
+function extract_costs_from_details(orig_string, pane_title, purchase, label) {
     "use strict";
     var string = orig_string;
 
