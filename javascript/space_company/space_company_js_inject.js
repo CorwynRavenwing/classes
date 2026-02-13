@@ -466,6 +466,7 @@ function check_energy_levels(quantities) {
     add_class_remove_others(game_ob, add_class, all_energy_classes);
 }
 
+var GLOBAL_known_missing_tabs = [];
 function get_tabs_available() {
     "use strict";
     var answer = [];
