@@ -1062,8 +1062,20 @@ function tr_2_magic(tr, pane_title, quantities) {
 
     details = cleanup_details(details);
 
+    var label = pane_title + "/" + purchase;
+    var costs = extract_costs_from_details(details, pane_title, purchase, label);
     magic.costs = costs;
 
+    var clean_purchase = purchase
+        .replace(' / ', '')
+        .replace(/[0-9]+$/, '')
+        .replace(/^Tier\ [0-9]+\ /, '')
+        .replace(/^T[0-9]+\ /, '')
+        .replace(/#$/, '')
+        .trim();
+
+    magic.requires = extract_requires_from_details(details, pane_title, clean_purchase, label);
+    magic.provides = extract_provides_from_details(details, pane_title, clean_purchase, label);
     complain_about_unknown_substances_once(unknown_substances);
     if (unknown_substances.length) {
         if (DEBUG) { console.warn("cost of UNKNOWN SUBSTANCES:", pane_title, purchase, unknown_substances); }
