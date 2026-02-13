@@ -1151,11 +1151,11 @@ function tr_2_magic(tr, pane_title, quantities) {
     else if (magic.bump_max) {
         magic.clickable = "bump_max";
     }
-    else if (magic.high_cost) {
-        magic.clickable = "high_cost";
-    }
     else if (magic.high_rate) {
         magic.clickable = "high_rate";
+    }
+    else if (magic.high_cost) {
+        magic.clickable = "high_cost";
     }
     else {
         magic.clickable = "OK";
