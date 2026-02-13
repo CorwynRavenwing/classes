@@ -534,6 +534,13 @@ function cleanup_details(string) {
     string = string.replaceAll(/Improves\ relationship\ by\ [0-9.]+/g, "");
     string = string.replaceAll(/Improves\ relationship\ by/g, "");
 
+    // Uses/Produces phrase to clean up:
+    string = string.replace("They produce", "produces");
+    string = string.replace("produces a lot of power", "");
+    string = string.replace("produces Gems at intense speeds", "");
+    string = string.replace("uses nano-fibres", "");
+    string = string.replace("Uses fission to create large amounts of power", "");
+
     string = string.trim();
 
     return string;
