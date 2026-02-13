@@ -88,12 +88,12 @@ function to_number(orig_value) {
     var answer = parseFloat(value);
     var multiplier_str = value.replace(/^-?[0-9.]*/, "");
     var multiplier = 1;
-    switch(multiplier_str) {
+    switch(multiplier_str.toLowerCase()) {
         case "":    multiplier = 1;             break;  // 1 thousand
-        case "K":   multiplier = 1000;          break;  // 1 thousand
-        case "M":   multiplier = 1000000;       break;  // 1 million
-        case "B":   multiplier = 1000000000;    break;  // 1 billion
-        case "T":   multiplier = 1000000000000; break;  // 1 trillion
+        case "k":   multiplier = 1000;          break;  // 1 thousand
+        case "m":   multiplier = 1000000;       break;  // 1 million
+        case "b":   multiplier = 1000000000;    break;  // 1 billion
+        case "t":   multiplier = 1000000000000; break;  // 1 trillion
         default:
             throw new Error("to_number(): Invalid multiplier '" + multiplier_str + "' (" + orig_value + "->" + value + ") ");
     }
