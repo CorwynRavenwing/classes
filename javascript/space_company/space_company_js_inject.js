@@ -639,6 +639,10 @@ function extract_costs_from_details(orig_string, pane_title, purchase, label) {
         throw new Error("Costs not found:\n" + label + "\n'" + orig_string + "'\n---\n'" + string + "'");
     }
 
+    // console.log('prices:', string, label);
+    var prices = prices_2_priceob(string);
+    return prices;
+}
 }
 
 function panesdesc_2_panesob(pane_descriptors, tabs_available) {
