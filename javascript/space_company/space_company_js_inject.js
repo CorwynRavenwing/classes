@@ -1076,11 +1076,23 @@ function tr_2_magic(tr, pane_title, quantities) {
 
     magic.requires = extract_requires_from_details(details, pane_title, clean_purchase, label);
     magic.provides = extract_provides_from_details(details, pane_title, clean_purchase, label);
+
+    var unknown_substances = [].concat(
+        get_unknown_substances(magic.requires, quantities),
+        get_unknown_substances(magic.provides, quantities),
+        get_unknown_substances(costs, quantities),
+        []  // last, no comma
+    ).filter(function(item) {
+        return item !== "";
+    });
     complain_about_unknown_substances_once(unknown_substances);
     if (unknown_substances.length) {
         if (DEBUG) { console.warn("cost of UNKNOWN SUBSTANCES:", pane_title, purchase, unknown_substances); }
+    } else {
+        unknown_substances = "";
     }
-
+    magic.unknown = unknown_substances;
+    
     magic.bump_max = get_bump_max_ob(costs, quantities);
 
     magic.high_cost = get_high_cost_ob(costs, quantities);
