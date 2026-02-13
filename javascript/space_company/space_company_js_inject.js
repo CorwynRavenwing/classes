@@ -546,6 +546,34 @@ function cleanup_details(string) {
     return string;
 }
 
+function price_2_pair(price_str) {
+    "use strict";
+    if (price_str === "") {
+        return [];
+    }
+    // console.log("price_str:", price_str)
+    var price_split = price_str
+        .replaceAll(" ", "_")       // any number of spaces -> underscore
+        .replace("_", " ")          // first underscore -> space again
+        .split(" ", 2);             // split on that first space
+    // console.warn("price split:", price_split);
+    const [neededC, substanceC] = price_split;
+    var needed = to_number(neededC);
+    var substance = substanceC.toLowerCase();
+    if (substance === "gem") { substance = "gems"; }
+    var price = [substance, needed];
+    // console.log("price:", price);
+    return price;
+}
+
+function prices_2_priceob(prices_str) {
+    "use strict";
+    // console.log('debug: prices_2_priceob(', prices_str, ')');
+    var prices_list = prices_str.split(", ");       // split on "comma space"
+    var prices_arr = prices_list.map(price_2_pair);
+    var prices_ob = Object.fromEntries(prices_arr);
+    return prices_ob;
+}
 
 
 
