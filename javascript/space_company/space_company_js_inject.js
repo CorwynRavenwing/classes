@@ -575,8 +575,33 @@ function prices_2_priceob(prices_str) {
     return prices_ob;
 }
 
+function extract_text_between(haystack, start_needle, end_needle_list) {
+    "use strict";
+    var answer = haystack.toLowerCase();
+    var position = answer.search(start_needle.toLowerCase());
+    if (position === -1) {
+        return null;
+    }
+    position += start_needle.length;
+    answer = answer.slice(position);    // delete up to after "needle"
 
+    end_needle_list.forEach(function(end_needle) {
+        var end_pos = answer.search(end_needle.toLowerCase());
+        if (end_pos === -1) {
+            return;
+        }
+        answer = answer.slice(0, end_pos);
+    });
 
+    answer = answer
+        .replace(/^:/, "")          // remove leading colon
+        .trim()                     // remove trailing spaces
+        .replace(/[.]+$/, "")       // remove trailing period
+        .trim()                     // remove trailing spaces *again*
+        .replaceAll(/\ \ +/g, " ")  // no doubled spaces
+        ;
+    return answer;
+}
 
 
 
@@ -610,6 +635,7 @@ function extract_costs_from_details(orig_string, pane_heading, pane_title, purch
         return [];
     }
 
+    var string = extract_text_between(orig_string, start_needle, end_needle_list);
         throw new Error("Costs not found:\n" + label + "\n'" + orig_string + "'\n---\n'" + string + "'");
     }
 
