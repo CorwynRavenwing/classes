@@ -643,6 +643,118 @@ function extract_costs_from_details(orig_string, pane_title, purchase, label) {
     var prices = prices_2_priceob(string);
     return prices;
 }
+
+function extract_requires_from_details(orig_string, pane_title, purchase, label) {
+    "use strict";
+
+    const start_needle = "Uses";
+    const end_needle_list = ["per second", "every second", "each second", " for ", ", produces "];       // ", provides"];
+
+    const purchase_ignore = [
+        "Batteries",
+        "Empowered Blowtorch",
+        "Explorer",
+        "Gem Miner",
+        "Grinder",
+        "Heat Resistant Crucible",
+        "Helium Drone",
+        "Hydrogen Collector",
+        "Ice Pickaxe",
+        "Miner",
+        "Native Moon Worker",
+        "Plasma Storage Units",
+        "Rocket Droid",
+        "Scout Ship",
+        "Small Pump",
+        "Solar Panels",
+        "Storage Upgrade",
+        "Vacuum Cleaner",
+        "Woodcutter",
+        // -----
+        "Energy Efficiency",
+        "Resource Efficiency",
+        "Science Efficiency",
+        // -----
+        "Activate Wonder",
+        "Energetic Wonder",
+        "Meteorite Wonder",
+        "Precious Metals Wonder",
+        "Technological Wonder",
+        "ZZZ LAST NO COMMA"
+    ];
+    const pane_ignore = [
+        "science",
+        "ZZZ LAST NO COMMA"
+    ];
+
+    if (pane_ignore.includes(pane_title)) {
+        return "";
+    }
+
+    if (purchase_ignore.includes(purchase)) {
+        return "";
+    }
+
+    var string = extract_text_between(orig_string, start_needle, end_needle_list);
+    if (string === null) {
+        string = extract_text_between(orig_string, "They use", end_needle_list);
+    }
+    if (string === null) {
+        var try_string = extract_text_between(orig_string, "produces", []);         // grab the whole "produces x for y" part
+        if (try_string !== null) {
+            string = extract_text_between(try_string, " for ", end_needle_list);    // then jump to the "for", take the rest
+        }
+    }
+    // yes, ask again:
+    if (string === null) {
+        // throw new Error("Requires not found:\n" + label + "\n'" + orig_string + "'\n---\n'" + string + "'");
+        label = label;  // ignore
+        return "Requires not found";
+    }
+
+    // console.log('prices:', "'"+orig_string+"'", "'"+string+"'", label);
+    var prices = prices_2_priceob(string);
+    return prices;
+}
+
+function extract_provides_from_details(orig_string, pane_title, purchase, label) {
+    "use strict";
+    const start_needle = "produces";
+    const end_needle_list = ["per second", "every second", "each second", " for ", ", uses "];   // , ", requires"];
+
+    const purchase_ignore = [
+        "Grinder",
+        "Batteries",
+        "Plasma Storage Units",
+        "Storage Upgrade",
+        // -----
+        "Energy Efficiency",
+        "Resource Efficiency",
+        "Science Efficiency",
+        // -----
+        "Activate Wonder",
+        "Energetic Wonder",
+        "Meteorite Wonder",
+        "Precious Metals Wonder",
+        "Technological Wonder",
+        "ZZZ LAST NO COMMA"
+    ];
+
+    if (purchase_ignore.includes(purchase)) {
+        return "";
+    }
+    pane_title = pane_title;    // ignore
+
+    var string = extract_text_between(orig_string, start_needle, end_needle_list);
+    if (string === null) {
+        // throw new Error("Provides not found:\n" + label + "\n'" + orig_string + "'\n---\n'" + string + "'");
+        label = label;  // ignore
+        return "Provides not found";
+    }
+
+    // console.log('prices:', "'"+orig_string+"'", "'"+string+"'", label);
+    var prices = prices_2_priceob(string);
+    return prices;
 }
 
 function panesdesc_2_panesob(pane_descriptors, tabs_available) {
