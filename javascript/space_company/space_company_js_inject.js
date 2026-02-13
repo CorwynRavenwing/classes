@@ -45,10 +45,6 @@ var pane_descriptors = {
     Wonders:        "#wonder"
 };
 
-var obsolete_known_unknowns = [];         // TODO: move to just before use
-var GLOBAL_known_missing_tabs = [];
-var GLOBAL_known_skip_page = [];
-
 function from_number(value) {
     "use strict";
     var mult_idx = 0;
@@ -436,24 +432,6 @@ function get_quantities(tabs_available) {
     return quantities;
 }
 
-function for_each_nav(fn, argument) {
-    "use strict";
-    var answer = [];
-
-    var sidetabs = $("#resourceNavParent > tbody > tr");
-    $.each(sidetabs, function(index, value) {
-        var ob = $( value );
-        index = index;   // ignore
-        // is_sidetab = ob.hasClass("sideTab");
-        // if (! is_sidetab) {
-        //     return;
-        // }
-        answer.push( fn(ob, argument) );
-    });
-
-    return answer;
-}
-
 function check_energy_levels(quantities) {
     "use strict";
 
@@ -563,15 +541,12 @@ function cleanup_details(string) {
 
 
 
-/// ############################################################################
-
 
 
 
 function extract_costs_from_details(orig_string, pane_heading, pane_title, purchase) {
     "use strict";
     var string = orig_string;
-    // const cost_flag = "Costs";
 
     if (pane_title === "energy_mass_conversion") {
         if (purchase !== "Research") {
@@ -599,23 +574,9 @@ function extract_costs_from_details(orig_string, pane_heading, pane_title, purch
         return [];
     }
 
-    var position = string.search(cost_flag);
-    if (DEBUG) {console.log("Costs Position:", position);}
-    if (position === -1) {
-        var label = pane_heading + "/" + pane_title + "/" + purchase;
         throw new Error("Costs not found:\n" + label + "\n'" + orig_string + "'\n---\n'" + string + "'");
     }
-    position += cost_flag.length;
-    string = string
-        .slice(position)            // delete up to after "Costs"
-        .replace(/^:/, "")          // remove leading colon
-        .trim()                     // remove lead/trail spaces
-        .replace(/[.]+$/, "")       // remove trailing period
-        .replaceAll(/\ \ +/g, " ")  // no doubled spaces
-        ;
 
-    var costs = string.split(", ");     // split on "comma space"
-    return costs;
 }
 
 function panesdesc_2_panesob(pane_descriptors, tabs_available) {
@@ -678,351 +639,6 @@ function arraysFromEntries(arr) {
         answer[first].push(second);
     });
     return answer;
-}
-
-// XYZZY
-
-function check_tabs(tabs_available, quantities) {
-    "use strict";
-    // var cost_flag = "Costs";
-    var GLOBAL_overflow_reasons = {};
-    var GLOBAL_pane_heading;
-    var GLOBAL_pane_title;
-    var GLOBAL_purchase;
-    var GLOBAL_unknown_substances;
-    var GLOBAL_bump_specifics;
-    var GLOBAL_clicked_something = false;
-
-    // console.log(panes)
-
-    function scan_one_cost(cost_idx, cost_str) {
-        if (cost_str === "") {
-            // no costs (energy-mass conversion page): NOOP
-            return;
-        }
-        if (cost_idx === "format") {
-            // why are functions being passed in here ?!?
-            return;
-        }
-        // console.log("cost_str:", cost_idx, cost_str)
-        var cost_split = cost_str
-            .replaceAll(" ", "_")       // any number of spaces -> underscore
-            .replace("_", " ")          // first underscore -> space again
-            .split(" ", 2)              // split on that first space
-            ;
-        // console.log("cost split:", cost_split);
-        const [neededC, substanceC] = cost_split;
-        var needed = to_number(neededC);
-        var substance = substanceC.toLowerCase();
-        if (substance === "gem") { substance = "gems"; }
-        var known_substance = Object.keys(quantities).includes(substance);
-        if (! known_substance) {
-            GLOBAL_unknown_substances.push("'" + substance + "'");
-            var seen = (obsolete_known_unknowns.includes(substance));
-            if (! seen) {
-                obsolete_known_unknowns.push(substance);
-                /* if (DEBUG) */ console.warn("cost of UNKNOWN SUBSTANCE:", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, cost_idx, "'" + cost_str + "'", substance, needed);
-            }
-            return;
-        }
-        var max_value = quantities[substance].max;
-        if (max_value === "") {
-            // console.log("cost ok:", cost_idx, substance, needed, max_value);
-            return;
-        }
-        if (needed <= max_value) {
-            // console.log("cost ok:", cost_idx, substance, needed, max_value);
-            return;
-        }
-
-        if (GLOBAL_purchase.includes("Swarm:")) {
-            console.log("Swarm (scan_one_cost)", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase);
-            return;
-        }
-
-        var known_overflow_reasons = Object.keys(GLOBAL_overflow_reasons).includes(substance);
-        if (! known_overflow_reasons) {
-            GLOBAL_overflow_reasons[substance] = [];
-        }
-        GLOBAL_overflow_reasons[substance].push(
-            GLOBAL_pane_heading + "/" + GLOBAL_pane_title + "/" + GLOBAL_purchase + ": " + from_number(needed)
-        );
-        GLOBAL_bump_specifics.push(substance);
-    }
-
-    function scan_one_tr(tr_idx, tr) {
-        tr_idx = tr_idx;
-        tr = $( tr );
-        var h3 = tr.find("h3");
-        GLOBAL_purchase = h3
-            .text()
-            .trim()
-            .replace(new RegExp("/[0-9]*$"), "")  // remove "/NN" from end
-            .replace(new RegExp(": [0-9]*$"), "")   // remove ": NN" from end
-            ;
-        if (! GLOBAL_purchase) {
-            return;
-        }
-        // NOTE: delete next section:
-        var is_hidden = tr.hasClass("hidden");
-        if (is_hidden) {
-            if (DEBUG) { console.log(GLOBAL_pane_title, GLOBAL_purchase, "HIDDEN"); }
-            return;
-        }
-        // NOTE: end deleted section
-        if (GLOBAL_purchase.includes("Swarm:")) {
-            console.log("Swarm (scan_one_tr)", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase);
-            console.log("tr", tr);
-        }
-        if (GLOBAL_pane_title === "energy_mass_conversion") {
-            return;
-        }
-        if (GLOBAL_pane_title === "dyson_swarms_and_sphere") {
-            return;
-        }
-        var cant_click = false;
-        // console.log("tr:", tr_idx, tr);
-        var details = tr
-            .find("td > span")
-            .text()
-            .trim();
-        var current_ob = h3
-            .find("span");
-        var current = current_ob
-            .text()
-            .trim();
-        var td = tr.find("td");
-        var button = td
-            .find("button")
-            [0];
-        if (! button) {
-            button = td
-                .find("div.btn")
-                [0];
-        }
-        if (button) {
-            button = $( button );
-        }
-        if (button) {
-            if (button.hasClass("destroy")) {
-                console.error("destroy button!", button);
-                button = null;
-            }
-        }
-        // yes, repeat the prior question
-        if (button) {
-            if (button.hasClass("btn-warning")) {
-                button = null;
-            }
-        }
-        // yes, repeat the prior question
-        if (button) {
-            var button_is_hidden = button
-                .hasClass("hidden");
-            if (button_is_hidden) {
-                // console.log("button is hidden", button);
-                button = null;
-            } else {
-                button_is_hidden = button
-                    .parent()
-                    .hasClass("hidden");
-                if (button_is_hidden) {
-                    // console.log("button is hidden", button.parent());
-                    button = null;
-                }
-            }
-        }
-        var input = td
-            .find("input.desired");
-        if (button && (input.length === 0)) {
-            // console.log(GLOBAL_pane_title, GLOBAL_purchase, "Creating input object:");
-            input = $("<input type='textbox' class='desired'/>");
-            td.append(input);
-        }
-        var desired = "";
-        if (input) {
-            var val = input.val();
-            if (val) {
-                desired = val.trim();
-            }
-        }
-        desired = to_number(desired);
-        // if (current && desired) {
-        //     console.log(pane_title, purchase, "current", current, "desired", desired);
-        // }
-        var red_ingredients = tr
-            .find("td > span span.red");
-        if (red_ingredients.length) {
-            // console.log("red_ingredients", red_ingredients);
-            cant_click = true;
-        }
-        if (DEBUG) { console.log("purchase:", GLOBAL_purchase); }
-        details = cleanup_details(details);
-        // if (DEBUG)  console.log("details:", details);
-        var costs = extract_costs_from_details(details, GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase);
-        if (DEBUG) { console.log("costs:", costs); }
-        GLOBAL_unknown_substances = [];
-        GLOBAL_bump_specifics = [];
-        $.each(costs, scan_one_cost);
-        var pop_up = [];
-        var set_class = "";
-
-        var all_click_classes = [
-            "bump_max",
-            "cant_click",
-            "high_cost",
-            "high_rate",
-            "click_me",
-            "click_me_maybe",
-            "clicking",
-            "auto_request",
-            "unknown_substance",
-            "no_button"
-        ];
-
-        if (! button) {
-            set_class = "no_button";
-        } else {
-            if (desired) {
-                if (! button) {
-                    console.warn("Trying to click missing button", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase);
-                    cant_click = true;
-                }
-                if (cant_click) {
-                    set_class = "cant_click";
-                    pop_up.push("Missing Ingredients: " + red_ingredients.length);
-                } else {
-                    if (GLOBAL_clicked_something) {
-                        set_class = "click_me";
-                    } else {
-                        set_class = "clicking";
-                    }
-                }
-            }
-
-            if (GLOBAL_bump_specifics.length) {
-                set_class = "bump_max";
-                pop_up.push("Bump:");
-                pop_up.push(...GLOBAL_bump_specifics);
-            }
-            if (GLOBAL_unknown_substances.length) {
-                pop_up.push("Unknown:");
-                pop_up.push(...GLOBAL_unknown_substances);
-                set_class = "unknown_substance";
-            }
-            if (set_class === "clicking") {
-                // if (red_ingredients.length) {
-                //     console.log("red_ingredients", red_ingredients)
-                //     console.log("cant_click:", cant_click)
-                // }
-                var click_time;
-                click_time = Math.floor(new Date().getTime() / 1000);
-
-                var elapsed_s = (click_time - prior_cick_time);
-                var TIME = toHHMMSS(elapsed_s);
-                TIME = "(" + TIME.trim() + ")";
-
-                button.click();
-                var new_current = current_ob.text().trim();
-                var VERIFY = false;
-                if (VERIFY && (current !== "") && (new_current === current)) {
-                    console.warn("ERROR: tried clicking", GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, "no change", new_current, current);
-                    set_class = "click_me";
-                    // need to remove click-me from removal list
-                } else {
-                    GLOBAL_clicked_something = true;
-
-                    console.log("AUTO-CLICK", TIME, GLOBAL_pane_heading, GLOBAL_pane_title, GLOBAL_purchase, "(" + desired + ")");
-
-                    prior_cick_time = click_time;
-
-                    desired -= 1;
-                    if (! desired) {
-                        desired = "";
-                    }
-                    input.val(desired);
-                }
-            }
-        }
-
-        add_class_remove_others(tr, set_class, all_click_classes);
-
-        set_ob_title_by_array(tr, pop_up);
-    }
-
-    function scan_one_pane(pane_idx, pane) {
-        pane_idx = pane_idx;
-        pane = $(pane);
-        var trs = pane.find("tr");
-        var tr0 = $( trs[0] );
-        var h2 = tr0.find("h2");
-        GLOBAL_pane_title = cleanup_substance_name_simple(
-            h2.text()
-        );
-
-        var available_substances = Object.keys(quantities);
-        
-        var known_title = (available_substances.includes(GLOBAL_pane_title));
-        if (! known_title) {
-            var page_designator = GLOBAL_pane_heading + "/" + GLOBAL_pane_title;
-            var known_skip = (GLOBAL_known_skip_page.includes(page_designator));
-            if (! known_skip) {
-                console.warn("Skip", page_designator);
-                GLOBAL_known_skip_page.push(page_designator);
-            }
-            return;
-        }
-        if (GLOBAL_pane_title === "dyson_swarms_and_sphere") {
-            // console.log("Ignore Dyson Swarm / Sphere pane");
-            return;
-        }
-        if (DEBUG) {
-            console.log("pane:", pane);
-            console.log(trs);
-            console.log("tr0:", tr0);
-            console.log("h2:", h2);
-            console.log("pane_title:", GLOBAL_pane_title);
-        }
-        $.each(trs, scan_one_tr);
-    }
-
-    var panes_ob = panesdesc_2_panesob(pane_descriptors, tabs_available);
-    $.each(panes_ob, function(pane_heading, panes) {
-        GLOBAL_pane_heading = pane_heading;
-        if (DEBUG) {console.log("pane_heading:", GLOBAL_pane_heading);}
-        if (DEBUG) {console.log("panes:", panes);}
-        $.each(panes, scan_one_pane);
-    });
-
-    // console.log("overflow_reasons", GLOBAL_overflow_reasons);
-    return GLOBAL_overflow_reasons;
-}
-
-function prices_2_pair(cost_str) {
-    "use strict";
-    if (cost_str === "") {
-        return [];
-    }
-    // console.log("cost_str:", cost_str)
-    var cost_split = cost_str
-        .replaceAll(" ", "_")       // any number of spaces -> underscore
-        .replace("_", " ")          // first underscore -> space again
-        .split(" ", 2);             // split on that first space
-    // console.log("cost split:", cost_split)
-    const [neededC, substanceC] = cost_split;
-    var needed = to_number(neededC);
-    var substance = substanceC.toLowerCase();
-    if (substance === "gem") { substance = "gems"; }
-    var cost = [substance, needed];
-    // console.log("cost:", cost);
-    return cost;
-}
-
-function priceslist_2_pricesob(prices_list) {
-    "use strict";
-    var prices_arr = prices_list.map(prices_2_pair);
-    var prices_ob = Object.fromEntries(prices_arr);
-    return prices_ob;
 }
 
 function get_button_id(td) {
@@ -1200,10 +816,6 @@ function get_high_cost_ob(costs_ob, quantities) {
 function get_high_rate_ob(rates_ob, quantities) {
     "use strict";
 
-    // WRITE ME
-
-    rates_ob = rates_ob;        // ignore
-    quantities = quantities;    // ignore
     return "";
 }
 
@@ -1272,12 +884,8 @@ function tr_2_magic(tr, pane_title, quantities) {
 
     details = cleanup_details(details);
 
-    var costs = extract_costs_from_details(details, "missing_pane_heading", pane_title, purchase);
-    costs = priceslist_2_pricesob(costs);
     magic.costs = costs;
 
-    var unknown_substances = get_unknown_substances(costs, quantities);
-    magic.unknown = unknown_substances;
     complain_about_unknown_substances_once(unknown_substances);
     if (unknown_substances.length) {
         if (DEBUG) { console.warn("cost of UNKNOWN SUBSTANCES:", pane_title, purchase, unknown_substances); }
@@ -1287,8 +895,6 @@ function tr_2_magic(tr, pane_title, quantities) {
 
     magic.high_cost = get_high_cost_ob(costs, quantities);
 
-    var consume_per_sec = "WRITE ME";
-    magic.high_rate = get_high_rate_ob(consume_per_sec, quantities);
 
     if (magic.button_id === "") {
         magic.clickable = "no_button";
@@ -1311,7 +917,7 @@ function tr_2_magic(tr, pane_title, quantities) {
 
     magic.pane_title = pane_title;
 
-    // ### MOVE TO HERE ... vvv
+    // magic.details = details;
 
     /*
         magic = {
@@ -1748,11 +1354,7 @@ function colorize_left_bar(quantities, overflow_reasons) {
     return;
 }
 
-function test() {
-    "use strict";
 
-    // TEST = true;
-    // console.warn('test(): setting TEST to', TEST);
 
     var tabs_available = get_tabs_available();
 
@@ -1790,60 +1392,6 @@ function test() {
 
     colorize_left_bar(quantities, overflow_reasons);
 
-    // TEST = false;
-    // console.warn('test(): setting TEST to', TEST);
-
-    return quantities;
-}
-
-function colorize_one_max(tr, tab_data) {
-    "use strict";
-    tr = $( tr );
-    var is_hidden = tr.hasClass("hidden");
-    if (is_hidden) {
-        return false;
-    }
-    // console.log(tr);
-    var tds = tr.children();
-    var label = $( tds[1] )
-        .text()
-        .trim()
-        .toLowerCase()
-        ;
-    var is_overflow = Object.keys(tab_data).includes(label);
-    if (is_overflow) {
-        tr.addClass("bump_max");
-        set_ob_title_by_array(tr, tab_data[label]);
-        return [label, "yes"];
-    } else {
-        tr.removeClass("bump_max");
-        set_ob_title_by_string(tr, "[nope]");
-        return [label, "no"];
-    }
-}
-
-// global variable
-var tick_id;
-
-function tick() {
-    "use strict";
-    // console.log("tick", tick_id);
-
-    var new_way = true;
-
-    if (new_way) {
-        test();
-    } else {
-        var tabs_available = get_tabs_available();
-        // console.log("tabs_available:", tabs_available);
-
-        var quantities = get_quantities(tabs_available);
-        check_energy_levels(quantities);
-
-        var tab_data = check_tabs(tabs_available, quantities);
-        // console.log("tab_data", tab_data);
-        var results = for_each_nav(colorize_one_max, tab_data);
-        if (DEBUG) {console.log("results", results);}
     }
 
     return;
@@ -1879,5 +1427,4 @@ function x_CONSUME() {
     "use strict";
     x_CONSUME();
     test();
-    // GLOBAL_available_substances = GLOBAL_available_substances;
 }
