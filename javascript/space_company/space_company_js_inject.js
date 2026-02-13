@@ -1097,6 +1097,30 @@ function tr_2_magic(tr, pane_title, quantities) {
 
     magic.high_cost = get_high_cost_ob(costs, quantities);
 
+    magic.high_rate = get_high_rate_ob(magic.requires, quantities);
+
+    magic.provides = (magic.provides === "") ? {} : magic.provides;
+    magic.provides.DEBUG = 'DEBUG';
+    // console.warn('DEBUG: magic.provides', magic.provides);
+    var provides_entries = Object.entries(magic.provides);
+    var provides_entry;
+    // console.warn('DEBUG: provides_entries', provides_entries);
+    // console.warn('DEBUG: provides_entries.length', provides_entries.length);
+    switch(provides_entries.length) {
+      case 0:
+        magic.provides_item = "";
+        magic.provides_count = 0;
+        break;
+      case 1:
+        provides_entry = provides_entries[0];
+
+        magic.provides_item = provides_entry[0];
+        magic.provides_count = provides_entry[1];
+        break;
+      default:
+        magic.provides_item = "ERROR: provides.length > 1";
+        magic.provides_count = provides_entries.length;
+    } 
 
     if (magic.button_id === "") {
         magic.clickable = "no_button";
