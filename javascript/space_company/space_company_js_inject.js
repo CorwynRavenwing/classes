@@ -605,7 +605,8 @@ function extract_text_between(haystack, start_needle, end_needle_list) {
 
 function extract_costs_from_details(orig_string, pane_title, purchase, label) {
     "use strict";
-    var string = orig_string;
+    const start_needle = cost_flag;
+    const end_needle_list = [];
 
     if (pane_title === "energy_mass_conversion") {
         if (purchase !== "Research") {
