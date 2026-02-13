@@ -1288,6 +1288,10 @@ function get_magics_ob(pane_descriptors, tabs_available, quantities) {
 function filter_magics_by(magics_list, filter_column) {
     "use strict";
 
+    if (magics_list === undefined) {
+        return "";
+    }
+
     var answer_list = magics_list.map(function(magic) {
         var filter = magic[filter_column];
         return [filter, magic];
