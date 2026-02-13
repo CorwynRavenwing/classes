@@ -8,10 +8,10 @@
 //
 // TERMS OF ART:
 //
-//      Header:
+//      Category:
 //          the things at the top of the page (Resources, Solar System, ...)
 //      Item:
-//          the things down the left bar which appear when you click a Header
+//          the things down the left bar which appear when you click a Category
 //          (Metal, Gems; Science production, Technologies; ...)
 //          Called an Item b/c most of them are a physical good you possess
 //      Page:
