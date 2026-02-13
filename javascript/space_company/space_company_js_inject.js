@@ -1605,14 +1605,25 @@ function colorize_left_bar(quantities, overflow_reasons) {
     return;
 }
 
+// global variable
+var tick_id;
 
+var TEST = false;
+
+function tick() {
+    "use strict";
+    // console.log("tick", tick_id);
 
     var tabs_available = get_tabs_available();
+    // console.log("tabs_available:", tabs_available);
 
     var quantities = get_quantities(tabs_available);
+    if (TEST) { console.log("quantities:", quantities); }
+
     check_energy_levels(quantities);
 
     var magic_by_clickable = get_magic_by_clickable(tabs_available, quantities);
+    if (TEST) { console.log('magic_by_clickable:', magic_by_clickable); }
 
     var all_click_classes = [
         "bump_max",
@@ -1630,7 +1641,7 @@ function colorize_left_bar(quantities, overflow_reasons) {
     colorize_clacks_by_clickable(magic_by_clickable, all_click_classes);
 
     var magic_by_requested = filter_magics_by(magic_by_clickable.OK, "click_requested");
-    // console.warn('magic_by_requested:', magic_by_requested);
+    if (TEST) { console.log('magic_by_requested:', magic_by_requested); }
 
     var okay_and_requested     = magic_by_requested[1] || [];
     var okay_but_not_requested = magic_by_requested[0] || [];
@@ -1643,6 +1654,36 @@ function colorize_left_bar(quantities, overflow_reasons) {
 
     colorize_left_bar(quantities, overflow_reasons);
 
+    if (TEST) {
+        safeEntries(magic_by_clickable).forEach(function(entry) {
+            const [magics_label, magics_list] = entry;
+            var check = magics_list.map(function(magic) {
+                var answer = {
+                    name: magic.name,
+                    provides: magic.provides,
+                    requires: magic.requires,
+                    pane_title: magic.pane_title,
+                    // details: magic.details,
+                    provides_item: magic.provides_item,
+                    provides_count: magic.provides_count
+                };
+                return answer;
+            });
+            var check_by_provides = filter_magics_by(check, "provides");
+            var check_by_requires = filter_magics_by(check, "requires");
+            // console.warn('check_by_provides:', check_by_provides);
+            // console.warn('check_by_requires:', check_by_requires);
+
+            var fail_provides = check_by_provides["Provides not found"];
+            var fail_requires = check_by_requires["Requires not found"];
+            console.log(magics_label, 'fail_provides:', fail_provides);
+            console.log(magics_label, 'fail_requires:', fail_requires);
+
+            var magic_by_provides = filter_magics_by(check, "provides_item");
+            // console.log(magics_label, 'by_provides_item:', magic_by_provides);
+            var fail_provides_item = magic_by_provides["ERROR: provides.length > 1"];
+            console.log(magics_label, 'fail provides_item:', fail_provides_item);
+        });
     }
 
     return;
@@ -1673,6 +1714,21 @@ if (DEBUG_tick) {
 } else {
     tick_start();
 }
+
+function test() {
+    "use strict";
+
+    TEST = true;
+    // console.warn('test(): setting TEST to', TEST);
+
+    tick();
+
+    TEST = false;
+    // console.warn('test(): setting TEST to', TEST);
+
+    return;
+}
+
 
 function x_CONSUME() {
     "use strict";
