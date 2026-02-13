@@ -993,8 +993,28 @@ function get_high_cost_ob(costs_ob, quantities) {
 
 function get_high_rate_ob(rates_ob, quantities) {
     "use strict";
+    var rate_list = Object.entries(rates_ob);
 
-    return "";
+    var high_rate_list = rate_list.filter(function([substance, needed]) {
+        var item_ob = quantities[substance];
+        if (item_ob === undefined) {
+            // no such substance: problem
+            return true;
+        }
+        var rate_value = item_ob.rate;
+        if (rate_value === "") {
+            console.log('DEBUG: checking high rate for non-counted substance', substance, 'needed', needed, 'count', rate_value);
+            // no rate -> no problem
+            return false;
+        }
+        return (needed > rate_value);
+    });
+    if (high_rate_list.length > 0) {
+        var high_rate_ob = Object.fromEntries(high_rate_list);
+        return high_rate_ob;
+    } else {
+        return "";
+    }
 }
 
 function tr_2_magic(tr, pane_title, quantities) {
