@@ -647,6 +647,30 @@ function extract_costs_from_details(orig_string, pane_title, purchase, label) {
     return prices;
 }
 
+// things which have neither a Requires nor a Provides section:
+var purchase_ignore_both = [
+    "Batteries",
+    "Plasma Storage Units",
+    'PSUs',
+    "Storage Upgrade",
+    // -----
+    "Energy Efficiency",
+    "Resource Efficiency",
+    "Science Efficiency",
+    // -----
+    "Activate Portal",        
+    "Activate Wonder",
+    "Energetic Wonder",
+    "Meteorite Wonder",
+    "Precious Metals Wonder",
+    "Rebuild Antimatter Wonder",
+    "Rebuild Communication Wonder",
+    "Rebuild Rocket Wonder",
+    "Technological Wonder",
+    // -----
+    "ZZZ LAST NO COMMA"
+];
+
 function extract_requires_from_details(orig_string, pane_title, purchase, label) {
     "use strict";
 
@@ -654,7 +678,6 @@ function extract_requires_from_details(orig_string, pane_title, purchase, label)
     const end_needle_list = ["per second", "every second", "each second", " for ", ", produces "];       // ", provides"];
 
     const purchase_ignore = [
-        "Batteries",
         "Empowered Blowtorch",
         "Explorer",
         "Gem Miner",
@@ -665,30 +688,23 @@ function extract_requires_from_details(orig_string, pane_title, purchase, label)
         "Ice Pickaxe",
         "Miner",
         "Native Moon Worker",
-        "Plasma Storage Units",
         "Rocket Droid",
         "Scout Ship",
         "Small Pump",
         "Solar Panels",
-        "Storage Upgrade",
         "Vacuum Cleaner",
         "Woodcutter",
         // -----
-        "Energy Efficiency",
-        "Resource Efficiency",
-        "Science Efficiency",
-        // -----
-        "Activate Wonder",
-        "Energetic Wonder",
-        "Meteorite Wonder",
-        "Precious Metals Wonder",
-        "Technological Wonder",
         "ZZZ LAST NO COMMA"
     ];
     const pane_ignore = [
         "science",
         "ZZZ LAST NO COMMA"
     ];
+
+    if (purchase_ignore_both.includes(purchase)) {
+        return "";
+    }
 
     if (pane_ignore.includes(pane_title)) {
         return "";
@@ -726,22 +742,14 @@ function extract_provides_from_details(orig_string, pane_title, purchase, label)
     const end_needle_list = ["per second", "every second", "each second", " for ", ", uses "];   // , ", requires"];
 
     const purchase_ignore = [
-        "Grinder",
-        "Batteries",
-        "Plasma Storage Units",
-        "Storage Upgrade",
+        // "none yet",
         // -----
-        "Energy Efficiency",
-        "Resource Efficiency",
-        "Science Efficiency",
-        // -----
-        "Activate Wonder",
-        "Energetic Wonder",
-        "Meteorite Wonder",
-        "Precious Metals Wonder",
-        "Technological Wonder",
         "ZZZ LAST NO COMMA"
     ];
+
+    if (purchase_ignore_both.includes(purchase)) {
+        return "";
+    }
 
     if (purchase_ignore.includes(purchase)) {
         return "";
