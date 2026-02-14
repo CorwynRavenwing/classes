@@ -1034,6 +1034,10 @@ function get_high_cost_and_time_ob(costs_ob, quantities) {
 
 function get_high_rate_ob(rates_ob, quantities) {
     "use strict";
+    if (rates_ob === "Requires not found") {
+        console.error('debug: rates_ob', rates_ob);
+        return "";
+    }
     var rate_list = Object.entries(rates_ob);
 
     var high_rate_list = rate_list.filter(function([substance, needed]) {
