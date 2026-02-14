@@ -1714,20 +1714,8 @@ function tick() {
     if (TEST) {
         safeEntries(magic_by_clickable).forEach(function(entry) {
             const [magics_label, magics_list] = entry;
-            var check = magics_list.map(function(magic) {
-                var answer = {
-                    name: magic.name,
-                    provides: magic.provides,
-                    requires: magic.requires,
-                    pane_title: magic.pane_title,
-                    // details: magic.details,
-                    provides_item: magic.provides_item,
-                    provides_count: magic.provides_count
-                };
-                return answer;
-            });
-            var check_by_provides = filter_magics_by(check, "provides");
-            var check_by_requires = filter_magics_by(check, "requires");
+            var check_by_provides = filter_magics_by(magics_list, "provides");
+            var check_by_requires = filter_magics_by(magics_list, "requires");
             // console.warn('check_by_provides:', check_by_provides);
             // console.warn('check_by_requires:', check_by_requires);
 
@@ -1736,7 +1724,7 @@ function tick() {
             console.log(magics_label, 'fail_provides:', fail_provides);
             console.log(magics_label, 'fail_requires:', fail_requires);
 
-            var magic_by_provides = filter_magics_by(check, "provides_item");
+            var magic_by_provides = filter_magics_by(magics_list, "provides_item");
             // console.log(magics_label, 'by_provides_item:', magic_by_provides);
             var fail_provides_item = magic_by_provides["ERROR: provides.length > 1"];
             console.log(magics_label, 'fail provides_item:', fail_provides_item);
