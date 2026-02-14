@@ -976,29 +976,59 @@ function get_bump_max_ob(costs_ob, quantities) {
     }
 }
 
-function get_high_cost_ob(costs_ob, quantities) {
+function get_high_cost_and_time_ob(costs_ob, quantities) {
     "use strict";
     var costs_list = Object.entries(costs_ob);
 
-    var high_cost_list = costs_list.filter(function([substance, needed]) {
+    var high_cost_and_time_list = costs_list.map(function([substance, needed]) {
         var item_ob = quantities[substance];
         if (item_ob === undefined) {
-            // no such substance: problem
-            return true;
+            // no such substance: ignore
+            return null;
         }
-        var count_value = item_ob.count;
-        if (count_value === "") {
-            console.log('DEBUG: checking high cost for non-counted substance', substance, 'needed', needed, 'count', count_value);
-            // no count -> no problem
-            return false;
+        var item_count = item_ob.count;
+        var item_rate = item_ob.rate;
+        if (item_count === "") {
+            console.log('DEBUG: checking high cost for non-counted substance', substance, 'needed', needed, 'count', item_count);
+            // no count: ignore
+            return null;
         }
-        return (needed > count_value);
+        var remaining = needed - item_count;
+        if (remaining <= 0) {
+            // have enough already: ignore
+            return null;
+        }
+
+        var time_left;
+        if (item_rate <= 0) {
+            time_left = "INF";
+        } else {
+            time_left = remaining / item_rate;
+        }
+
+        return [substance, needed, time_left];
+    }).filter(function(entry) {
+        return entry !== null;
     });
-    if (high_cost_list.length > 0) {
+
+    if (high_cost_and_time_list.length > 0) {
+        var high_cost_list = high_cost_and_time_list.map(
+            function(entry) {
+                // label and column 1
+                return [ entry[0], entry[1] ];
+            }
+        );
+        var time_list = high_cost_and_time_list.map(
+            function(entry) {
+                // label and column 2
+                return [ entry[0], entry[2] ];
+            }
+        );
         var high_cost_ob = Object.fromEntries(high_cost_list);
-        return high_cost_ob;
+        var time_ob = Object.fromEntries(time_list);
+        return [high_cost_ob, time_ob];
     } else {
-        return "";
+        return ["", ""];
     }
 }
 
@@ -1126,7 +1156,10 @@ function tr_2_magic(tr, pane_title, quantities) {
     
     magic.bump_max = get_bump_max_ob(costs, quantities);
 
-    magic.high_cost = get_high_cost_ob(costs, quantities);
+    var high_cost_and_time = get_high_cost_and_time_ob(costs, quantities);
+    const [high_cost, high_cost_time] = high_cost_and_time;
+    magic.high_cost = high_cost;
+    magic.high_cost_time = high_cost_time;
 
     magic.high_rate = get_high_rate_ob(magic.requires, quantities);
 
