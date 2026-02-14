@@ -1211,7 +1211,9 @@ function tr_2_magic(tr, pane_title, quantities) {
 
     magic.pane_title = pane_title;
 
-    // magic.details = details;
+    if (magic.provides === "Provides not found" || magic.requires === "Requires not found") {
+        magic.details = details;
+    }
 
     /*
         magic = {
