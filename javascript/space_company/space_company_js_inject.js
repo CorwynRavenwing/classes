@@ -105,9 +105,12 @@ function to_number(orig_value) {
 
 function toHHMMSS(total_sec) {
     "use strict";
+    if (total_sec === "INF") {
+        return total_sec;
+    }
     var hours   = Math.floor(total_sec / 3600);
     var minutes = Math.floor(total_sec / 60) % 60;
-    var seconds = total_sec % 60;
+    var seconds = Math.floor(total_sec % 60);
 
     if (hours) { hours += " hour"; } else { hours = ""; }
     if (minutes) { minutes += " min"; } else { minutes = ""; }
@@ -115,7 +118,7 @@ function toHHMMSS(total_sec) {
 
     var answer = [hours,minutes,seconds];
 
-    return answer.join(" ");
+    return answer.join(" ").trim();
 }
 
 function jQuery_to_array(jquery_object) {
