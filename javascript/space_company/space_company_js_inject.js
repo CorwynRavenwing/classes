@@ -1168,7 +1168,7 @@ function tr_2_magic(tr, pane_title, quantities) {
     magic.high_rate = get_high_rate_ob(magic.requires, quantities);
 
     magic.provides = (magic.provides === "") ? {} : magic.provides;
-    magic.provides.DEBUG = 'DEBUG';
+
     // console.warn('DEBUG: magic.provides', magic.provides);
     var provides_entries = Object.entries(magic.provides);
     var provides_entry;
