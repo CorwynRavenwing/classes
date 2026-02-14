@@ -1440,8 +1440,9 @@ function colorize_clacks_by_clickable(magic_by_clickable, all_click_classes) {
 
         var pop_up = safeEntries(magic.bump_max).map(function(entry) {
             const [substance, count] = entry;
-            return "Bump max: " + substance + ": " + from_number(count);
+            return substance + ": " + from_number(count);
         });
+        pop_up.unshift("Bump max:");
         set_ob_title_by_array(tr, pop_up);
     });
 
@@ -1454,10 +1455,15 @@ function colorize_clacks_by_clickable(magic_by_clickable, all_click_classes) {
         add_class_remove_others(tr, "high_cost", all_click_classes);
         // console.log("tr_id", tr_id, "class", "high_cost", "tr", tr);
 
+        var high_cost_time = magic.high_cost_time;
         var pop_up = safeEntries(magic.high_cost).map(function(entry) {
             const [substance, count] = entry;
-            return "High cost: " + substance + ": " + from_number(count);
+
+            var cost_time = high_cost_time[substance];
+
+            return substance + ": " + from_number(count) + " (" + toHHMMSS(cost_time) + ")";
         });
+        pop_up.unshift("High cost:");
         set_ob_title_by_array(tr, pop_up);
     });
 
@@ -1472,8 +1478,9 @@ function colorize_clacks_by_clickable(magic_by_clickable, all_click_classes) {
 
         var pop_up = safeEntries(magic.high_rate).map(function(entry) {
             const [substance, count] = entry;
-            return "High rate/sec: " + substance + ": " + from_number(count);
+            return substance + ": " + from_number(count);
         });
+        pop_up.unshift("High rate/sec:");
         set_ob_title_by_array(tr, pop_up);
     });
 
