@@ -1097,6 +1097,60 @@ function tr_2_magic(tr, pane_title, quantities) {
     if (pane_title === "dyson_swarms_and_sphere") {
         if (purchase !== "Research") {
             // this is where we wire in the special Dyson Sphere code
+            // tr === $('#dysonPage')
+            // var this_span = tr.find('td').find('> span');
+            // var use_this = this_span.contents();
+            // array of 43 items:
+            /*
+            var thing = {
+                0: #text "\n\t\t\t\t\t\t\t\t\t\tThese mega-structures cannot possibly be built in one piece. They must be created from small segments and forged together around the sun.\n\t\t\t\t\t\t\t\t\t\t"
+                1: <br>
+                2: #text "\n\t\t\t\t\t\t\t\t\t\tThe next segment costs: "
+                3: <span id="dysonTitaniumCost" class="red">
+                4: #text " Titanium, "
+                5: <span id="dysonGoldCost">
+                6: #text " Gold, "
+                7: <span id="dysonSiliconCost">
+                8: #text " Silicon, "
+                9: <span id="dysonMeteoriteCost" class="">
+                10: #text " Meteorite, "
+                11: <span id="dysonIceCost">
+                12: #text " Ice.\n\t\t\t\t\t\t\t\t\t\t"
+                13: <br>
+                14: #text "\n\t\t\t\t\t\t\t\t\t\t"
+                15: <br>
+                16: #text "\n\t\t\t\t\t\t\t\t\t\t"
+                17: <button class="btn btn-default" onclick="getDyson()">
+                18: #text "\n\t\t\t\t\t\t\t\t\t\t"
+                19: <button class="btn btn-default" onclick="buildDysonTo(50)">
+                20: #text "\n\t\t\t\t\t\t\t\t\t\t"
+                21: <button class="btn btn-default" onclick="buildDysonTo(100)">
+                22: #text "\n\t\t\t\t\t\t\t\t\t\t"
+                23: <button class="btn btn-default" onclick="buildDysonTo(250)">
+                24: #text "\n\t\t\t\t\t\t\t\t\t\t"
+                25: <br>
+                26: #text "\n\t\t\t\t\t\t\t\t\t\t"
+                27: <br>
+                28: #text "\n\t\t\t\t\t\t\t\t\t\t"
+                29: <h3 class="default btn-link">
+                30: #text "\n\t\t\t\t\t\t\t\t\t\t"
+                31: <span>
+                32: #text "\n\t\t\t\t\t\t\t\t\t\t"
+                33: <button class="btn btn-default" onclick="buildRing()">
+                34: #text "\n\t\t\t\t\t\t\t\t\t\t"
+                35: <button class="btn btn-default" onclick="buildDysonTo(50);buildRing()">
+                36: #text "\n\t\t\t\t\t\t\t\t\t\t"
+                37: <br>
+                38: #text "\n\t\t\t\t\t\t\t\t\t\t"
+                39: <br>
+                40: #text "\n\t\t\t\t\t\t\t\t\t\t"
+                41: <hide id="dysonSphere" class="">
+                42: #text "\n\t\t\t\t\t\t\t\t\t"
+            };
+            */
+            // document.getElementById('target').insertAdjacentHTML('beforebegin', '＜div class="wrapper"＞');
+            // document.getElementById('target').insertAdjacentHTML('afterend', '＜/div＞');
+
             return null;
         }
     }
