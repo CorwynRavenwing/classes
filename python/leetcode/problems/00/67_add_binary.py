@@ -1,5 +1,6 @@
 class Solution:
     def addBinary(self, a: str, b: str) -> str:
+
         print(f"{a=} {b=}")
         A = list(map(int, list(a)))
         B = list(map(int, list(b)))
@@ -28,3 +29,8 @@ class Solution:
         print(f"{C=}")
         return ''.join(map(str, C))
 
+# NOTE: Acceptance Rate 56.9% (easy)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 75 ms Beats 5.47%
+# NOTE: Memory 19.83 MB Beats 12.44%
