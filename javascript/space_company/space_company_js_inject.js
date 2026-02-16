@@ -26,7 +26,7 @@
 var tick_seconds = 1;
 
 var DEBUG = false;
-var DEBUG_tick = false;
+var DEBUG_tick = true;
 // var TEST = false;
 
 var prior_cick_time;
