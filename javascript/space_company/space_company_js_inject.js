@@ -1125,172 +1125,49 @@ function get_high_rate_ob(rates_ob, quantities) {
     }
 }
 
-function tr_2_magic(tr, pane_title, quantities) {
+function compose_magic_object(pane_title, purchase, details, current_ob, button_ob, tr_id) {
     "use strict";
     var magic = {};
-    // console.log("tr2magic", tr);
-    tr = $( tr );
-    magic.tr_id = uniqueId(tr, 'tr-right');
-
-    // console.log("->", tr);
-    var h3 = tr.find("h3");
-    var purchase = h3
-        .text()
-        .trim()
-        .replace(new RegExp("/[0-9]*$"), "")    // remove "/NN" from end
-        .replace(new RegExp(": [0-9]*$"), "")   // remove ": NN" from end
-        ;
-
-    if (! purchase) {
-        return null;
-    }
     magic.name = purchase;
 
-    var is_hidden = tr.hasClass("hidden");
-    if (is_hidden) {
-        /* if (DEBUG) */ console.warn(pane_title, purchase, "HIDDEN");
-        return null;
-    }
-
-    if (pane_title === "energy_mass_conversion") {
-        if (purchase !== "Research") {
-            return null;
-        }
-    }
-    if (pane_title === "dyson_swarms_and_sphere") {
-        if (purchase !== "Research") {
-            // this is where we wire in the special Dyson Sphere code
-            // tr === $('#dysonPage')
-            // var this_span = tr.find('td').find('> span');
-            // var use_this = this_span.contents();
-            // array of 43 items:
-            /*
-            var thing = {
-                0: #text "\n\t\t\t\t\t\t\t\t\t\tThese mega-structures cannot possibly be built in one piece. They must be created from small segments and forged together around the sun.\n\t\t\t\t\t\t\t\t\t\t"
-                1: <br>
-                2: #text "\n\t\t\t\t\t\t\t\t\t\tThe next segment costs: "
-                3: <span id="dysonTitaniumCost" class="red">
-                4: #text " Titanium, "
-                5: <span id="dysonGoldCost">
-                6: #text " Gold, "
-                7: <span id="dysonSiliconCost">
-                8: #text " Silicon, "
-                9: <span id="dysonMeteoriteCost" class="">
-                10: #text " Meteorite, "
-                11: <span id="dysonIceCost">
-                12: #text " Ice.\n\t\t\t\t\t\t\t\t\t\t"
-                13: <br>
-                14: #text "\n\t\t\t\t\t\t\t\t\t\t"
-                15: <br>
-                16: #text "\n\t\t\t\t\t\t\t\t\t\t"
-                17: <button class="btn btn-default" onclick="getDyson()">
-                18: #text "\n\t\t\t\t\t\t\t\t\t\t"
-                19: <button class="btn btn-default" onclick="buildDysonTo(50)">
-                20: #text "\n\t\t\t\t\t\t\t\t\t\t"
-                21: <button class="btn btn-default" onclick="buildDysonTo(100)">
-                22: #text "\n\t\t\t\t\t\t\t\t\t\t"
-                23: <button class="btn btn-default" onclick="buildDysonTo(250)">
-                24: #text "\n\t\t\t\t\t\t\t\t\t\t"
-                25: <br>
-                26: #text "\n\t\t\t\t\t\t\t\t\t\t"
-                27: <br>
-                28: #text "\n\t\t\t\t\t\t\t\t\t\t"
-                29: <h3 class="default btn-link">
-                30: #text "\n\t\t\t\t\t\t\t\t\t\t"
-                31: <span>
-                32: #text "\n\t\t\t\t\t\t\t\t\t\t"
-                33: <button class="btn btn-default" onclick="buildRing()">
-                34: #text "\n\t\t\t\t\t\t\t\t\t\t"
-                35: <button class="btn btn-default" onclick="buildDysonTo(50);buildRing()">
-                36: #text "\n\t\t\t\t\t\t\t\t\t\t"
-                37: <br>
-                38: #text "\n\t\t\t\t\t\t\t\t\t\t"
-                39: <br>
-                40: #text "\n\t\t\t\t\t\t\t\t\t\t"
-                41: <hide id="dysonSphere" class="">
-                42: #text "\n\t\t\t\t\t\t\t\t\t"
-            };
-            */
-            // document.getElementById('target').insertAdjacentHTML('beforebegin', '＜div class="wrapper"＞');
-            // document.getElementById('target').insertAdjacentHTML('afterend', '＜/div＞');
-
-            return null;
-        }
-    }
-
-    var details = tr
-        .find("td > span")
-        .text()
-        .trim()
-        ;
-
-    var current_ob = h3
-        .find("span");
-    var current = current_ob
-        .text()
-        .trim();
-    magic.current = to_number(current);
-
-    var td = tr.find("td");
-
-    var button_id = get_button_id(td);
-    magic.button_id = button_id;
-
-    var input_id = create_input_and_get_id(td, button_id, pane_title + "/" + purchase);
-    magic.input_id = input_id;
-
-    magic.desired = inputid_2_desired(input_id);
-    magic.click_requested = ((magic.desired > 0) ? 1 : 0);
-
-    details = cleanup_details(details);
-
-    var label = pane_title + "/" + purchase;
-    var costs = extract_costs_from_details(details, pane_title, purchase, label);
-    magic.costs = costs;
-
-    var clean_purchase = purchase
+    var clean_name = purchase
         .replace(' / ', '')
         .replace(/[0-9]+$/, '')
         .replace(/^Tier\ [0-9]+\ /, '')
         .replace(/^T[0-9]+\ /, '')
         .replace(/#$/, '')
         .trim();
+    magic.clean_name = clean_name;
 
-    magic.requires = extract_requires_from_details(details, pane_title, clean_purchase, label);
-    magic.provides = extract_provides_from_details(details, pane_title, clean_purchase, label);
+    magic.pane_title = pane_title;
 
-    var unknown_substances = [].concat(
-        get_unknown_substances(magic.requires, quantities),
-        get_unknown_substances(magic.provides, quantities),
-        get_unknown_substances(costs, quantities),
-        []  // last, no comma
-    ).filter(function(item) {
-        return item !== "";
-    });
-    complain_about_unknown_substances_once(unknown_substances);
-    if (unknown_substances.length) {
-        if (DEBUG) { console.warn("cost of UNKNOWN SUBSTANCES:", pane_title, purchase, unknown_substances); }
-    } else {
-        unknown_substances = "";
+    var current = current_ob
+        .text()
+        .trim();
+    magic.current = to_number(current);
+
+    var button_id = uniqueId(button_ob, 'btn');
+    magic.button_id = button_id;
+
+    var input_id = create_input_and_get_id_NEW(button_id, pane_title + "/" + purchase);
+    magic.input_id = input_id;
+
+    magic.desired = inputid_2_desired(input_id);
+    magic.click_requested = ((magic.desired > 0) ? 1 : 0);
+
+    var label = pane_title + "/" + purchase;
+    var costs = extract_costs_from_details(details, pane_title, purchase, label);
+    magic.costs = costs;
+
+    magic.requires = extract_requires_from_details(details, pane_title, clean_name, label);
+    magic.provides = extract_provides_from_details(details, pane_title, clean_name, label);
+
+    if (magic.provides === "") {
+        magic.provides = {};
     }
-    magic.unknown = unknown_substances;
-    
-    magic.bump_max = get_bump_max_ob(costs, quantities);
-
-    var high_cost_and_time = get_high_cost_and_time_ob(costs, quantities);
-    const [high_cost, high_cost_time] = high_cost_and_time;
-    magic.high_cost = high_cost;
-    magic.high_cost_time = high_cost_time;
-
-    magic.high_rate = get_high_rate_ob(magic.requires, quantities);
-
-    magic.provides = (magic.provides === "") ? {} : magic.provides;
-
-    // console.warn('DEBUG: magic.provides', magic.provides);
     var provides_entries = Object.entries(magic.provides);
     var provides_entry;
-    // console.warn('DEBUG: provides_entries', provides_entries);
-    // console.warn('DEBUG: provides_entries.length', provides_entries.length);
+
     switch(provides_entries.length) {
       case 0:
         magic.provides_item = "";
@@ -1306,6 +1183,127 @@ function tr_2_magic(tr, pane_title, quantities) {
         magic.provides_item = "ERROR: provides.length > 1";
         magic.provides_count = provides_entries.length;
     } 
+
+    magic.details = details;
+
+    magic.tr_id = tr_id;
+
+    return magic;
+}
+
+function tr_2_magic_raw(tr, pane_title) {
+    "use strict";
+    tr = $( tr );
+    var tr_id = uniqueId(tr, 'tr-right');
+
+    // console.log("->", tr);
+    var h3 = tr.find("h3");
+    var purchase = h3
+        .text()
+        .trim()
+        .replace(new RegExp("/[0-9]*$"), "")    // remove "/NN" from end
+        .replace(new RegExp(": [0-9]*$"), "")   // remove ": NN" from end
+        ;
+
+    if (! purchase) {
+        return null;
+    }
+    var is_hidden = tr.hasClass("hidden");
+    if (is_hidden) {
+        /* if (DEBUG) */ console.warn(pane_title, purchase, "HIDDEN");
+        return null;
+    }
+    if (pane_title === "energy_mass_conversion") {
+        if (purchase !== "Research") {
+            return null;
+        }
+    }
+    if (pane_title === "dyson_swarms_and_sphere") {
+        if (purchase !== "Research") {
+            // this is where we wire in the special Dyson Sphere code
+            // var this_span_direct = $('#dysonPage').find('td').find('> span');
+            // var this_span = tr.find('td').find('> span');
+            // var use_this = this_span.contents();
+            var dyson_buttons = tr.find('td').find('> span').find('button');
+            console.warn('Dyson Buttons:', dyson_buttons);
+            // array of 10 items:
+            /*
+            var thing = {
+                0: <button class="btn btn-default" onclick="getDyson()">
+                1: <button class="btn btn-default" onclick="buildDysonTo(50)">
+                2: <button class="btn btn-default" onclick="buildDysonTo(100)">
+                3: <button class="btn btn-default" onclick="buildDysonTo(250)">
+
+                // DIVIDER #1
+                4: <button class="btn btn-default" onclick="buildRing()">
+                5: <button class="btn btn-default" onclick="buildDysonTo(50);buildRing()">
+
+                // DIVIDER #2
+                6: <button class="btn btn-default" onclick="buildSwarm()">
+                7: <button class="btn btn-default" onclick="buildDysonTo(100);buildSwarm()">
+
+                // DIVIDER #3
+                8: <button class="btn btn-default" onclick="buildSphere()">
+                9: <button class="btn btn-default" onclick="buildDysonTo(250);buildSphere()">
+            };
+            */
+            // document.getElementById('target').insertAdjacentHTML('beforebegin', '＜div class="wrapper"＞');
+            // document.getElementById('target').insertAdjacentHTML('afterend', '＜/div＞');
+
+            return null;
+        }
+    }
+
+    var details = tr
+        .find("td > span")
+        .text()
+        .trim()
+        ;
+    details = cleanup_details(details);
+
+    var current_ob = h3
+        .find("span");
+
+    var td = tr.find("td");
+
+    var button_ob = get_button(td);
+
+    var magic = compose_magic_object(pane_title, purchase, details, current_ob, button_ob, tr_id);
+
+    return magic;
+}
+
+function update_magic_fields(magic, pane_title, quantities) {
+    "use strict";
+
+    if (magic === null) {
+        return magic;
+    }
+
+    var unknown_substances = [].concat(
+        get_unknown_substances(magic.requires, quantities),
+        get_unknown_substances(magic.provides, quantities),
+        get_unknown_substances(magic.costs, quantities),
+        []  // last, no comma
+    ).filter(function(item) {
+        return item !== "";
+    });
+    complain_about_unknown_substances_once(unknown_substances);
+    if (unknown_substances.length) {
+        if (DEBUG) { console.warn("cost of UNKNOWN SUBSTANCES:", pane_title, magic.name, unknown_substances); }
+    } else {
+        unknown_substances = "";
+    }
+    magic.unknown = unknown_substances;
+
+    magic.bump_max = get_bump_max_ob(magic.costs, quantities);
+
+    var high_cost_and_time = get_high_cost_and_time_ob(magic.costs, quantities);
+    const [high_cost, high_cost_time] = high_cost_and_time;
+    magic.high_cost = high_cost;
+    magic.high_cost_time = high_cost_time;
+
+    magic.high_rate = get_high_rate_ob(magic.requires, quantities);
 
     if (magic.button_id === "") {
         magic.clickable = "no_button";
@@ -1326,35 +1324,67 @@ function tr_2_magic(tr, pane_title, quantities) {
         magic.clickable = "OK";
     }
 
-    magic.pane_title = pane_title;
-
-    if (magic.provides === "Provides not found" || magic.requires === "Requires not found") {
-        magic.details = details;
+    if (magic.provides !== "Provides not found" && magic.requires !== "Requires not found") {
+        magic.details = "";
     }
 
+    return;
+}
+
+function tr_2_magic(tr, pane_title, quantities) {
+    "use strict";
+
+    var magic = tr_2_magic_raw(tr, pane_title);
+
+    // the following should really be called MUCH LATER after we have
+    // used the Magic objects to update the (effective) Rates
+    // on the Quantities object
+
+    update_magic_fields(magic, pane_title, quantities);
+    
     /*
         magic = {
-          "name": "Storage Upgrade",
-          "pane_title": "Metal"
+            // Set by tr_2_magic_raw():
 
-          "current": 0,
-          "desired": 25,        // == actually "how many MORE should we get"
-          "click_requested": 1, // == 1 if desired > 0
+            "name": "Storage Upgrade #12/25",
+            "clean_name": "Storage Upgrade",
+            "pane_title": "Metal"
 
-          "costs": {
-            "helium": 50,
-            "lunarite": 20
-          },
+            "current": 0,
+            "desired": 25,        // == actually "how many MORE should we get"
+            "click_requested": 1, // == 1 if desired > 0
 
-          "unknown": [],
-          "bump_max": "",
-          "high_cost": "",
-          "high_rate": "",
-          "clickable": "OK"
+            "button_id": "uniq-btn-28",
+            "input_id": "uniq-input-99",
 
-          "button_id": "uniq-btn-28",
-          "input_id": "uniq-input-29",
-          "tr_id": "heliumStorageUpgrade",
+            "desired": 12,
+            "click_requested": 1,
+
+            "costs": "" | {list of substances with count},
+
+            "requires": "" | {list of substances with count},
+
+            "provides": "" | {list of substances with count},
+            "provides_item": "energy",
+            "provides_count": 1,
+
+            "details": "description including Costs, Requires, and Provides",
+
+            "tr_id": "heliumStorageUpgrade",
+
+            // ----------------------------------------------------------------
+
+            // Set by update_magic_fields():
+
+            "unknown": [list of substances],
+            "bump_max": "" | {list of substances with count},
+            "high_cost": "" | {list of substances with count},
+            "high_rate": "" | {list of substances with count},
+
+            "clickable": "no_button|unknown|bump_max|high_rate|high_cost|OK",
+
+            "details": << usually deleted >>
+
         };
     */
     return magic;
