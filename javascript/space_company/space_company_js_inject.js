@@ -833,8 +833,9 @@ function arraysFromEntries(arr) {
     return answer;
 }
 
-function get_button_id(td) {
+function get_button_raw(td) {
     "use strict";
+
     var button = td
         .find("button")
         [0];
@@ -850,6 +851,12 @@ function get_button_id(td) {
     }
 
     button = $( button );
+
+    return button;
+}
+
+function verify_button(button) {
+    "use strict";
 
     if (button.hasClass("destroy")) {
         console.error("destroy button!", button);
@@ -877,8 +884,24 @@ function get_button_id(td) {
         return "";
     }
 
-    return uniqueId(button, 'btn');
+    return button;
 }
+
+function get_button(td) {
+    "use strict";
+
+    var button = get_button_raw(td);
+    button = verify_button(button);
+
+    return button;
+}
+
+// function get_button_id_OLD(td) {
+//     "use strict";
+//     var button = get_button(td);
+// 
+//     return uniqueId(button, 'btn');
+// }
 
 function inputid_2_desired(input_id) {
     "use strict";
