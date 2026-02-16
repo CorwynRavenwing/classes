@@ -170,6 +170,9 @@ function unused_random_id(prefix) {
 
 function uniqueId(ob, prefix) {
     "use strict";
+    if (ob === "") {
+        return "";
+    }
     const ID = "id";
     var id = ob.attr(ID);
     if (id === undefined) {
