@@ -67,5 +67,11 @@ class Solution:
             print(f"    {TT=}")
             timeTuples.extend(TT)
         print(f"    {timeTuples=}")
+
         return format_times(timeTuples)
 
+# NOTE: Acceptance Rate 58.3% (easy)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 3 ms Beats 28.29%
+# NOTE: Memory 19.57 MB Beats 13.49%
