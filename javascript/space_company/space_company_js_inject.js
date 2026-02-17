@@ -763,6 +763,7 @@ var purchase_ignore_both = [
     'PSUs',
     "Storage Upgrade",
     // -----
+    "Battery Efficiency",
     "Energy Efficiency",
     "Resource Efficiency",
     "Science Efficiency",
@@ -776,6 +777,8 @@ var purchase_ignore_both = [
     "Rebuild Communication Wonder",
     "Rebuild Rocket Wonder",
     "Technological Wonder",
+    // -----
+    "Dyson Segment",
     // -----
     "ZZZ LAST NO COMMA"
 ];
