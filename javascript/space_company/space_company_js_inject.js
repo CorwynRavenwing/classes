@@ -275,7 +275,7 @@ function cleanup_substance_name_simple(name) {
         .replace("comms", "communication")
         .replace("stargate", "stargate room")
         .replace("room room", "room")
-        .replace("dyson segments", "dyson swarms and sphere")
+        .replace("dyson swarms and sphere", "dyson segments")
         .replace(" production", "")
         .replace(": dormant", "")
         .replace(": activated", "")
