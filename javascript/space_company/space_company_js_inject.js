@@ -744,11 +744,15 @@ function extract_costs_from_details(orig_string, pane_title, purchase, label) {
 
     string = extract_text_between_single(orig_string, start_needle, end_needle_list);
     if (string === null) {
+        console.error('THROWING ERROR');
+        console.error('pane data:', pane_title, purchase, label);
+        console.error('needle data:', start_needle, end_needle_list);
         throw new Error("Costs not found:\n" + label + "\n'" + orig_string + "'\n---\n'" + string + "'");
     }
 
-    // console.log('prices:', string, label);
-    var prices = prices_2_priceob(string);
+    // console.log('prices:', string);
+    prices = prices_2_priceob(string);
+    // console.warn('prices:', prices);
     return prices;
 }
 
@@ -873,8 +877,11 @@ function extract_provides_from_details(orig_string, pane_title, purchase, label)
         return "Provides not found";
     }
 
-    // console.log('prices:', "'"+orig_string+"'", "'"+string+"'", label);
+    // console.log('prices: orig_string', "'"+orig_string+"'");
+    // console.log('prices: string', "'"+string+"'");
+    // console.log('prices: label', label);
     var prices = prices_2_priceob(string);
+    // console.warn('prices:', prices);
     return prices;
 }
 
@@ -1109,9 +1116,11 @@ function get_unknown_substances(costs_ob, quantities) {
     "use strict";
 
     var costs_list = Object.keys(costs_ob);
+    // console.log('known_substances_list:', known_substances_list);
 
     var unknown_substances_list = costs_list.filter(function(substance) {
         var known_substance = Object.keys(quantities).includes(substance);
+        // console.log('substance:', substance);
         return (! known_substance);
     });
     if (unknown_substances_list.length > 0) {
@@ -1477,6 +1486,7 @@ function update_magic_fields(magic, pane_title, quantities) {
     }
 
     var unknown_substances = [].concat(
+    // console.log('quantities:', quantities);
         get_unknown_substances(magic.requires, quantities),
         get_unknown_substances(magic.provides, quantities),
         get_unknown_substances(magic.costs, quantities),
@@ -1484,6 +1494,10 @@ function update_magic_fields(magic, pane_title, quantities) {
     ).filter(function(item) {
         return item !== "";
     });
+
+    // console.log('unknown_substances_list:', unknown_substances_list);
+
+    // console.warn('unknown_substances_ob:', unknown_substances_ob);
     complain_about_unknown_substances_once(unknown_substances);
     if (unknown_substances.length) {
         if (DEBUG) { console.warn("cost of UNKNOWN SUBSTANCES:", pane_title, magic.name, unknown_substances); }
@@ -1719,7 +1733,10 @@ function choose_best_unrequested(magics_list) {
 function get_magic_by_clickable(tabs_available, quantities) {
     "use strict";
     var magics_ob = get_magics_ob(pane_descriptors, tabs_available, quantities);
-    // console.warn('magics_ob:', magics_ob);
+    // console.warn('magics_ob (before):', magics_ob);
+
+            // console.warn('DEBUG: updating magic', 'pane_title', pane_title, 'magic', magic);
+    // console.warn('magics_ob (after):', magics_ob);
 
     var magics_list = Object.values(magics_ob).flat();
     // console.warn('magics_list:', magics_list);
