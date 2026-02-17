@@ -642,6 +642,8 @@ function extract_costs_from_details(orig_string, pane_title, purchase, label) {
     "use strict";
     const start_needle = cost_flag;
     const end_needle_list = [];
+    var string, string1, start1, end1, string2, start2, end2;
+    var prices;
 
     if (pane_title === "energy_mass_conversion") {
         if (purchase !== "Research") {
@@ -649,9 +651,80 @@ function extract_costs_from_details(orig_string, pane_title, purchase, label) {
             return "";
         }
     }
-    if (pane_title === "dyson swarms and sphere") {
-        if (purchase !== "Research") {
-            // has non-standard Costs section
+    if (pane_title === "dyson_segments") {
+
+        switch(purchase) {
+
+          case "Research":
+            // fall through, extract costs normally
+            break;
+
+          case "Dyson Segment":
+            // fall through, extract costs normally
+            break;
+
+          case "Dyson Ring":
+            start1 = "It requires";
+            end1 = ["in total"];
+            string1 = extract_text_between_single(orig_string, start1, end1);
+            // console.log('DEBUG string1', "'" + string1 + "'");
+
+            start2 = "You currently have";
+            end2 = ["to create the", "to build the"];
+            string2 = extract_text_between_single(orig_string, start2, end2);
+            string2 = string2
+                .replace(/^[0-9]+/, "")
+                .replace(" out of ", "")
+                ;
+            // console.log('DEBUG string2', "'" + string2 + "'");
+
+            string = string1 + ", " + string2;
+            // console.log('prices:', string);
+            prices = prices_2_priceob(string);
+            // console.warn('prices:', prices);
+            return prices;
+
+          case "Dyson Swarm":
+            start1 = "It requires";
+            end1 = ["in total"];
+            string1 = extract_text_between_single(orig_string, start1, end1);
+
+            start2 = "You currently have";
+            end2 = ["to create the", "to build the"];
+            string2 = extract_text_between_single(orig_string, start2, end2);
+            string2 = string2
+                .replace(/^[0-9]+/, "")
+                .replace(" out of ", "")
+                ;
+
+            string = string1 + ", " + string2;
+            // console.log('prices:', string);
+            prices = prices_2_priceob(string);
+            // console.warn('prices:', prices);
+            return prices;
+
+          case "Dyson Sphere":
+            // console.warn('dyson sphere orig_string', orig_string);
+            start1 = "Costs:";
+            end1 = ["to assemble the segments"];
+            string1 = extract_text_between_single(orig_string, start1, end1);
+
+            start2 = "You currently have";
+            end2 = ["to create the", "to build the"];
+            string2 = extract_text_between_single(orig_string, start2, end2);
+            string2 = string2
+                .replace(/^[0-9]+/, "")
+                .replace(" out of ", "")
+                ;
+
+            string = string1 + ", " + string2;
+            // console.log('prices:', string);
+            prices = prices_2_priceob(string);
+            // console.warn('prices:', prices);
+            return prices;
+
+          default:
+            console.error('Dyson purchase unknown:', purchase);
             return "";
         }
     }
@@ -726,6 +799,10 @@ function extract_requires_from_details(orig_string, pane_title, purchase, label)
         "Solar Panels",
         "Vacuum Cleaner",
         "Woodcutter",
+        // -----
+        "Dyson Ring",
+        "Dyson Swarm",
+        "Dyson Sphere",
         // -----
         "ZZZ LAST NO COMMA"
     ];
@@ -1248,39 +1325,128 @@ function tr_2_magic_raw(tr, pane_title) {
             return null;
         }
     }
-    if (pane_title === "dyson_swarms_and_sphere") {
+    if (pane_title === "dyson_segments") {
         if (purchase !== "Research") {
             // this is where we wire in the special Dyson Sphere code
-            // var this_span_direct = $('#dysonPage').find('td').find('> span');
-            // var this_span = tr.find('td').find('> span');
-            // var use_this = this_span.contents();
-            var dyson_buttons = tr.find('td').find('> span').find('button');
-            console.warn('Dyson Buttons:', dyson_buttons);
-            // array of 10 items:
-            /*
-            var thing = {
-                0: <button class="btn btn-default" onclick="getDyson()">
-                1: <button class="btn btn-default" onclick="buildDysonTo(50)">
-                2: <button class="btn btn-default" onclick="buildDysonTo(100)">
-                3: <button class="btn btn-default" onclick="buildDysonTo(250)">
 
-                // DIVIDER #1
-                4: <button class="btn btn-default" onclick="buildRing()">
-                5: <button class="btn btn-default" onclick="buildDysonTo(50);buildRing()">
+            var dyson_page = tr.find('td').find('> span');
+            var dyson_buttons = dyson_page.find('button');
+            var dyson_spans = dyson_page.find('span');
 
-                // DIVIDER #2
-                6: <button class="btn btn-default" onclick="buildSwarm()">
-                7: <button class="btn btn-default" onclick="buildDysonTo(100);buildSwarm()">
+            if (dyson_buttons.length !== 10) {
+                console.error('THROWING ERROR');
+                console.error("dyson_buttons", dyson_buttons.length + ")", dyson_buttons);
+                throw new Error("dyson_segments: Invalid dyson_buttons.length (should be 10)");
+            }
+            if (dyson_spans.length !== 19) {
+                console.error('THROWING ERROR');
+                console.error("dyson_spans", dyson_spans.length + ")" , dyson_spans);
+                throw new Error("dyson_segments: Invalid dyson_spans.length (should be 19)");
+            }
 
-                // DIVIDER #3
-                8: <button class="btn btn-default" onclick="buildSphere()">
-                9: <button class="btn btn-default" onclick="buildDysonTo(250);buildSphere()">
-            };
-            */
-            // document.getElementById('target').insertAdjacentHTML('beforebegin', '＜div class="wrapper"＞');
-            // document.getElementById('target').insertAdjacentHTML('afterend', '＜/div＞');
+            var dyson_objects = [];
+            var dyson_subpage, dyson_magic, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id;
 
-            return null;
+            //////////////////////////
+            // Construction clack:  //
+            //////////////////////////
+
+            dyson_product = "Dyson Segment";
+            dyson_subpage = dyson_page;
+            dyson_tr_id = uniqueId(dyson_subpage);
+            dyson_details = dyson_subpage
+                .text()
+                .trim()
+                ;
+            var position = dyson_details.search("Build Dyson Segment");
+            if (position === -1) {
+                throw new Error("dyson_segments: Invalid dyson_details (should contain 'Build Dyson Segment'): " + dyson_details);
+            }
+            dyson_details = dyson_details.slice(0, position);
+            dyson_details = cleanup_details(dyson_details);
+            dyson_current_ob = $("#dysonPieces2");
+            dyson_button_ob = $( dyson_buttons[0] );
+
+            // console.warn('compose_magic_object()', pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
+            dyson_magic = compose_magic_object(pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
+            // console.warn('compose_magic_object()', dyson_magic);
+
+            dyson_objects.push(dyson_magic);
+
+            //////////////////////////
+            // Ring clack:          //
+            //////////////////////////
+
+            dyson_product = "Dyson Ring";
+            dyson_subpage = $( dyson_spans[6] );
+            dyson_tr_id = uniqueId(dyson_subpage);
+            dyson_details = dyson_subpage
+                .text()
+                .trim()
+                ;
+            dyson_details = cleanup_details(dyson_details);
+            dyson_current_ob = $("#ring");
+            dyson_button_ob = $( dyson_buttons[4] );
+
+            // console.warn('compose_magic_object()', pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
+            dyson_magic = compose_magic_object(pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
+            // console.warn('compose_magic_object()', dyson_magic);
+
+            dyson_objects.push(dyson_magic);
+
+            //////////////////////////
+            // Swarm clack:         //
+            //////////////////////////
+
+            dyson_product = "Dyson Swarm";
+            dyson_subpage = $( dyson_spans[10] );
+            dyson_tr_id = uniqueId(dyson_subpage);
+            dyson_details = dyson_subpage
+                .text()
+                .trim()
+                ;
+            dyson_details = cleanup_details(dyson_details);
+            dyson_current_ob = $("#swarm");
+            dyson_button_ob = $( dyson_buttons[6] );
+
+            // console.warn('compose_magic_object()', pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
+            dyson_magic = compose_magic_object(pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
+            // console.warn('compose_magic_object()', dyson_magic);
+
+            dyson_objects.push(dyson_magic);
+
+            //////////////////////////
+            // Sphere clack:        //
+            //////////////////////////
+
+            dyson_product = "Dyson Sphere";
+            dyson_subpage = $( dyson_spans[15] );
+            dyson_tr_id = uniqueId(dyson_subpage);
+            dyson_details = dyson_subpage
+                .text()
+                .trim()
+                ;
+            dyson_details = cleanup_details(dyson_details);
+            dyson_current_ob = $("#sphere");
+            var dyson_max_ob = $("#sphereMax");
+            var dyson_current_val = to_number(dyson_current_ob.text().trim());
+            var dyson_max_val = to_number(dyson_max_ob.text().trim());
+            if (dyson_current_val < dyson_max_val) {
+                dyson_button_ob = $( dyson_buttons[8] );
+            } else {
+                console.warn('dyson sphere counts: compare', dyson_current_val, dyson_max_val, 'MAX REACHED');
+                dyson_button_ob = "";
+            }
+
+            // console.warn('compose_magic_object()', pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
+            dyson_magic = compose_magic_object(pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
+            // console.warn('compose_magic_object()', dyson_magic);
+
+            dyson_objects.push(dyson_magic);
+
+            // console.warn('dyson_objects', dyson_objects);
+
+            return dyson_objects;
         }
     }
 
