@@ -1551,7 +1551,7 @@ function update_magic_fields(magic, pane_title, quantities) {
     return;
 }
 
-function tr_2_magic(tr, pane_title, quantities) {
+function tr_2_magic(tr, pane_title) {
     "use strict";
 
     var magic = tr_2_magic_raw(tr, pane_title);
@@ -1604,7 +1604,7 @@ function tr_2_magic(tr, pane_title, quantities) {
     return magic;
 }
 
-function trsob_2_magicsob(trs_ob, quantities) {
+function trsob_2_magicsob(trs_ob) {
     "use strict";
     var magic;
     var trs_array = Object.entries(trs_ob);
@@ -1612,7 +1612,7 @@ function trsob_2_magicsob(trs_ob, quantities) {
         if (DEBUG) {console.log("DEBUG GMO", pane_title);}
         var magics = trs.map(function(tr) {
             // console.log("DEBUG idx", "tr", tr)
-            magic = tr_2_magic(tr, pane_title, quantities);
+            magic = tr_2_magic(tr, pane_title);
             return magic;
         })
         .filter((ob) => ob !== null)
@@ -1694,7 +1694,7 @@ function get_magics_ob(pane_descriptors, tabs_available, quantities) {
     "use strict";
     var panes_ob = panesdesc_2_panesob(pane_descriptors, tabs_available);
     var trs_ob = panesob_2_trsob(panes_ob, quantities);
-    var magics_ob = trsob_2_magicsob(trs_ob, quantities);
+    var magics_ob = trsob_2_magicsob(trs_ob);
 
     return magics_ob;
 }
