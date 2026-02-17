@@ -786,8 +786,8 @@ var purchase_ignore_both = [
 function extract_requires_from_details(orig_string, pane_title, purchase, label) {
     "use strict";
 
-    const start_needle = "Uses";
-    const end_needle_list = ["per second", "every second", "each second", " for ", ", produces "];       // ", provides"];
+    const start_needle_list = ["Uses", "They use"];
+    const end_needle_list = ["per second", "every second", "each second", " for ", ", produces "];
 
     const purchase_ignore = [
         "Empowered Blowtorch",
@@ -830,14 +830,11 @@ function extract_requires_from_details(orig_string, pane_title, purchase, label)
         return "";
     }
 
-    var string = extract_text_between(orig_string, start_needle, end_needle_list);
+    var string = extract_text_between_list(orig_string, start_needle_list, end_needle_list);
     if (string === null) {
-        string = extract_text_between(orig_string, "They use", end_needle_list);
-    }
-    if (string === null) {
-        var try_string = extract_text_between(orig_string, "produces", []);         // grab the whole "produces x for y" part
+        var try_string = extract_text_between_single(orig_string, "produces", []);         // grab the whole "produces x for y" part
         if (try_string !== null) {
-            string = extract_text_between(try_string, " for ", end_needle_list);    // then jump to the "for", take the rest
+            string = extract_text_between_single(try_string, " for ", end_needle_list);    // then jump to the "for", take the rest
         }
     }
     // yes, ask again:
@@ -855,7 +852,7 @@ function extract_requires_from_details(orig_string, pane_title, purchase, label)
 
 function extract_provides_from_details(orig_string, pane_title, purchase, label) {
     "use strict";
-    const start_needle = "produces";
+    const start_needle_list = ["produces", "that can produce", "it can produce", "it will produce"];
     const end_needle_list = ["per second", "every second", "each second", " for ", ", uses "];   // , ", requires"];
 
     const purchase_ignore = [
