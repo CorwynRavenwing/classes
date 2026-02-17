@@ -1282,10 +1282,11 @@ function compose_magic_object(pane_title, purchase, details, current_ob, button_
     magic.requires = extract_requires_from_details(details, pane_title, clean_name, label);
     magic.provides = extract_provides_from_details(details, pane_title, clean_name, label);
 
-    if (magic.provides === "") {
-        magic.provides = {};
+    var provides = magic.provides;
+    if (provides === "") {
+        provides = {};
     }
-    var provides_entries = Object.entries(magic.provides);
+    var provides_entries = Object.entries(provides);
     var provides_entry;
 
     switch(provides_entries.length) {
