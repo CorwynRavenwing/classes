@@ -598,7 +598,7 @@ function prices_2_priceob(prices_str) {
     return prices_ob;
 }
 
-function extract_text_between(haystack, start_needle, end_needle_list) {
+function extract_text_between_single(haystack, start_needle, end_needle_list) {
     "use strict";
     var answer = haystack.toLowerCase();
     var position = answer.search(start_needle.toLowerCase());
@@ -623,6 +623,18 @@ function extract_text_between(haystack, start_needle, end_needle_list) {
         .trim()                     // remove trailing spaces *again*
         .replaceAll(/\ \ +/g, " ")  // no doubled spaces
         ;
+    return answer;
+}
+
+function extract_text_between_list(haystack, start_needle_list, end_needle_list) {
+    "use strict";
+    var answer = null;
+    start_needle_list.forEach(function(start_needle) {
+        if (answer === null) {
+            answer = extract_text_between_single(haystack, start_needle, end_needle_list);
+            // console.log('DEBUG: extract_text_between_list()', answer, "<-", haystack, start_needle, end_needle_list);
+        }
+    });
     return answer;
 }
 
@@ -657,7 +669,7 @@ function extract_costs_from_details(orig_string, pane_title, purchase, label) {
         return "";
     }
 
-    var string = extract_text_between(orig_string, start_needle, end_needle_list);
+    string = extract_text_between_single(orig_string, start_needle, end_needle_list);
     if (string === null) {
         throw new Error("Costs not found:\n" + label + "\n'" + orig_string + "'\n---\n'" + string + "'");
     }
@@ -777,7 +789,7 @@ function extract_provides_from_details(orig_string, pane_title, purchase, label)
     }
     pane_title = pane_title;    // ignore
 
-    var string = extract_text_between(orig_string, start_needle, end_needle_list);
+    var string = extract_text_between_list(orig_string, start_needle_list, end_needle_list);
     if (string === null) {
         // throw new Error("Provides not found:\n" + label + "\n'" + orig_string + "'\n---\n'" + string + "'");
         label = label;  // ignore
