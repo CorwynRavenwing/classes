@@ -1115,16 +1115,20 @@ function complain_about_unknown_substances_once(unknown_substances_list) {
 function get_unknown_substances(costs_ob, quantities) {
     "use strict";
 
-    var costs_list = Object.keys(costs_ob);
+    var costs_list = Object.entries(costs_ob);
+
+    var known_substances_list = Object.keys(quantities);
     // console.log('known_substances_list:', known_substances_list);
 
-    var unknown_substances_list = costs_list.filter(function(substance) {
-        var known_substance = Object.keys(quantities).includes(substance);
+    var unknown_substances_list = costs_list.filter(function(entry) {
+        const substance = entry[0];
         // console.log('substance:', substance);
+        var known_substance = known_substances_list.includes(substance);
         return (! known_substance);
     });
     if (unknown_substances_list.length > 0) {
-        return unknown_substances_list;
+        var unknown_substances_ob = Object.fromEntries(unknown_substances_list);
+        return unknown_substances_ob;
     } else {
         return "";
     }
@@ -1485,26 +1489,31 @@ function update_magic_fields(magic, pane_title, quantities) {
         return magic;
     }
 
-    var unknown_substances = [].concat(
     // console.log('quantities:', quantities);
+
+    var unknown_substances_list = [
         get_unknown_substances(magic.requires, quantities),
         get_unknown_substances(magic.provides, quantities),
-        get_unknown_substances(magic.costs, quantities),
-        []  // last, no comma
-    ).filter(function(item) {
-        return item !== "";
-    });
+        get_unknown_substances(magic.costs, quantities)
+    ];
 
     // console.log('unknown_substances_list:', unknown_substances_list);
 
+    var unknown_substances_entry_list = unknown_substances_list.map(function(unknown_ob) {
+        return safeEntries(unknown_ob);
+    }).flat();
+
+    var unknown_substances_ob = Object.fromEntries(unknown_substances_entry_list);
     // console.warn('unknown_substances_ob:', unknown_substances_ob);
+    var unknown_substances = Object.keys(unknown_substances_ob);
+
     complain_about_unknown_substances_once(unknown_substances);
     if (unknown_substances.length) {
         if (DEBUG) { console.warn("cost of UNKNOWN SUBSTANCES:", pane_title, magic.name, unknown_substances); }
     } else {
-        unknown_substances = "";
+        unknown_substances_ob = "";
     }
-    magic.unknown = unknown_substances;
+    magic.unknown = unknown_substances_ob;
 
     magic.bump_max = get_bump_max_ob(magic.costs, quantities);
 
