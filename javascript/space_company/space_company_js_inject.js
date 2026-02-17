@@ -1556,12 +1556,6 @@ function tr_2_magic(tr, pane_title, quantities) {
 
     var magic = tr_2_magic_raw(tr, pane_title);
 
-    // the following should really be called MUCH LATER after we have
-    // used the Magic objects to update the (effective) Rates
-    // on the Quantities object
-
-    update_magic_fields(magic, pane_title, quantities);
-    
     /*
         magic = {
             // Set by tr_2_magic_raw():
@@ -1620,7 +1614,10 @@ function trsob_2_magicsob(trs_ob, quantities) {
             // console.log("DEBUG idx", "tr", tr)
             magic = tr_2_magic(tr, pane_title, quantities);
             return magic;
-        }).filter((ob) => ob !== null);
+        })
+        .filter((ob) => ob !== null)
+        .flat()
+        ;
         return [pane_title, magics];
     });
     var magics_ob = Object.fromEntries(magics_array);
@@ -1745,7 +1742,14 @@ function get_magic_by_clickable(tabs_available, quantities) {
     var magics_ob = get_magics_ob(pane_descriptors, tabs_available, quantities);
     // console.warn('magics_ob (before):', magics_ob);
 
+    var magics_entries = safeEntries(magics_ob);
+    magics_entries.forEach(function(entry) {
+        const [pane_title, magics_list] = entry;
+        magics_list.forEach(function(magic) {
             // console.warn('DEBUG: updating magic', 'pane_title', pane_title, 'magic', magic);
+            update_magic_fields(magic, pane_title, quantities);
+        });
+    });
     // console.warn('magics_ob (after):', magics_ob);
 
     var magics_list = Object.values(magics_ob).flat();
