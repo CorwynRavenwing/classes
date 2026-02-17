@@ -174,6 +174,7 @@ function uniqueId(ob, prefix) {
         return "";
     }
     const ID = "id";
+    // console.log('uniqueId(ob):', ob);
     var id = ob.attr(ID);
     if (id === undefined) {
         id = unused_random_id("uniq-" + prefix + '-');
@@ -292,9 +293,6 @@ function cleanup_substance_name(name, pane_heading) {
             // Disambiguate "Resource/Plasma" from "Sol Center/Plasma":
             name += " Unlock";
         }
-        if (DEBUG) {
-            console.error('Plasma', pane_heading, name);
-        }
     }
 
     return cleanup_substance_name_simple(name);
@@ -302,6 +300,9 @@ function cleanup_substance_name(name, pane_heading) {
 
 function textlist_2_substance(pane_heading, tr_id, texts) {
     "use strict";
+    // if (pane_heading === "Sol Center") {
+    //     console.warn('t2s(): Sol Center, texts=', texts);
+    // }
     var substance = {};
     var A, B;
     switch (texts.length) {
@@ -316,6 +317,9 @@ function textlist_2_substance(pane_heading, tr_id, texts) {
         substance.count = to_number(texts[1]);
         substance.rate = 0;
         substance.max = "";
+        // if (pane_heading === "Sol Center") {
+        //     console.warn('t2s(): Sol Center, substance=', substance);
+        // }
         break;
     case 3:
         substance.name = texts[0];
@@ -342,7 +346,7 @@ function textlist_2_substance(pane_heading, tr_id, texts) {
             substance.max = B;
             break;
         default:
-            console.error("GQ():", pane_heading, "3-element texts for invalid tab name '" + substance.name + "'", "texts", texts, "substance", substance);
+            console.error("T2S():", pane_heading, "3-element texts for invalid tab name '" + substance.name + "'", "texts", texts, "substance", substance);
             return null;
         }
         break;
@@ -365,12 +369,16 @@ function textlist_2_substance(pane_heading, tr_id, texts) {
 
 function get_quantities(tabs_available) {
     "use strict";
+
     var leftbar = panesdesc_2_left_trs(tabs_available);
 
     var leftbar_entries = Object.entries(leftbar);
 
     var substance_list_all = leftbar_entries.map(function(entry) {
         const [pane_heading, trs] = entry;
+
+        // DEBUG = (pane_heading === "Sol Center");
+
         if (DEBUG) {console.log('GQ(): pane_heading, trs', pane_heading, trs);}
         var tds_list = trs.map(function(tr) {
             var tds = tr_to_tds(tr);
@@ -406,12 +414,18 @@ function get_quantities(tabs_available) {
         var substance_list = texts_list.map(function(entry) {
             const [tr_id, texts] = entry;
             var substance = textlist_2_substance(pane_heading, tr_id, texts);
+            // if (pane_heading === "Sol Center") {
+            //     console.warn('GQ(): Sol Center, substance=', substance);
+            // }
             return substance;
         });
 
         return substance_list;
     }).flat();
+
+    // DEBUG = true;
     if (DEBUG) {console.log('GQ(): substance_list_all', substance_list_all);}
+    // DEBUG = false;
 
     // // should pull these counts from the Interstellar:Rockets page
     var plating_count = 0;
@@ -434,7 +448,10 @@ function get_quantities(tabs_available) {
     if (DEBUG) {console.log('GQ(): quantities_list', quantities_list);}
 
     var quantities = Object.fromEntries(quantities_list);
-    // IF (DEBUG) {console.log('GQ(): quantities', quantities);}
+    // DEBUG = true;
+    if (DEBUG) {console.log('GQ(): quantities', quantities);}
+    // DEBUG = false;
+
     return quantities;
 }
 
@@ -734,8 +751,9 @@ function extract_requires_from_details(orig_string, pane_title, purchase, label)
         return "Requires not found";
     }
 
-    // console.log('prices:', "'"+orig_string+"'", "'"+string+"'", label);
+    // console.log('prices:', string);
     var prices = prices_2_priceob(string);
+    // console.warn('prices:', prices);
     return prices;
 }
 
@@ -1863,18 +1881,16 @@ function tick() {
             const [magics_label, magics_list] = entry;
             var check_by_provides = filter_magics_by(magics_list, "provides");
             var check_by_requires = filter_magics_by(magics_list, "requires");
-            // console.warn('check_by_provides:', check_by_provides);
-            // console.warn('check_by_requires:', check_by_requires);
 
             var fail_provides = check_by_provides["Provides not found"];
             var fail_requires = check_by_requires["Requires not found"];
-            console.log(magics_label, 'fail_provides:', fail_provides);
-            console.log(magics_label, 'fail_requires:', fail_requires);
+            if (fail_provides !== undefined) { console.error(magics_label, 'fail_provides:', fail_provides); }
+            if (fail_requires !== undefined) { console.error(magics_label, 'fail_requires:', fail_requires); }
 
             var magic_by_provides = filter_magics_by(magics_list, "provides_item");
             // console.log(magics_label, 'by_provides_item:', magic_by_provides);
             var fail_provides_item = magic_by_provides["ERROR: provides.length > 1"];
-            console.log(magics_label, 'fail provides_item:', fail_provides_item);
+            if (fail_provides_item !== undefined) { console.error(magics_label, 'fail provides_item:', fail_provides_item); }
         });
     }
 
