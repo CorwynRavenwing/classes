@@ -1321,6 +1321,9 @@ function compose_magic_object(pane_title, purchase, details, current_ob, button_
 function tr_2_magic_raw(tr, pane_title) {
     "use strict";
     tr = $( tr );
+    // TODO: this once threw an error:
+    // Uncaught TypeError: can't assign to property "id" on -1.8359385912006677e+289: not an object
+    // I have no idea how the $() fn returned a number ?!?
     var tr_id = uniqueId(tr, 'tr-right');
 
     // console.log("->", tr);
