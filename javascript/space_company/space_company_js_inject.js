@@ -1121,7 +1121,7 @@ function complain_about_unknown_substances_once(unknown_substances_list) {
 function get_unknown_substances(costs_ob, quantities) {
     "use strict";
 
-    var costs_list = Object.entries(costs_ob);
+    var costs_list = safeEntries(costs_ob);
 
     var known_substances_list = Object.keys(quantities);
     // console.log('known_substances_list:', known_substances_list);
