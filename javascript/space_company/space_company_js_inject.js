@@ -1281,6 +1281,10 @@ function compose_magic_object(pane_title, purchase, details, current_ob, button_
     magic.desired = inputid_2_desired(input_id);
     magic.click_requested = ((magic.desired > 0) ? 1 : 0);
 
+    magic.details = details;
+
+    details = cleanup_details(details);
+
     var label = pane_title + "/" + purchase;
     var costs = extract_costs_from_details(details, pane_title, purchase, label);
     magic.costs = costs;
@@ -1310,8 +1314,6 @@ function compose_magic_object(pane_title, purchase, details, current_ob, button_
         magic.provides_item = "ERROR: provides.length > 1";
         magic.provides_count = provides_entries.length;
     } 
-
-    magic.details = details;
 
     magic.tr_id = tr_id;
 
@@ -1478,7 +1480,6 @@ function tr_2_magic_raw(tr, pane_title) {
         .text()
         .trim()
         ;
-    details = cleanup_details(details);
 
     var current_ob = h3
         .find("span");
