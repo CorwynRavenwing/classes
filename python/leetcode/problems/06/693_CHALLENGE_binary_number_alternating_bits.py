@@ -42,3 +42,8 @@ class Solution:
             prior_bit = bit
         return True
 
+# NOTE: Acceptance Rate 69.5% (easy)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 0 ms Beats 100.00%
+# NOTE: Memory 19.38 MB Beats 51.52%
