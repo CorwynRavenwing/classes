@@ -1725,25 +1725,52 @@ function filter_magics_by(magics_list, filter_column) {
     return answer;
 }
 
-function choose_best_requested(magics_list) {
+function choose_leftmost(magics_list) {
     "use strict";
-    // TODO: blindly picking the leftmost for now
     return magics_list[0];
 }
 
-function choose_best_unrequested(magics_list) {
+function choose_random(magics_list) {
     "use strict";
+    var i = Math.floor(Math.random() * magics_list.length);
+    return magics_list[i];
+}
 
+// function filter_field_equal(magics_list, field_name, skip_value) {
+//     "use strict";
+//     magics_list = magics_list.filter(function(magic) {
+//         if (magic[field_name] !== skip_value) {
+//             // console.log("FF(==) skip", field_name, skip_value, magic);
+//             return false;
+//         }
+//         return true;
+//     });
+//     return magics_list;
+// }
+
+function filter_field_not_equal(magics_list, field_name, skip_value) {
+    "use strict";
     magics_list = magics_list.filter(function(magic) {
-        if (magic.name === "Storage Upgrade") {
-            // console.log('   ... skip Storage upgrade', magic);
+        if (magic[field_name] === skip_value) {
+            // console.log("FF(!=) skip", field_name, skip_value, magic);
             return false;
         }
         return true;
     });
-    // TODO: blindly picking a random one for now
-    var i = Math.floor(Math.random() * magics_list.length);
-    return magics_list[i];
+    return magics_list;
+}
+
+function choose_best_requested(magics_list) {
+    "use strict";
+    // TODO: use a better method
+    return choose_leftmost(magics_list);
+}
+
+function choose_best_unrequested(magics_list) {
+    "use strict";
+    magics_list = filter_field_not_equal(magics_list, "name", "Storage Upgrade");
+    // TODO: use a better method
+    return choose_random(magics_list);
 }
 
 function get_magic_by_clickable(tabs_available, quantities) {
