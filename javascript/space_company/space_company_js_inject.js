@@ -1251,6 +1251,21 @@ function get_high_rate_ob(rates_ob, quantities) {
     }
 }
 
+function details_2_cost_need_make(details, pane_title, purchase, clean_name) {
+    "use strict";
+    details = cleanup_details(details);
+
+    var label = pane_title + "/" + purchase;
+
+    var answer = {
+        cost: extract_costs_from_details(details, pane_title, purchase, label),
+        need: extract_requires_from_details(details, pane_title, clean_name, label),
+        make: extract_make_from_details(details, pane_title, clean_name, label)
+    };
+
+    return answer;
+}
+
 function compose_magic_object(pane_title, purchase, details, current_ob, button_ob, tr_id) {
     "use strict";
     var magic = {};
@@ -1283,18 +1298,15 @@ function compose_magic_object(pane_title, purchase, details, current_ob, button_
 
     magic.details = details;
 
-    details = cleanup_details(details);
+    var cost_need_make = details_2_cost_need_make(details, pane_title, purchase, clean_name);
 
-    var label = pane_title + "/" + purchase;
-    var costs = extract_costs_from_details(details, pane_title, purchase, label);
-    magic.costs = costs;
+    magic.costs = cost_need_make.cost;
+    magic.requires = cost_need_make.need;
+    magic.make = cost_need_make.make;
 
-    magic.requires = extract_requires_from_details(details, pane_title, clean_name, label);
-    magic.provides = extract_provides_from_details(details, pane_title, clean_name, label);
-
-    var provides = magic.provides;
-    if (provides === "") {
-        provides = {};
+    var make = magic.make;
+    if (make === "") {
+        make = {};
     }
     var provides_entries = Object.entries(provides);
     var provides_entry;
