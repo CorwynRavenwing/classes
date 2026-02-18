@@ -782,7 +782,9 @@ var purchase_ignore_both = [
     "Rebuild Rocket Wonder",
     "Technological Wonder",
     // -----
+    "Astronomical Breakthrough",
     "Dyson Segment",
+    "Interstellar Radar Scanner",
     // -----
     "ZZZ LAST NO COMMA"
 ];
