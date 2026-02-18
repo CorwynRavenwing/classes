@@ -2005,8 +2005,9 @@ function get_bump_reasons(magic_by_clickable) {
             var bump_max_items = safeEntries(magic.bump_max);
             var bump_max_arr = bump_max_items.map(function(entry) {
                 const [substance, count] = entry;
-                var pane_heading = "Unknown";
-                return [substance, [pane_heading + '/' + pane_title + '/' + pane_name, count]];
+                // var pane_heading = "Unknown";
+                // return [substance, [pane_heading + '/' + pane_title + '/' + pane_name, count]];
+                return [substance, [pane_title + '/' + pane_name, count]];
             });
             // console.log('debug: bump_max_arr', bump_max_arr);
             return bump_max_arr;
