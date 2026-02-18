@@ -1975,13 +1975,13 @@ function click_something(okay_and_requested, okay_but_not_requested, all_click_c
         // add_class_remove_others(tr, "auto_request", all_click_classes);
         // // button = $( "#" + magic.button_id );
         // input = $( "#" + magic.input_id );
-        // console.log('... tr', tr, 'desired', magic.desired, 'input', input);
+        // // console.log('... tr', tr, 'desired', magic.desired, 'input', input);
         // if (magic.desired) {
         //     console.error("Error!  'desired' is not zero/blank!", magic.desired);
         //     // return, maybe?
         // } else {
         //     desired = 1;
-        //     console.log("AUTO-REQUEST", /* TIME, */ magic.pane_title, magic.name, "(" + magic.desired + "->" + desired + ")");
+        //     console.warn("AUTO-REQUEST", /* TIME, */ magic.pane_title, magic.name, "(" + magic.desired + "->" + desired + ")");
         //     input.val(desired);
         // }
 
