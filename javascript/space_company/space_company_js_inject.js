@@ -116,9 +116,13 @@ function toHHMMSS(total_sec) {
     if (minutes) { minutes += " min"; } else { minutes = ""; }
     if (seconds) { seconds += " sec"; } else { seconds = ""; }
 
-    var answer = [hours,minutes,seconds];
+    var answers = [hours,minutes,seconds];
 
-    return answer.join(" ").trim();
+    var answer = answers.join(" ").trim();
+    if (answer === "") {
+            answer = "0 sec";
+    }
+    return answer;
 }
 
 function jQuery_to_array(jquery_object) {
