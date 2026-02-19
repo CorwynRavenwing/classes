@@ -27,7 +27,7 @@ var tick_seconds = 1;
 
 var DEBUG = false;
 var DEBUG_tick = false;
-// var TEST = false;
+var TEST = false;
 
 var prior_cick_time;
 
@@ -642,7 +642,7 @@ function extract_text_between_list(haystack, start_needle_list, end_needle_list)
     return answer;
 }
 
-function extract_costs_from_details(orig_string, pane_title, purchase, label) {
+function extract_cost_from_details(orig_string, pane_title, purchase, label) {
     "use strict";
     const start_needle = cost_flag;
     const end_needle_list = [];
@@ -660,11 +660,11 @@ function extract_costs_from_details(orig_string, pane_title, purchase, label) {
         switch(purchase) {
 
           case "Research":
-            // fall through, extract costs normally
+            // fall through, extract cost normally
             break;
 
           case "Dyson Segment":
-            // fall through, extract costs normally
+            // fall through, extract cost normally
             break;
 
           case "Dyson Ring":
@@ -742,7 +742,7 @@ function extract_costs_from_details(orig_string, pane_title, purchase, label) {
         return "";
     }
     if (orig_string === "") {
-        // string is now blank: no costs
+        // string is now blank: no cost
         return "";
     }
 
@@ -760,7 +760,7 @@ function extract_costs_from_details(orig_string, pane_title, purchase, label) {
     return prices;
 }
 
-// things which have neither a Requires nor a Provides section:
+// things which have neither a Need nor a Make section:
 var purchase_ignore_both = [
     "Batteries",
     "Plasma Storage Units",
@@ -789,7 +789,7 @@ var purchase_ignore_both = [
     "ZZZ LAST NO COMMA"
 ];
 
-function extract_requires_from_details(orig_string, pane_title, purchase, label) {
+function extract_need_from_details(orig_string, pane_title, purchase, label) {
     "use strict";
 
     const start_needle_list = ["Uses", "They use"];
@@ -845,9 +845,9 @@ function extract_requires_from_details(orig_string, pane_title, purchase, label)
     }
     // yes, ask again:
     if (string === null) {
-        // throw new Error("Requires not found:\n" + label + "\n'" + orig_string + "'\n---\n'" + string + "'");
+        // throw new Error("Need not found:\n" + label + "\n'" + orig_string + "'\n---\n'" + string + "'");
         label = label;  // ignore
-        return "Requires not found";
+        return "Need not found";
     }
 
     // console.log('prices:', string);
@@ -856,7 +856,7 @@ function extract_requires_from_details(orig_string, pane_title, purchase, label)
     return prices;
 }
 
-function extract_provides_from_details(orig_string, pane_title, purchase, label) {
+function extract_make_from_details(orig_string, pane_title, purchase, label) {
     "use strict";
     const start_needle_list = ["produces", "that can produce", "it can produce", "it will produce"];
     const end_needle_list = ["per second", "every second", "each second", " for ", ", uses "];   // , ", requires"];
@@ -878,9 +878,9 @@ function extract_provides_from_details(orig_string, pane_title, purchase, label)
 
     var string = extract_text_between_list(orig_string, start_needle_list, end_needle_list);
     if (string === null) {
-        // throw new Error("Provides not found:\n" + label + "\n'" + orig_string + "'\n---\n'" + string + "'");
+        // throw new Error("Make not found:\n" + label + "\n'" + orig_string + "'\n---\n'" + string + "'");
         label = label;  // ignore
-        return "Provides not found";
+        return "Make not found";
     }
 
     // console.log('prices: orig_string', "'"+orig_string+"'");
@@ -1118,15 +1118,15 @@ function complain_about_unknown_substances_once(unknown_substances_list) {
     return;
 }
 
-function get_unknown_substances(costs_ob, quantities) {
+function get_unknown_substances(prices_ob, quantities) {
     "use strict";
 
-    var costs_list = safeEntries(costs_ob);
+    var prices_list = safeEntries(prices_ob);
 
     var known_substances_list = Object.keys(quantities);
     // console.log('known_substances_list:', known_substances_list);
 
-    var unknown_substances_list = costs_list.filter(function(entry) {
+    var unknown_substances_list = prices_list.filter(function(entry) {
         const substance = entry[0];
         // console.log('substance:', substance);
         var known_substance = known_substances_list.includes(substance);
@@ -1223,7 +1223,7 @@ function get_high_cost_and_time_ob(costs_ob, quantities) {
 
 function get_high_rate_ob(rates_ob, quantities) {
     "use strict";
-    if (rates_ob === "Requires not found") {
+    if (rates_ob === "Need not found") {
         console.error('debug: rates_ob', rates_ob);
         return "";
     }
@@ -1251,19 +1251,35 @@ function get_high_rate_ob(rates_ob, quantities) {
     }
 }
 
-function details_2_cost_need_make(details, pane_title, purchase, clean_name) {
+function details_2_cost_need_make_OLD(details, pane_title, purchase, clean_name) {
     "use strict";
     details = cleanup_details(details);
 
     var label = pane_title + "/" + purchase;
 
     var answer = {
-        cost: extract_costs_from_details(details, pane_title, purchase, label),
-        need: extract_requires_from_details(details, pane_title, clean_name, label),
+        cost: extract_cost_from_details(details, pane_title, purchase, label),
+        need: extract_need_from_details(details, pane_title, clean_name, label),
         make: extract_make_from_details(details, pane_title, clean_name, label)
     };
 
     return answer;
+}
+
+function details_2_cost_need_make_NEW(details, pane_title, purchase, clean_name) {
+    "use strict";
+    var OLD = details_2_cost_need_make_OLD(details, pane_title, purchase, clean_name);
+    return OLD;
+}
+
+function details_2_cost_need_make(details, pane_title, purchase, clean_name) {
+    "use strict";
+    var OLD = details_2_cost_need_make_OLD(details, pane_title, purchase, clean_name);
+    var NEW = details_2_cost_need_make_NEW(details, pane_title, purchase, clean_name);
+    if (TEST) {
+        OLD.new = NEW;
+    }
+    return OLD;
 }
 
 function compose_magic_object(pane_title, purchase, details, current_ob, button_ob, tr_id) {
@@ -1300,31 +1316,31 @@ function compose_magic_object(pane_title, purchase, details, current_ob, button_
 
     var cost_need_make = details_2_cost_need_make(details, pane_title, purchase, clean_name);
 
-    magic.costs = cost_need_make.cost;
-    magic.requires = cost_need_make.need;
+    magic.cost = cost_need_make.cost;
+    magic.need = cost_need_make.need;
     magic.make = cost_need_make.make;
 
     var make = magic.make;
     if (make === "") {
         make = {};
     }
-    var provides_entries = Object.entries(provides);
-    var provides_entry;
+    var make_entries = Object.entries(make);
+    var make_entry;
 
-    switch(provides_entries.length) {
+    switch(make_entries.length) {
       case 0:
-        magic.provides_item = "";
-        magic.provides_count = 0;
+        magic.make_item = "";
+        magic.make_count = 0;
         break;
       case 1:
-        provides_entry = provides_entries[0];
+        make_entry = make_entries[0];
 
-        magic.provides_item = provides_entry[0];
-        magic.provides_count = provides_entry[1];
+        magic.make_item = make_entry[0];
+        magic.make_count = make_entry[1];
         break;
       default:
-        magic.provides_item = "ERROR: provides.length > 1";
-        magic.provides_count = provides_entries.length;
+        magic.make_item = "ERROR: make.length > 1";
+        magic.make_count = make_entries.length;
     } 
 
     magic.tr_id = tr_id;
@@ -1515,9 +1531,9 @@ function update_magic_fields(magic, pane_title, quantities) {
     // console.log('quantities:', quantities);
 
     var unknown_substances_list = [
-        get_unknown_substances(magic.requires, quantities),
-        get_unknown_substances(magic.provides, quantities),
-        get_unknown_substances(magic.costs, quantities)
+        get_unknown_substances(magic.need, quantities),
+        get_unknown_substances(magic.make, quantities),
+        get_unknown_substances(magic.cost, quantities)
     ];
 
     // console.log('unknown_substances_list:', unknown_substances_list);
@@ -1538,14 +1554,14 @@ function update_magic_fields(magic, pane_title, quantities) {
     }
     magic.unknown = unknown_substances_ob;
 
-    magic.bump_max = get_bump_max_ob(magic.costs, quantities);
+    magic.bump_max = get_bump_max_ob(magic.cost, quantities);
 
-    var high_cost_and_time = get_high_cost_and_time_ob(magic.costs, quantities);
+    var high_cost_and_time = get_high_cost_and_time_ob(magic.cost, quantities);
     const [high_cost, high_cost_time] = high_cost_and_time;
     magic.high_cost = high_cost;
     magic.high_cost_time = high_cost_time;
 
-    magic.high_rate = get_high_rate_ob(magic.requires, quantities);
+    magic.high_rate = get_high_rate_ob(magic.need, quantities);
 
     if (magic.button_id === "") {
         magic.clickable = "no_button";
@@ -1566,7 +1582,7 @@ function update_magic_fields(magic, pane_title, quantities) {
         magic.clickable = "OK";
     }
 
-    if (magic.provides !== "Provides not found" && magic.requires !== "Requires not found") {
+    if (magic.make !== "Make not found" && magic.need !== "Need not found") {
         magic.details = "";
     }
 
@@ -1596,15 +1612,15 @@ function tr_2_magic(tr, pane_title) {
             "desired": 12,
             "click_requested": 1,
 
-            "costs": "" | {list of substances with count},
+            "cost": "" | {list of substances with count},
 
-            "requires": "" | {list of substances with count},
+            "need": "" | {list of substances with count},
 
-            "provides": "" | {list of substances with count},
-            "provides_item": "energy",
-            "provides_count": 1,
+            "make": "" | {list of substances with count},
+            "make_item": "energy",
+            "make_count": 1,
 
-            "details": "description including Costs, Requires, and Provides",
+            "details": "description including Costs, Make, and Need",
 
             "tr_id": "heliumStorageUpgrade",
 
@@ -2089,8 +2105,6 @@ function colorize_left_bar(quantities, overflow_reasons) {
 // global variable
 var tick_id;
 
-var TEST = false;
-
 function tick() {
     "use strict";
     // console.log("tick", tick_id);
@@ -2138,18 +2152,18 @@ function tick() {
     if (TEST) {
         safeEntries(magic_by_clickable).forEach(function(entry) {
             const [magics_label, magics_list] = entry;
-            var check_by_provides = filter_magics_by(magics_list, "provides");
-            var check_by_requires = filter_magics_by(magics_list, "requires");
+            var check_by_make = filter_magics_by(magics_list, "make");
+            var check_by_need = filter_magics_by(magics_list, "need");
 
-            var fail_provides = check_by_provides["Provides not found"];
-            var fail_requires = check_by_requires["Requires not found"];
-            if (fail_provides !== undefined) { console.error(magics_label, 'fail_provides:', fail_provides); }
-            if (fail_requires !== undefined) { console.error(magics_label, 'fail_requires:', fail_requires); }
+            var fail_make = check_by_make["Make not found"];
+            var fail_need = check_by_need["Need not found"];
+            if (fail_make !== undefined) { console.error(magics_label, 'fail_make:', fail_make); }
+            if (fail_need !== undefined) { console.error(magics_label, 'fail_need:', fail_need); }
 
-            var magic_by_provides = filter_magics_by(magics_list, "provides_item");
-            // console.log(magics_label, 'by_provides_item:', magic_by_provides);
-            var fail_provides_item = magic_by_provides["ERROR: provides.length > 1"];
-            if (fail_provides_item !== undefined) { console.error(magics_label, 'fail provides_item:', fail_provides_item); }
+            var magic_by_make = filter_magics_by(magics_list, "make_item");
+            // console.log(magics_label, 'by_make_item:', magic_by_make);
+            var fail_make_item = magic_by_make["ERROR: make.length > 1"];
+            if (fail_make_item !== undefined) { console.error(magics_label, 'fail make_item:', fail_make_item); }
         });
     }
 
