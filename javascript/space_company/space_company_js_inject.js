@@ -1016,13 +1016,6 @@ function get_button(td) {
     return button;
 }
 
-// function get_button_id_OLD(td) {
-//     "use strict";
-//     var button = get_button(td);
-// 
-//     return uniqueId(button, 'btn');
-// }
-
 function inputid_2_desired(input_id) {
     "use strict";
     var desired = "";
@@ -1071,34 +1064,6 @@ function create_input_and_get_id_NEW(button_id, debug_label) {
 
     return uniqueId(input, 'input');
 }
-
-// function create_input_and_get_id_OLD(td, button_id, debug_label) {
-//     "use strict";
-//     var input = td
-//         .find("input.desired");
-
-//     if (input.length === 0) {
-//         // "input" not found
-//         if (! button_id) {
-//             // no button or input --> okay
-//             return;
-//         }
-//         // button but no input: create input
-//         // console.log(debug_label, "Creating input object:")
-//         input = $("<input type='textbox' class='desired'/>");
-//         td.append(input);
-//     } else {
-//         // "input" is found
-//         if (! button_id) {
-//             // input but no button: input is obsolete
-//             console.log(debug_label, "Destroying input object:");
-//             input.remove();
-//         // } else {
-//         //     // both button and input: okay
-//         }
-//     }
-//     return uniqueId(input, 'input');
-// }
 
 var GLOBAL_known_unknowns = [];
 function complain_about_unknown_substances_once(unknown_substances_list) {
