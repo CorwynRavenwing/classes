@@ -732,6 +732,7 @@ function extract_cost_from_details(orig_string, pane_title, purchase, label) {
             return "";
         }
     }
+
     if (purchase === "Rocket Ship: Built") {
         // does not have Costs section anymore
         return "";
@@ -760,9 +761,15 @@ function extract_cost_from_details(orig_string, pane_title, purchase, label) {
     return prices;
 }
 
-// things which have neither a Need nor a Make section:
-var purchase_ignore_both = [
-    "Batteries",
+function extract_need_from_details(orig_string, pane_title, purchase, label) {
+    "use strict";
+
+    const start_needle_list = ["Uses", "They use"];
+    const end_needle_list = ["per second", "every second", "each second", " for ", ", produces "];
+
+    // things which have neither a Need nor a Make section:
+    const purchase_ignore_both = [
+        "Batteries",
     "Plasma Storage Units",
     'PSUs',
     "Storage Upgrade",
@@ -787,15 +794,9 @@ var purchase_ignore_both = [
     "Interstellar Radar Scanner",
     // -----
     "ZZZ LAST NO COMMA"
-];
+    ];
 
-function extract_need_from_details(orig_string, pane_title, purchase, label) {
-    "use strict";
-
-    const start_needle_list = ["Uses", "They use"];
-    const end_needle_list = ["per second", "every second", "each second", " for ", ", produces "];
-
-    const purchase_ignore = [
+    const purchase_ignore_need = [
         "Empowered Blowtorch",
         "Explorer",
         "Gem Miner",
@@ -819,7 +820,8 @@ function extract_need_from_details(orig_string, pane_title, purchase, label) {
         // -----
         "ZZZ LAST NO COMMA"
     ];
-    const pane_ignore = [
+
+    const pane_ignore_need = [
         "science",
         "ZZZ LAST NO COMMA"
     ];
@@ -828,11 +830,11 @@ function extract_need_from_details(orig_string, pane_title, purchase, label) {
         return "";
     }
 
-    if (pane_ignore.includes(pane_title)) {
+    if (pane_ignore_need.includes(pane_title)) {
         return "";
     }
 
-    if (purchase_ignore.includes(purchase)) {
+    if (purchase_ignore_need.includes(purchase)) {
         return "";
     }
 
@@ -861,20 +863,54 @@ function extract_make_from_details(orig_string, pane_title, purchase, label) {
     const start_needle_list = ["produces", "that can produce", "it can produce", "it will produce"];
     const end_needle_list = ["per second", "every second", "each second", " for ", ", uses "];   // , ", requires"];
 
-    const purchase_ignore = [
-        // "none yet",
+    // things which have neither a Need nor a Make section:
+    const purchase_ignore_both = [
+        "Batteries",
+        "Plasma Storage Units",
+        'PSUs',
+        "Storage Upgrade",
+        // -----
+        "Battery Efficiency",
+        "Energy Efficiency",
+        "Resource Efficiency",
+        "Science Efficiency",
+        // -----
+        "Activate Portal",        
+        "Activate Wonder",
+        "Energetic Wonder",
+        "Meteorite Wonder",
+        "Precious Metals Wonder",
+        "Rebuild Antimatter Wonder",
+        "Rebuild Communication Wonder",
+        "Rebuild Rocket Wonder",
+        "Technological Wonder",
+        // -----
+        "Astronomical Breakthrough",
+        "Dyson Segment",
+        "Interstellar Radar Scanner",
         // -----
         "ZZZ LAST NO COMMA"
+    ];
+
+    const purchase_ignore_make = [
+        // "none yet",
+    ];
+
+    const pane_ignore_make = [
+        // "none yet",
     ];
 
     if (purchase_ignore_both.includes(purchase)) {
         return "";
     }
 
-    if (purchase_ignore.includes(purchase)) {
+    if (pane_ignore_make.includes(pane_title)) {
         return "";
     }
-    pane_title = pane_title;    // ignore
+
+    if (purchase_ignore_make.includes(purchase)) {
+        return "";
+    }
 
     var string = extract_text_between_list(orig_string, start_needle_list, end_needle_list);
     if (string === null) {
@@ -1028,7 +1064,7 @@ function inputid_2_desired(input_id) {
     return to_number(desired);
 }
 
-function create_input_and_get_id_NEW(button_id, debug_label) {
+function create_input_and_get_id(button_id, debug_label) {
     "use strict";
 
     if (button_id === "") {
@@ -1228,21 +1264,340 @@ function details_2_cost_need_make_OLD(details, pane_title, purchase, clean_name)
         make: extract_make_from_details(details, pane_title, clean_name, label)
     };
 
+    var make = answer.make;
+    if (make === "") {
+        make = {};
+    }
+    var make_entries = Object.entries(make);
+    var make_entry;
+
+    switch(make_entries.length) {
+      case 0:
+        answer.make_item = "";
+        answer.make_count = 0;
+        break;
+      case 1:
+        make_entry = make_entries[0];
+
+        answer.make_item = make_entry[0];
+        answer.make_count = make_entry[1];
+        break;
+      default:
+        answer.make_item = "ERROR: make.length > 1";
+        answer.make_count = make_entries.length;
+    } 
+
     return answer;
 }
 
-function details_2_cost_need_make_NEW(details, pane_title, purchase, clean_name) {
+function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_name) {
     "use strict";
-    var OLD = details_2_cost_need_make_OLD(details, pane_title, purchase, clean_name);
-    return OLD;
+
+    clean_name = clean_name;        // ignore
+
+    var details = orig_details
+        .replaceAll("\n", " ")
+        .replaceAll("\t", " ")
+        .replaceAll(/\ \ +/g, " ")
+        .replaceAll("{", "")
+        .replaceAll("}", "")
+        .replaceAll(" and ", ", ")
+        ;
+
+    var replacements = {
+        "---": [
+            /\ [0-9.]+%/g,
+            /Activate\ .*\ Wonder/g,
+            /Rebuild\ .*\ Wonder/g,
+            "Activate Portal",
+            "Donate Resources",
+            "Improves relationship by",
+            "In return for your Gems",
+            "produces a lot of power",
+            "produces Gems at intense speeds",
+            "Pulverizes Uranium for easy transportation",
+            "Unlock Dyson Sphere Research",
+            "Unlock EMC Machine Research",
+            "Unlock Plasma Research",
+            "Uses fission to create large amounts of power",
+            "uses nano-fibres",
+
+            "ZZZ LAST NO COMMA"
+        ],
+        "}{COST:": [
+            "Costs:",
+            "Costs ",
+            "Cost:",
+            "Cost ",
+            "He requests a pyramid containing",
+            "He requests a tower consisting of",
+            "He requires that you donate",
+            "The Overlord wishes for a cube made up of",
+            "This requires",
+
+            "ZZZ LAST NO COMMA"
+        ],
+        "}{MAKE:": [
+            "it can produce",
+            "it will produce",
+            "Produces",
+            "produces",
+            ", produces ",
+            "that can produce",
+            "They produce",
+
+            "ZZZ LAST NO COMMA"
+        ],
+        "}{NEED:": [
+            "They use",
+            "Uses",
+            ", uses ",
+
+            "ZZZ LAST NO COMMA"
+        ],
+        "}{OTHER:": [
+            " for ",            // close SOMETHING, open INVERSE
+
+            "ZZZ LAST NO COMMA"
+        ],
+        "}": [
+            /$/g,
+            ". ",
+            " for this knowledge",
+            " to acquire his methods",
+            " to unlock this technology",
+            " to be given this technology",
+            "per second",
+            "every second",
+            "each second",
+
+            "ZZZ LAST NO COMMA"
+        ],
+        ZZZ: ["ZZZ LAST NO COMMA"]
+    };
+
+    // things which have neither a Need nor a Make section:
+    const purchase_ignore_both = [
+        "Batteries",
+        "Plasma Storage Units",
+        'PSUs',
+        "Storage Upgrade",
+        // -----
+        "Battery Efficiency",
+        "Energy Efficiency",
+        "Resource Efficiency",
+        "Science Efficiency",
+        // -----
+        "Activate Portal",        
+        "Activate Wonder",
+        "Energetic Wonder",
+        "Meteorite Wonder",
+        "Precious Metals Wonder",
+        "Rebuild Antimatter Wonder",
+        "Rebuild Communication Wonder",
+        "Rebuild Rocket Wonder",
+        "Technological Wonder",
+        // -----
+        "Astronomical Breakthrough",
+        "Dyson Segment",
+        "Interstellar Radar Scanner",
+        // -----
+        "ZZZ LAST NO COMMA"
+    ];
+
+    const purchase_ignore_need = [
+        "Empowered Blowtorch",
+        "Explorer",
+        "Gem Miner",
+        "Grinder",
+        "Heat Resistant Crucible",
+        "Helium Drone",
+        "Hydrogen Collector",
+        "Ice Pickaxe",
+        "Miner",
+        "Native Moon Worker",
+        "Rocket Droid",
+        "Scout Ship",
+        "Small Pump",
+        "Solar Panels",
+        "Vacuum Cleaner",
+        "Woodcutter",
+        // -----
+        "Dyson Ring",
+        "Dyson Swarm",
+        "Dyson Sphere",
+        // -----
+        "ZZZ LAST NO COMMA"
+    ];
+
+    const pane_ignore_need = [
+        "science",
+        "ZZZ LAST NO COMMA"
+    ];
+
+    const purchase_ignore_make = [
+        // "none yet",
+    ];
+
+    const pane_ignore_make = [
+        // "none yet",
+    ];
+
+    // create magic object and set failure defaults:
+    var magic = {
+        cost: "Cost not found",
+        need: "Need not found",
+        make: "Make not found",
+        details_orig: "SET ME",
+        details: "SET ME"
+    };
+
+    // set success defaults for each Page or Clack that doesn't need a data type:
+    if (pane_title === "energy_mass_conversion") {
+        if (purchase !== "Research") {
+            // does not have Costs section
+            magic.cost = "";
+        }
+    }
+
+    if (purchase === "Rocket Ship: Built") {
+        // does not have Costs section anymore
+        magic.cost = "";
+    }
+    if (pane_title === "travel") {
+        // Interstellar.
+        // does not have Costs section
+        magic.cost = "";
+    }
+    if (details === "") {
+        // details is now blank: return nothing
+        magic.cost = "";
+        magic.need = "";
+        magic.make = "";
+    }
+
+    if (pane_ignore_need.includes(pane_title)) {
+        magic.need = "";
+    }
+
+    if (purchase_ignore_need.includes(purchase)) {
+        magic.need = "";
+    }
+
+    if (purchase_ignore_both.includes(purchase)) {
+        magic.need = "";
+        magic.make = "";
+    }
+
+    if (pane_ignore_make.includes(pane_title)) {
+        magic.make = "";
+    }
+
+    if (purchase_ignore_make.includes(purchase)) {
+        magic.make = "";
+    }
+
+    // search for begin/end of each data type:
+    safeEntries(replacements).forEach(function([new_string, target_list]) {
+        target_list.forEach(function(target_string) {
+            details = details.replaceAll(target_string, new_string);
+        });
+    });
+
+    // clean up data
+    details = details
+        .replaceAll(/[\-\ .]+[}]/g, "}")    // dashes, spaces, or periods before a close-bracket
+        .replaceAll(/[}][}]+/g, "}")        // two close-brackets become one
+        ;
+
+    details = "START:" + details;
+    var sections = details.split("{");
+    // console.log('sections:', sections);
+    var answers = sections.map(function(section) {
+        var fragments = section.split("}");
+        fragments = fragments.filter(function(thing) { return thing !== ""; });
+        if (fragments.length > 1) {
+            // console.warn('fragments > 1', fragments);
+        }
+        var cleaned = fragments[0];
+        var pieces = cleaned.split(":");
+        var header = pieces[0];
+        var remainder = pieces.slice(1).join(":");
+        return [header, remainder];
+    });
+    console.log('answers:', answers);
+
+    // var position_start, position_end;
+    // var first, middle, last;
+    // var looping = true;
+    // while (looping ===  true) {
+    //     console.warn('details BEFORE', details);
+    //     position_start = details.search("{");
+    //     if (position_start === -1) {
+    //         console.warn('open-bracket not found');
+    //         looping = false;
+    //         break;
+    //     }
+    //     position_end = details.search("}", position_start);
+    //     console.warn("found brackets at position", position_start, position_end);
+    //     first = details.slice(0, position_start);
+    //     if (position_end === -1) {
+    //         middle = details.slice(position_start);
+    //         last = "";
+    //     } else {
+    //         middle = details.slice(position_start, position_end + 1);
+    //         last = details.slice(position_end);
+    //     }
+    //     console.log("first:", "'" + first + "'");
+    //     console.log("middle:", "'" + middle + "'");
+    //     console.log("last:", "'" + last + "'");
+    //     details = first + " (-) " + last;
+    //     console.warn('details AFTER', details);
+
+    //     details = "DEBUG: STOP";
+    //     break;
+    // }
+
+    // XYZZY
+
+    magic.details_orig = orig_details;
+    magic.details = details;
+
+    var make = magic.make;
+    if (make === "") {
+        make = {};
+    }
+    var make_entries = Object.entries(make);
+    var make_entry;
+
+    switch(make_entries.length) {
+      case 0:
+        magic.make_item = "";
+        magic.make_count = 0;
+        break;
+      case 1:
+        make_entry = make_entries[0];
+        magic.make_item = make_entry[0];
+        magic.make_count = make_entry[1];
+        break;
+      default:
+        magic.make_item = "ERROR: make.length > 1";
+        magic.make_count = make_entries.length;
+    }
+
+    return magic;
 }
 
 function details_2_cost_need_make(details, pane_title, purchase, clean_name) {
     "use strict";
     var OLD = details_2_cost_need_make_OLD(details, pane_title, purchase, clean_name);
-    var NEW = details_2_cost_need_make_NEW(details, pane_title, purchase, clean_name);
     if (TEST) {
-        OLD.new = NEW;
+        var NEW = details_2_cost_need_make_NEW(details, pane_title, purchase, clean_name);
+        OLD.details_NEW = NEW.details;
+        OLD.cost_NEW = NEW.cost;
+        OLD.need_NEW = NEW.need;
+        OLD.make_NEW = NEW.make;
+        OLD.make_item_NEW = NEW.make_item;
     }
     return OLD;
 }
@@ -1271,7 +1626,7 @@ function compose_magic_object(pane_title, purchase, details, current_ob, button_
     var button_id = uniqueId(button_ob, 'btn');
     magic.button_id = button_id;
 
-    var input_id = create_input_and_get_id_NEW(button_id, pane_title + "/" + purchase);
+    var input_id = create_input_and_get_id(button_id, pane_title + "/" + purchase);
     magic.input_id = input_id;
 
     magic.desired = inputid_2_desired(input_id);
@@ -1284,29 +1639,13 @@ function compose_magic_object(pane_title, purchase, details, current_ob, button_
     magic.cost = cost_need_make.cost;
     magic.need = cost_need_make.need;
     magic.make = cost_need_make.make;
+    magic.make_item = cost_need_make.make_item;
 
-    var make = magic.make;
-    if (make === "") {
-        make = {};
-    }
-    var make_entries = Object.entries(make);
-    var make_entry;
-
-    switch(make_entries.length) {
-      case 0:
-        magic.make_item = "";
-        magic.make_count = 0;
-        break;
-      case 1:
-        make_entry = make_entries[0];
-
-        magic.make_item = make_entry[0];
-        magic.make_count = make_entry[1];
-        break;
-      default:
-        magic.make_item = "ERROR: make.length > 1";
-        magic.make_count = make_entries.length;
-    } 
+    magic.details_NEW = cost_need_make.details_NEW;
+    magic.cost_NEW = cost_need_make.cost_NEW;
+    magic.need_NEW = cost_need_make.need_NEW;
+    magic.make_NEW = cost_need_make.make_NEW;
+    magic.make_item_NEW = cost_need_make.make_item_NEW;
 
     magic.tr_id = tr_id;
 
