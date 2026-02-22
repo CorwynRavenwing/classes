@@ -2058,28 +2058,33 @@ function filter_magics_by(magics_list, filter_column) {
     return answer;
 }
 
-function choose_leftmost(magics_list) {
+function choose_leftmost(things) {
     "use strict";
-    return magics_list[0];
+    return things[0];
 }
 
-function choose_random(magics_list) {
+function choose_rightmost(things) {
     "use strict";
-    var i = Math.floor(Math.random() * magics_list.length);
-    return magics_list[i];
+    return things[things.length - 1];
 }
 
-// function filter_field_equal(magics_list, field_name, skip_value) {
-//     "use strict";
-//     magics_list = magics_list.filter(function(magic) {
-//         if (magic[field_name] !== skip_value) {
-//             // console.log("FF(==) skip", field_name, skip_value, magic);
-//             return false;
-//         }
-//         return true;
-//     });
-//     return magics_list;
-// }
+function choose_random(things) {
+    "use strict";
+    var i = Math.floor(Math.random() * things.length);
+    return things[i];
+}
+
+function filter_field_equal(magics_list, field_name, skip_value) {
+    "use strict";
+    magics_list = magics_list.filter(function(magic) {
+        if (magic[field_name] !== skip_value) {
+            // console.log("FF(==) skip", field_name, skip_value, magic);
+            return false;
+        }
+        return true;
+    });
+    return magics_list;
+}
 
 function filter_field_not_equal(magics_list, field_name, skip_value) {
     "use strict";
@@ -2095,8 +2100,14 @@ function filter_field_not_equal(magics_list, field_name, skip_value) {
 
 function choose_best_requested(magics_list) {
     "use strict";
-    // TODO: use a better method
-    return choose_leftmost(magics_list);
+    var magics_by_item = filter_magics_by(magics_list, "make_item");
+    var all_items = Object.keys(magics_by_item);
+    var random_item = choose_random(all_items);
+    var magics_with_that_item = magics_by_item[random_item];
+    // console.log('CBR(): MBI=', magics_by_item);
+    // console.log('CBR(): items=', all_items);
+    // console.log('CBR(): choosing rightmost of the', magics_with_that_item.length, 'Clacks making', random_item);
+    return choose_rightmost(magics_with_that_item);
 }
 
 function choose_best_unrequested(magics_list) {
@@ -2104,6 +2115,17 @@ function choose_best_unrequested(magics_list) {
     magics_list = filter_field_not_equal(magics_list, "name", "Storage Upgrade");
     // TODO: use a better method
     return choose_random(magics_list);
+}
+
+function suppress_unused_fn_msgs() {
+    "use strict";
+    if (false) {
+        choose_leftmost();
+        choose_rightmost();
+        filter_field_equal();
+        filter_field_not_equal();
+        suppress_unused_fn_msgs();
+    }
 }
 
 function get_magic_by_clickable(tabs_available, quantities) {
