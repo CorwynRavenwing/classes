@@ -770,30 +770,30 @@ function extract_need_from_details(orig_string, pane_title, purchase, label) {
     // things which have neither a Need nor a Make section:
     const purchase_ignore_both = [
         "Batteries",
-    "Plasma Storage Units",
-    'PSUs',
-    "Storage Upgrade",
-    // -----
-    "Battery Efficiency",
-    "Energy Efficiency",
-    "Resource Efficiency",
-    "Science Efficiency",
-    // -----
-    "Activate Portal",        
-    "Activate Wonder",
-    "Energetic Wonder",
-    "Meteorite Wonder",
-    "Precious Metals Wonder",
-    "Rebuild Antimatter Wonder",
-    "Rebuild Communication Wonder",
-    "Rebuild Rocket Wonder",
-    "Technological Wonder",
-    // -----
-    "Astronomical Breakthrough",
-    "Dyson Segment",
-    "Interstellar Radar Scanner",
-    // -----
-    "ZZZ LAST NO COMMA"
+        "Plasma Storage Units",
+        'PSUs',
+        "Storage Upgrade",
+        // -----
+        "Battery Efficiency",
+        "Energy Efficiency",
+        "Resource Efficiency",
+        "Science Efficiency",
+        // -----
+        "Activate Portal",        
+        "Activate Wonder",
+        "Energetic Wonder",
+        "Meteorite Wonder",
+        "Precious Metals Wonder",
+        "Rebuild Antimatter Wonder",
+        "Rebuild Communication Wonder",
+        "Rebuild Rocket Wonder",
+        "Technological Wonder",
+        // -----
+        "Astronomical Breakthrough",
+        "Dyson Segment",
+        "Interstellar Radar Scanner",
+        // -----
+        "ZZZ LAST NO COMMA"
     ];
 
     const purchase_ignore_need = [
@@ -2476,11 +2476,11 @@ function tick() {
     colorize_left_bar(quantities, overflow_reasons);
 
     if (TEST) {
-        safeEntries(magic_by_clickable).forEach(function(entry) {
-            const [magics_label, magics_list] = entry;
+        safeEntries(magic_by_clickable).forEach(function([magics_label, magics_list]) {
+            // also should check by cost:
+
             var check_by_make = filter_magics_by(magics_list, "make");
             var check_by_need = filter_magics_by(magics_list, "need");
-
             var fail_make = check_by_make["Make not found"];
             var fail_need = check_by_need["Need not found"];
             if (fail_make !== undefined) { console.error(magics_label, 'fail_make:', fail_make); }
@@ -2490,8 +2490,46 @@ function tick() {
             // console.log(magics_label, 'by_make_item:', magic_by_make);
             var fail_make_item = magic_by_make["ERROR: make.length > 1"];
             if (fail_make_item !== undefined) { console.error(magics_label, 'fail make_item:', fail_make_item); }
+
         });
+        // we're checking all the clickable types together instead of separately:
+        var all_magic = safeEntries(magic_by_clickable).map(function(entry) {
+            var magics_list = entry[1];
+            return magics_list;
+        }).flat();
+
+        var check_by_cost_NEW = filter_magics_by(all_magic, "cost_NEW");
+        var check_by_make_NEW = filter_magics_by(all_magic, "make_NEW");
+        var check_by_need_NEW = filter_magics_by(all_magic, "need_NEW");
+        var fail_cost_NEW = check_by_cost_NEW["Cost not found"] || [];
+        var fail_make_NEW = check_by_make_NEW["Make not found"] || [];
+        var fail_need_NEW = check_by_need_NEW["Need not found"] || [];
+        // if (fail_cost_NEW !== undefined) { console.error('ALL', 'fail_cost_NEW:', fail_cost_NEW); }
+        // if (fail_make_NEW !== undefined) { console.error('ALL', 'fail_make_NEW:', fail_make_NEW); }
+        // if (fail_need_NEW !== undefined) { console.error('ALL', 'fail_need_NEW:', fail_need_NEW); }
+
+        var magic_by_make_NEW = filter_magics_by(all_magic, "make_item_NEW");
+        // console.log(magics_label, 'by_make_item_NEW:', magic_by_make_NEW);
+        var fail_make_item_NEW = magic_by_make_NEW["ERROR: make.length > 1"] || [];
+        // if (fail_make_item_NEW !== undefined) { console.error('ALL', 'fail make_item_NEW:', fail_make_item_NEW); }
+
+        var all_problems = [].concat(
+            fail_cost_NEW,
+            fail_make_NEW,
+            fail_need_NEW,
+            fail_make_item_NEW,
+            []  // last: no comma
+        );
+        if (all_problems.length > 0) { console.error('ALL', 'all_problems:', all_problems); }
+        var all_details_entries = all_problems.map(function(ob) {
+            var name = ob.name;
+            var details = ob.details_NEW;
+            return [name, details];
+        });
+        var all_details = Object.fromEntries(all_details_entries);
+        if (all_problems.length > 0) { console.warn('ALL', 'all_details:', all_details); }
     }
+    // XYZZY
 
     return;
 }
