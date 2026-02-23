@@ -602,7 +602,10 @@ function price_2_pair(price_str) {
 function prices_2_priceob(prices_str) {
     "use strict";
     // console.log('debug: prices_2_priceob(', prices_str, ')');
-    var prices_list = prices_str.split(", ");       // split on "comma space"
+    var prices_list = prices_str
+        .trim()
+        .split(", ")    // split on "comma space"
+        ;
     var prices_arr = prices_list.map(price_2_pair);
     var prices_ob = Object.fromEntries(prices_arr);
     return prices_ob;
@@ -1586,7 +1589,7 @@ function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_
             if (fragments.length > 1) {
                 fragments = fragments.map(function(frag, idx) {
                     if (idx === 0) {
-                        return frag;
+                        return frag.trim();
                     }
                     // console.warn('extra junk section', details, fragments, frag);
                     return JUNK + frag;
