@@ -1380,6 +1380,10 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
             "store it for later use",
             "Uranium for easy",
 
+            // misuse of "out of":
+            "landings out of atmospheres",
+            "transportation out of deep",
+
             "ZZZ LAST NO COMMA"
         ],
         "}{COST:": [
@@ -1436,6 +1440,7 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
             "to acquire his methods",
             "to assemble the",
             "to be given this technology",
+            "to build the",
             "to create the",
             "to unlock this technology",
 
