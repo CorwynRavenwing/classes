@@ -1666,8 +1666,11 @@ function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_
 
     // XYZZY
 
-    magic.details_orig = orig_details;
-    magic.details = details;
+    c_n_m.details_orig = orig_details;
+    c_n_m.details = details;
+    c_n_m.details_answers = answers;
+    c_n_m.details_entries = c_n_m_entries;
+    c_n_m.details_keys = c_n_m_keys;
 
     var make = c_n_m.make;
     if (make === "") {
@@ -1752,12 +1755,12 @@ function compose_magic_object(pane_title, purchase, details, current_ob, button_
     magic.make_item = cost_need_make.make_item;
     magic.junk = cost_need_make.junk;
 
-    magic.details_NEW = cost_need_make.details_NEW;
-    magic.cost_NEW = cost_need_make.cost_NEW;
-    magic.need_NEW = cost_need_make.need_NEW;
-    magic.make_NEW = cost_need_make.make_NEW;
-    magic.make_item_NEW = cost_need_make.make_item_NEW;
-    magic.junk_NEW = cost_need_make.junk_NEW;
+
+    magic.details_orig = cost_need_make.details_orig;
+    magic.details = cost_need_make.details;
+    magic.details_answers = cost_need_make.details_answers;
+    magic.details_entries = cost_need_make.details_entries;
+    magic.details_keys = cost_need_make.details_keys;
 
     magic.tr_id = tr_id;
 
