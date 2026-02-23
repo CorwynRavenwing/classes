@@ -788,11 +788,16 @@ function extract_need_from_details(orig_string, pane_title, purchase, label) {
         "Rebuild Antimatter Wonder",
         "Rebuild Communication Wonder",
         "Rebuild Rocket Wonder",
+        "Rebuild Stargate Wonder",
         "Technological Wonder",
         // -----
         "Astronomical Breakthrough",
         "Dyson Segment",
         "Interstellar Radar Scanner",
+        "Rocket Ship: Not Built",
+        "Aerodynamic Sections",
+        "Engine Unit",
+        "Shield Plating",
         // -----
         "ZZZ LAST NO COMMA"
     ];
@@ -884,11 +889,16 @@ function extract_make_from_details(orig_string, pane_title, purchase, label) {
         "Rebuild Antimatter Wonder",
         "Rebuild Communication Wonder",
         "Rebuild Rocket Wonder",
+        "Rebuild Stargate Wonder",
         "Technological Wonder",
         // -----
         "Astronomical Breakthrough",
         "Dyson Segment",
         "Interstellar Radar Scanner",
+        "Rocket Ship: Not Built",
+        "Aerodynamic Sections",
+        "Engine Unit",
+        "Shield Plating",
         // -----
         "ZZZ LAST NO COMMA"
     ];
@@ -1294,14 +1304,13 @@ function details_2_cost_need_make_OLD(details, pane_title, purchase, clean_name)
 function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_name) {
     "use strict";
 
-    clean_name = clean_name;        // ignore
-
     var details = orig_details
         .replaceAll("\n", " ")
         .replaceAll("\t", " ")
         .replaceAll(/\ \ +/g, " ")
-        .replaceAll("{", "")
-        .replaceAll("}", "")
+        .replaceAll("{", "(")
+        .replaceAll("}", ")")
+        .replaceAll(":", " -- ")
         .replaceAll(" and ", ", ")
         ;
 
@@ -1313,26 +1322,49 @@ function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_
             "Activate Portal",
             "Donate Resources",
             "Improves relationship by",
-            "In return for your Gems",
-            "produces a lot of power",
-            "produces Gems at intense speeds",
-            "Pulverizes Uranium for easy transportation",
             "Unlock Dyson Sphere Research",
             "Unlock EMC Machine Research",
             "Unlock Plasma Research",
+
+            // misuse of "uses" or "produces":
+            "produces a lot of power",
+            "produces Gems at intense speeds",
             "Uses fission to create large amounts of power",
             "uses nano-fibres",
+
+            // misuse of " for ":
+            "allow for easy",
+            "allow for enough",
+            "allows for a massive increase",
+            "asteroids for gold",
+            "axe for your woodcutter",
+            "designed for mining",
+            "field for pieces",
+            "for this knowledge",
+            "pickaxe for your miner",
+            "return for building",
+            "return for your",
+            "search for Titanium",
+            "shovel for your woodburner",
+            "store it for later use",
+            "Uranium for easy",
 
             "ZZZ LAST NO COMMA"
         ],
         "}{COST:": [
             "Costs:",
+            "Costs -- ",    // we've replaced colons with em-dashes above ...
+            "costs -- ",    // ...
             "Costs ",
             "Cost:",
+            "Cost -- ",     // ... so this is what really matches now
             "Cost ",
             "He requests a pyramid containing",
             "He requests a tower consisting of",
             "He requires that you donate",
+            "However, it requires",
+            "It requires",
+            "out of",
             "The Overlord wishes for a cube made up of",
             "This requires",
 
@@ -1340,6 +1372,7 @@ function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_
         ],
         "}{MAKE:": [
             "it can produce",
+            "It will produce",
             "it will produce",
             "Produces",
             "produces",
@@ -1364,13 +1397,16 @@ function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_
         "}": [
             /$/g,
             ". ",
-            " for this knowledge",
-            " to acquire his methods",
-            " to unlock this technology",
-            " to be given this technology",
-            "per second",
-            "every second",
             "each second",
+            "every second",
+            "for this knowledge",
+            "in total",
+            "per second",
+            "to acquire his methods",
+            "to assemble the",
+            "to be given this technology",
+            "to create the",
+            "to unlock this technology",
 
             "ZZZ LAST NO COMMA"
         ],
@@ -1397,11 +1433,16 @@ function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_
         "Rebuild Antimatter Wonder",
         "Rebuild Communication Wonder",
         "Rebuild Rocket Wonder",
+        "Rebuild Stargate Wonder",
         "Technological Wonder",
         // -----
         "Astronomical Breakthrough",
         "Dyson Segment",
         "Interstellar Radar Scanner",
+        "Rocket Ship: Not Built",
+        "Aerodynamic Sections",
+        "Engine Unit",
+        "Shield Plating",
         // -----
         "ZZZ LAST NO COMMA"
     ];
