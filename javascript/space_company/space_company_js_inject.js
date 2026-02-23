@@ -1517,45 +1517,45 @@ function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_
     if (pane_title === "energy_mass_conversion") {
         if (purchase !== "Research") {
             // does not have Costs section
-            magic.cost = "";
+            c_n_m.cost = "";
         }
     }
 
     if (purchase === "Rocket Ship: Built") {
         // does not have Costs section anymore
-        magic.cost = "";
+        c_n_m.cost = "";
     }
     if (pane_title === "travel") {
         // Interstellar.
         // does not have Costs section
-        magic.cost = "";
+        c_n_m.cost = "";
     }
     if (details === "") {
         // details is now blank: return nothing
-        magic.cost = "";
-        magic.need = "";
-        magic.make = "";
+        c_n_m.cost = "";
+        c_n_m.need = "";
+        c_n_m.make = "";
     }
 
     if (pane_ignore_need.includes(pane_title)) {
-        magic.need = "";
+        c_n_m.need = "";
     }
 
     if (purchase_ignore_need.includes(clean_name)) {
-        magic.need = "";
+        c_n_m.need = "";
     }
 
     if (purchase_ignore_both.includes(clean_name)) {
-        magic.need = "";
-        magic.make = "";
+        c_n_m.need = "";
+        c_n_m.make = "";
     }
 
     if (pane_ignore_make.includes(pane_title)) {
-        magic.make = "";
+        c_n_m.make = "";
     }
 
     if (purchase_ignore_make.includes(clean_name)) {
-        magic.make = "";
+        c_n_m.make = "";
     }
 
     // search for begin/end of each data type:
@@ -1603,7 +1603,7 @@ function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_
         if (pieces.length > 2) {
             // shouldn't be possible, since we've replaced colons with em-dashes above
             console.error('pieces > 2', pieces);
-            throw new Error('D2CNM(): found extra colon in a section');
+            throw new Error('D2c_n_m(): found extra colon in a section');
         }
         return pieces;
     });
@@ -1614,14 +1614,17 @@ function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_
     var answers_lowercase = answers.map(function([label, data]) {
         return [label.toLowerCase(), data];
     });
-    var CNM_entries = arraysFromEntries(answers_lowercase);
-    // console.log('CNM_entries [A]:', CNM_entries);
+    var c_n_m_entries = arraysFromEntries(answers_lowercase);
+    // console.log('c_n_m_entries [A]:', c_n_m_entries);
 
-    var CNM_keys = Object.keys(CNM_entries);
+    var c_n_m_keys = Object.keys(c_n_m_entries);
     var prior_key = "";
-    CNM_keys.forEach(function(key) {
-        var value_arr = CNM_entries[key];
-        var value_str = value_arr.join(", ");   // must match prices_2_priceob!
+    c_n_m_keys.forEach(function(key) {
+        var value_arr = c_n_m_entries[key];
+        var value_str = value_arr
+            .map(function(s) { return s.trim(); })
+            .join(", ")   // must match prices_2_priceob!
+            ;
         if (key === "other") {
             if (prior_key === "") {
                 console.error('got an OTHER without a PRIOR!');
@@ -1643,10 +1646,10 @@ function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_
             prior_key = key;
         }
         if (key === "junk") {
-            magic[key] = value_str;
+            c_n_m[key] = value_str;
         } else {
             try {
-                magic[key] = prices_2_priceob(value_str);
+                c_n_m[key] = prices_2_priceob(value_str);
             } catch (e_const) {
                 var e = e_const;
                 if (!(e instanceof Error)) {
@@ -1659,14 +1662,14 @@ function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_
             }
         }
     });
-    // console.log('CNM_entries [B]:', CNM_entries);
+    // console.log('c_n_m_entries [B]:', c_n_m_entries);
 
     // XYZZY
 
     magic.details_orig = orig_details;
     magic.details = details;
 
-    var make = magic.make;
+    var make = c_n_m.make;
     if (make === "") {
         make = {};
     }
@@ -1675,20 +1678,20 @@ function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_
 
     switch(make_entries.length) {
       case 0:
-        magic.make_item = "";
-        magic.make_count = 0;
+        c_n_m.make_item = "";
+        c_n_m.make_count = 0;
         break;
       case 1:
         make_entry = make_entries[0];
-        magic.make_item = make_entry[0];
-        magic.make_count = make_entry[1];
+        c_n_m.make_item = make_entry[0];
+        c_n_m.make_count = make_entry[1];
         break;
       default:
-        magic.make_item = "ERROR: make.length > 1";
-        magic.make_count = make_entries.length;
+        c_n_m.make_item = "ERROR: make.length > 1";
+        c_n_m.make_count = make_entries.length;
     }
 
-    return magic;
+    return c_n_m;
 }
 
 function details_2_cost_need_make(details, pane_title, purchase, clean_name) {
