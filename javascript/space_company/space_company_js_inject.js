@@ -1059,8 +1059,13 @@ function verify_button(button) {
     return button;
 }
 
-function get_button(td) {
+function get_button(td, purchase) {
     "use strict";
+
+    if (purchase.includes("(MAX)")) {
+        // console.log("found MAX:", purchase);
+        return "";
+    }
 
     var button = get_button_raw(td);
     button = verify_button(button);
@@ -1699,6 +1704,7 @@ function compose_magic_object(pane_title, purchase, details, current_ob, button_
 
     var clean_name = purchase
         .replace(' / ', '')
+        .replace(/\ \(MAX\)$/, '')
         .replace(/[0-9]+$/, '')
         .replace(/^Tier\ [0-9]+\ /, '')
         .replace(/^T[0-9]+\ /, '')
@@ -1910,7 +1916,7 @@ function tr_2_magic_raw(tr, pane_title) {
 
     var td = tr.find("td");
 
-    var button_ob = get_button(td);
+    var button_ob = get_button(td, purchase);
 
     var magic = compose_magic_object(pane_title, purchase, details, current_ob, button_ob, tr_id);
 
