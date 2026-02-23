@@ -1685,8 +1685,8 @@ function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_
 function details_2_cost_need_make(details, pane_title, purchase, clean_name) {
     "use strict";
     var OLD = details_2_cost_need_make_OLD(details, pane_title, purchase, clean_name);
+    var NEW = details_2_cost_need_make_NEW(details, pane_title, purchase, clean_name);
     if (TEST) {
-        var NEW = details_2_cost_need_make_NEW(details, pane_title, purchase, clean_name);
         OLD.details_NEW = NEW.details;
         OLD.cost_NEW = NEW.cost;
         OLD.need_NEW = NEW.need;
