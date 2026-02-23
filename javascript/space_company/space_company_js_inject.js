@@ -1687,6 +1687,7 @@ function details_2_cost_need_make(details, pane_title, purchase, clean_name) {
         OLD.need_NEW = NEW.need;
         OLD.make_NEW = NEW.make;
         OLD.make_item_NEW = NEW.make_item;
+        OLD.junk_NEW = NEW.junk;
     }
     return OLD;
 }
@@ -1729,12 +1730,14 @@ function compose_magic_object(pane_title, purchase, details, current_ob, button_
     magic.need = cost_need_make.need;
     magic.make = cost_need_make.make;
     magic.make_item = cost_need_make.make_item;
+    magic.junk = cost_need_make.junk;
 
     magic.details_NEW = cost_need_make.details_NEW;
     magic.cost_NEW = cost_need_make.cost_NEW;
     magic.need_NEW = cost_need_make.need_NEW;
     magic.make_NEW = cost_need_make.make_NEW;
     magic.make_item_NEW = cost_need_make.make_item_NEW;
+    magic.junk_NEW = cost_need_make.junk_NEW;
 
     magic.tr_id = tr_id;
 
