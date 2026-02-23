@@ -78,6 +78,7 @@ function to_number(orig_value) {
     if (value === "Built") { return 1; }
 
     if (value === "N/A") { return ""; }
+    if (value === "n/a") { return ""; }
 
     value = value.replaceAll(",", "");
     value = value.replaceAll("/", "");   // Energy comes preceeded by "/" for some reason
