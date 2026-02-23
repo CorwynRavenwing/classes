@@ -1532,11 +1532,11 @@ function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_
         magic.need = "";
     }
 
-    if (purchase_ignore_need.includes(purchase)) {
+    if (purchase_ignore_need.includes(clean_name)) {
         magic.need = "";
     }
 
-    if (purchase_ignore_both.includes(purchase)) {
+    if (purchase_ignore_both.includes(clean_name)) {
         magic.need = "";
         magic.make = "";
     }
@@ -1545,7 +1545,7 @@ function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_
         magic.make = "";
     }
 
-    if (purchase_ignore_make.includes(purchase)) {
+    if (purchase_ignore_make.includes(clean_name)) {
         magic.make = "";
     }
 
