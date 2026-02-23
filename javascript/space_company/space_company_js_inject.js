@@ -1067,6 +1067,15 @@ function get_button(td, purchase) {
         return "";
     }
 
+    var found = purchase.match(/:\ [0-9]+\/[0-9]+$/);
+    if (found !== null) {
+        found = purchase.match(/[0-9]+/g);
+        if (found[0] === found[1]) {
+            // e.g. "25/25"
+            return "";
+        }
+    }
+
     var button = get_button_raw(td);
     button = verify_button(button);
 
@@ -1705,7 +1714,9 @@ function compose_magic_object(pane_title, purchase, details, current_ob, button_
     var clean_name = purchase
         .replace(' / ', '')
         .replace(/\ \(MAX\)$/, '')
-        .replace(/[0-9]+$/, '')
+        .replace(new RegExp("/[0-9]*$"), "")    // remove "/NN" from end
+        .replace(new RegExp(": [0-9]*$"), "")   // remove ": NN" from end
+        .replace(/[#0-9]+$/, "")                // remove "#N" or "NN" from end
         .replace(/^Tier\ [0-9]+\ /, '')
         .replace(/^T[0-9]+\ /, '')
         .replace(/#$/, '')
@@ -1763,8 +1774,6 @@ function tr_2_magic_raw(tr, pane_title) {
     var purchase = h3
         .text()
         .trim()
-        .replace(new RegExp("/[0-9]*$"), "")    // remove "/NN" from end
-        .replace(new RegExp(": [0-9]*$"), "")   // remove ": NN" from end
         ;
 
     if (! purchase) {
