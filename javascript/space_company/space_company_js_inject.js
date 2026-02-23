@@ -1323,6 +1323,15 @@ function details_2_cost_need_make_OLD(details, pane_title, purchase, clean_name)
 function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_name) {
     "use strict";
 
+    // create cost_need_make object and set failure defaults:
+    var c_n_m = {
+        cost: "Cost not found",
+        need: "Need not found",
+        make: "Make not found",
+        details_orig: "SET ME",
+        details: "SET ME"
+    };
+
     var details = orig_details
         .replaceAll("\n", " ")
         .replaceAll("\t", " ")
@@ -1503,15 +1512,6 @@ function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_
     const pane_ignore_make = [
         // "none yet",
     ];
-
-    // create magic object and set failure defaults:
-    var magic = {
-        cost: "Cost not found",
-        need: "Need not found",
-        make: "Make not found",
-        details_orig: "SET ME",
-        details: "SET ME"
-    };
 
     // set success defaults for each Page or Clack that doesn't need a data type:
     if (pane_title === "energy_mass_conversion") {
