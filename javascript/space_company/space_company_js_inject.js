@@ -1323,7 +1323,7 @@ function details_2_cost_need_make_OLD(details, pane_title, purchase, clean_name)
     return answer;
 }
 
-function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_name) {
+function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name) {
     "use strict";
 
     // create cost_need_make object and set failure defaults:
@@ -1700,7 +1700,7 @@ function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_
     return c_n_m;
 }
 
-function details_2_cost_need_make(details, pane_title, purchase, clean_name) {
+function details_2_cost_need_make_OBSOLETE(details, pane_title, purchase, clean_name) {
     "use strict";
     var OLD = details_2_cost_need_make_OLD(details, pane_title, purchase, clean_name);
     var NEW = details_2_cost_need_make_NEW(details, pane_title, purchase, clean_name);
