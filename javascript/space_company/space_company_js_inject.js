@@ -1993,9 +1993,9 @@ function update_magic_fields(magic, pane_title, quantities) {
         magic.clickable = "OK";
     }
 
-    if (magic.make !== "Make not found" && magic.need !== "Need not found") {
-        magic.details = "";
-    }
+    // if (magic.make !== "Make not found" && magic.need !== "Need not found") {
+    //     magic.details = "";
+    // }
 
     return;
 }
@@ -2605,32 +2605,32 @@ function tick() {
             return magics_list;
         }).flat();
 
-        var check_by_cost_NEW = filter_magics_by(all_magic, "cost_NEW");
-        var check_by_make_NEW = filter_magics_by(all_magic, "make_NEW");
-        var check_by_need_NEW = filter_magics_by(all_magic, "need_NEW");
-        var fail_cost_NEW = check_by_cost_NEW["Cost not found"] || [];
-        var fail_make_NEW = check_by_make_NEW["Make not found"] || [];
-        var fail_need_NEW = check_by_need_NEW["Need not found"] || [];
-        // if (fail_cost_NEW !== undefined) { console.error('ALL', 'fail_cost_NEW:', fail_cost_NEW); }
-        // if (fail_make_NEW !== undefined) { console.error('ALL', 'fail_make_NEW:', fail_make_NEW); }
-        // if (fail_need_NEW !== undefined) { console.error('ALL', 'fail_need_NEW:', fail_need_NEW); }
+        var check_by_cost = filter_magics_by(all_magic, "cost");
+        var check_by_make = filter_magics_by(all_magic, "make");
+        var check_by_need = filter_magics_by(all_magic, "need");
+        var fail_cost = check_by_cost["Cost not found"] || [];
+        var fail_make = check_by_make["Make not found"] || [];
+        var fail_need = check_by_need["Need not found"] || [];
+        // if (fail_cost !== undefined) { console.error('ALL', 'fail_cost:', fail_cost); }
+        // if (fail_make !== undefined) { console.error('ALL', 'fail_make:', fail_make); }
+        // if (fail_need !== undefined) { console.error('ALL', 'fail_need:', fail_need); }
 
-        var magic_by_make_NEW = filter_magics_by(all_magic, "make_item_NEW");
-        // console.log(magics_label, 'by_make_item_NEW:', magic_by_make_NEW);
-        var fail_make_item_NEW = magic_by_make_NEW["ERROR: make.length > 1"] || [];
-        // if (fail_make_item_NEW !== undefined) { console.error('ALL', 'fail make_item_NEW:', fail_make_item_NEW); }
+        var magic_by_make = filter_magics_by(all_magic, "make_item");
+        // console.log(magics_label, 'by_make_item:', magic_by_make);
+        var fail_make_item = magic_by_make["ERROR: make.length > 1"] || [];
+        // if (fail_make_item !== undefined) { console.error('ALL', 'fail make_item:', fail_make_item); }
 
         var all_problems = [].concat(
-            fail_cost_NEW,
-            fail_make_NEW,
-            fail_need_NEW,
-            fail_make_item_NEW,
+            fail_cost,
+            fail_make,
+            fail_need,
+            fail_make_item,
             []  // last: no comma
         );
         if (all_problems.length > 0) { console.error('ALL', 'all_problems:', all_problems); }
         var all_details_entries = all_problems.map(function(ob) {
             var name = ob.name;
-            var details = ob.details_NEW;
+            var details = ob.details;
             return [name, details];
         });
         var all_details = Object.fromEntries(all_details_entries);
