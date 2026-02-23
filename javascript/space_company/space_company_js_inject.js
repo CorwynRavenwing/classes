@@ -150,6 +150,11 @@ function jQuery_to_array(jquery_object) {
     return array;
 }
 
+function filter_not_blank(thing) {
+    "use strict";
+    return thing !== "";
+}
+
 // some logic from Underscore UNIQUEID.JS:
 var random_id_counter = 0;
 function random_id(prefix) {
@@ -1551,54 +1556,96 @@ function details_2_cost_need_make_NEW(orig_details, pane_title, purchase, clean_
         .replaceAll(/[\-\ .]+[}]/g, "}")    // dashes, spaces, or periods before a close-bracket
         .replaceAll(/[}][}]+/g, "}")        // two close-brackets become one
         ;
-
-    details = "START:" + details;
-    var sections = details.split("{");
+    const JUNK = "JUNK:";
+    details = JUNK + details;
+    var sections = details
+        .split("{")
+        .filter(filter_not_blank)
+        ;
     // console.log('sections:', sections);
-    var answers = sections.map(function(section) {
-        var fragments = section.split("}");
-        fragments = fragments.filter(function(thing) { return thing !== ""; });
-        if (fragments.length > 1) {
-            // console.warn('fragments > 1', fragments);
+    var cleaned = sections.map(
+        function(section){
+            var fragments = section
+                .split("}")
+                .filter(filter_not_blank)
+                ;
+            if (fragments.length > 1) {
+                fragments = fragments.map(function(frag, idx) {
+                    if (idx === 0) {
+                        return frag;
+                    }
+                    // console.warn('extra junk section', details, fragments, frag);
+                    return JUNK + frag;
+                });
+            }
+            return fragments;
+        })
+        .flat()
+        .filter(filter_not_blank)
+        ;
+
+    var answers = cleaned.map(function(section) {
+        var pieces = section.split(":");
+        if (pieces.length > 2) {
+            // shouldn't be possible, since we've replaced colons with em-dashes above
+            console.error('pieces > 2', pieces);
+            throw new Error('D2CNM(): found extra colon in a section');
         }
-        var cleaned = fragments[0];
-        var pieces = cleaned.split(":");
-        var header = pieces[0];
-        var remainder = pieces.slice(1).join(":");
-        return [header, remainder];
+        return pieces;
     });
-    console.log('answers:', answers);
+    // console.log('orig_details:', orig_details);
+    // console.log('details:', details);
+    // console.log('answers:', answers);
 
-    // var position_start, position_end;
-    // var first, middle, last;
-    // var looping = true;
-    // while (looping ===  true) {
-    //     console.warn('details BEFORE', details);
-    //     position_start = details.search("{");
-    //     if (position_start === -1) {
-    //         console.warn('open-bracket not found');
-    //         looping = false;
-    //         break;
-    //     }
-    //     position_end = details.search("}", position_start);
-    //     console.warn("found brackets at position", position_start, position_end);
-    //     first = details.slice(0, position_start);
-    //     if (position_end === -1) {
-    //         middle = details.slice(position_start);
-    //         last = "";
-    //     } else {
-    //         middle = details.slice(position_start, position_end + 1);
-    //         last = details.slice(position_end);
-    //     }
-    //     console.log("first:", "'" + first + "'");
-    //     console.log("middle:", "'" + middle + "'");
-    //     console.log("last:", "'" + last + "'");
-    //     details = first + " (-) " + last;
-    //     console.warn('details AFTER', details);
+    var answers_lowercase = answers.map(function([label, data]) {
+        return [label.toLowerCase(), data];
+    });
+    var CNM_entries = arraysFromEntries(answers_lowercase);
+    // console.log('CNM_entries [A]:', CNM_entries);
 
-    //     details = "DEBUG: STOP";
-    //     break;
-    // }
+    var CNM_keys = Object.keys(CNM_entries);
+    var prior_key = "";
+    CNM_keys.forEach(function(key) {
+        var value_arr = CNM_entries[key];
+        var value_str = value_arr.join(", ");   // must match prices_2_priceob!
+        if (key === "other") {
+            if (prior_key === "") {
+                console.error('got an OTHER without a PRIOR!');
+                console.warn('key:', key, 'value_str:', value_str);
+                console.log('answers:', answers);
+                console.log('details:', details);
+            } else if (prior_key === "make") {
+                key = "need";
+            } else if (prior_key === "need") {
+                key = "make";
+            } else {
+                console.error('got an OTHER with an INVALID PRIOR:', prior_key);
+                console.warn('key:', key, 'value_str:', value_str);
+                console.log('answers:', answers);
+                console.log('details:', details);
+            }
+        }
+        if ((key === "make") || (key === "need")) {
+            prior_key = key;
+        }
+        if (key === "junk") {
+            magic[key] = value_str;
+        } else {
+            try {
+                magic[key] = prices_2_priceob(value_str);
+            } catch (e_const) {
+                var e = e_const;
+                if (!(e instanceof Error)) {
+                    e = new Error(e);
+                }
+                console.error(e.message);
+                console.warn('key:', key, 'value_str:', value_str);
+                console.log('answers:', answers);
+                console.log('details:', details);
+            }
+        }
+    });
+    // console.log('CNM_entries [B]:', CNM_entries);
 
     // XYZZY
 
