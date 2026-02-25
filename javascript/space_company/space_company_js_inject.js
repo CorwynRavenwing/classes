@@ -1001,6 +1001,7 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
             "allows for a massive increase",
             "asteroids for gold",
             "axe for your woodcutter",
+            "batteries for all",
             "designed for mining",
             "field for pieces",
             "for this knowledge",
@@ -1008,8 +1009,10 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
             "return for building",
             "return for your",
             "search for Titanium",
+            "science) for each Dark Matter",
             "shovel for your woodburner",
             "store it for later use",
+            "upgrade for dark matter",
             "Uranium for easy",
 
             // misuse of "out of":
@@ -1109,9 +1112,12 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
         "Dyson Segment",
         "Interstellar Radar Scanner",
         "Rocket Ship: Not Built",
+        "Rocket Ship: Built",
         "Aerodynamic Sections",
         "Engine Unit",
         "Shield Plating",
+        "Rebirth",
+        "Respec",
         // -----
         "ZZZ LAST NO COMMA"
     ];
