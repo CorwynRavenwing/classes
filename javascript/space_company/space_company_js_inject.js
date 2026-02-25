@@ -437,10 +437,11 @@ function get_quantities(tabs_available) {
     if (DEBUG) {console.log('GQ(): substance_list_all', substance_list_all);}
     // DEBUG = false;
 
-    // // should pull these counts from the Interstellar:Rockets page
-    var plating_count = 0;
-    var engine_count = 0;
-    var section_count = 0;
+    // pulling the counts from the Interstellar:Rockets page
+    // TODO: Instead, we should wait and get this from the Clacks objects
+    var plating_count = to_number($("#rocpart_shieldCount").text().trim());
+    var engine_count = to_number($("#rocpart_engineCount").text().trim());
+    var section_count = to_number($("#rocpart_aeroCount").text().trim());
     var fake_substances = [
         ["Shield Plating", plating_count, 50],
         ["Engine Unit", engine_count, 25],
