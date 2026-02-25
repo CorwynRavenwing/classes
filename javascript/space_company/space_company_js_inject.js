@@ -1886,12 +1886,12 @@ function suppress_unused_fn_msgs() {
     }
 }
 
-function get_magic_by_clickable(tabs_available, quantities) {
+function get_all_clacks(tabs_available, quantities) {
     "use strict";
-    var magics_ob = get_magics_ob(pane_descriptors, tabs_available, quantities);
-    // console.warn('magics_ob (before):', magics_ob);
+    var clacks_ob = get_magics_ob(pane_descriptors, tabs_available, quantities);
+    // console.warn('clacks_ob (before):', clacks_ob);
 
-    var magics_entries = safeEntries(magics_ob);
+    var magics_entries = safeEntries(clacks_ob);
     magics_entries.forEach(function(entry) {
         const [pane_title, magics_list] = entry;
         magics_list.forEach(function(magic) {
@@ -1899,32 +1899,28 @@ function get_magic_by_clickable(tabs_available, quantities) {
             update_magic_fields(magic, pane_title, quantities);
         });
     });
-    // console.warn('magics_ob (after):', magics_ob);
+    // console.warn('clacks_ob (after):', clacks_ob);
 
-    var magics_list = Object.values(magics_ob).flat();
-    // console.warn('magics_list:', magics_list);
-
-    var magic_by_clickable = filter_magics_by(magics_list, "clickable");
-    // console.warn('magic_by_clickable:', magic_by_clickable);
-
-    // magic_by_clickable =
-    //     {
-    //       "no_button": [ ... ],
-    //       "unknown": [ ... ],
-    //       "bump_max": [ ... ],
-    //       "high_cost": [ ... ],
-    //       "OK": [ ... ]
-    //     };
-
-    return magic_by_clickable;
+    return clacks_ob;
 }
 
-function colorize_clacks_by_clickable(magic_by_clickable, all_click_classes) {
+function filter_clacks_ob_by_clickable(clacks_ob) {
+    "use strict";
+    var clacks_list = Object.values(clacks_ob).flat();
+    // console.warn('clacks_list:', clacks_list);
+
+    var clacks_by_clickable = filter_magics_by(clacks_list, "clickable");
+    // console.warn('clacks_by_clickable:', clacks_by_clickable);
+
+    return clacks_by_clickable;
+}
+
+function colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes) {
     "use strict";
 
     var filtered;
 
-    filtered = magic_by_clickable.no_button || [];
+    filtered = clacks_by_clickable.no_button || [];
     // console.warn('filter: setting', filtered.length, 'items of type', "no_button", 'to class', "no_button");
     filtered.forEach(function(magic) {
         // console.log('debug; magic (no button)', magic);
@@ -1936,7 +1932,7 @@ function colorize_clacks_by_clickable(magic_by_clickable, all_click_classes) {
         // set_ob_title_blank(tr);
     });
 
-    filtered = magic_by_clickable.unknown || [];
+    filtered = clacks_by_clickable.unknown || [];
     // console.warn('filter: setting', filtered.length, 'items of type', "unknown", 'to class', "unknown_substance");
     filtered.forEach(function(magic) {
         // console.log('debug; magic (unknown)', magic);
@@ -1952,7 +1948,7 @@ function colorize_clacks_by_clickable(magic_by_clickable, all_click_classes) {
         set_ob_title_by_array(tr, pop_up);
     });
 
-    filtered = magic_by_clickable.bump_max || [];
+    filtered = clacks_by_clickable.bump_max || [];
     // console.warn('filter: setting', filtered.length, 'items of type', "bump_max", 'to class', "bump_max");
     filtered.forEach(function(magic) {
         // console.log('debug; magic (bump max)', magic);
@@ -1969,7 +1965,7 @@ function colorize_clacks_by_clickable(magic_by_clickable, all_click_classes) {
         set_ob_title_by_array(tr, pop_up);
     });
 
-    filtered = magic_by_clickable.high_cost || [];
+    filtered = clacks_by_clickable.high_cost || [];
     // console.warn('filter: setting', filtered.length, 'items of type', "high_cost", 'to class', "high_cost");
     filtered.forEach(function(magic) {
         // console.log('debug; magic (high cost)', magic);
@@ -1990,7 +1986,7 @@ function colorize_clacks_by_clickable(magic_by_clickable, all_click_classes) {
         set_ob_title_by_array(tr, pop_up);
     });
 
-    filtered = magic_by_clickable.high_rate || [];
+    filtered = clacks_by_clickable.high_rate || [];
     // console.warn('filter: setting', filtered.length, 'items of type', "high_rate", 'to class', "high_rate");
     filtered.forEach(function(magic) {
         // console.log('debug; magic (high rate/sec)', magic);
@@ -2105,10 +2101,10 @@ function click_something(okay_and_requested, okay_but_not_requested, all_click_c
     return;
 }
 
-function get_bump_reasons(magic_by_clickable) {
+function get_bump_reasons(clacks_by_clickable) {
     "use strict";
 
-    var bump_max = magic_by_clickable.bump_max || [];
+    var bump_max = clacks_by_clickable.bump_max || [];
     // console.warn('bump_max:', bump_max);
 
     var bump_max_data = bump_max.map(
@@ -2201,8 +2197,10 @@ function tick() {
 
     check_energy_levels(quantities);
 
-    var magic_by_clickable = get_magic_by_clickable(tabs_available, quantities);
-    if (TEST) { console.log('magic_by_clickable:', magic_by_clickable); }
+    var magics_ob = get_all_clacks(tabs_available, quantities);
+    var clacks_by_clickable = filter_clacks_ob_by_clickable(magics_ob);
+
+    if (TEST) { console.log('clacks_by_clickable:', clacks_by_clickable); }
 
     var all_click_classes = [
         "bump_max",
@@ -2217,9 +2215,9 @@ function tick() {
         "no_button"
     ];
 
-    colorize_clacks_by_clickable(magic_by_clickable, all_click_classes);
+    colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes);
 
-    var magic_by_requested = filter_magics_by(magic_by_clickable.OK, "click_requested");
+    var magic_by_requested = filter_magics_by(clacks_by_clickable.OK, "click_requested");
     if (TEST) { console.log('magic_by_requested:', magic_by_requested); }
 
     var okay_and_requested     = magic_by_requested[1] || [];
@@ -2229,12 +2227,12 @@ function tick() {
 
     click_something(okay_and_requested, okay_but_not_requested, all_click_classes);
 
-    var overflow_reasons = get_bump_reasons(magic_by_clickable);
+    var overflow_reasons = get_bump_reasons(clacks_by_clickable);
 
     colorize_left_bar(quantities, overflow_reasons);
 
     if (TEST) {
-        safeEntries(magic_by_clickable).forEach(function([magics_label, magics_list]) {
+        safeEntries(clacks_by_clickable).forEach(function([magics_label, magics_list]) {
             // also should check by cost:
 
             var check_by_make = filter_magics_by(magics_list, "make");
@@ -2251,7 +2249,7 @@ function tick() {
 
         });
         // we're checking all the clickable types together instead of separately:
-        var all_magic = safeEntries(magic_by_clickable).map(function(entry) {
+        var all_magic = safeEntries(clacks_by_clickable).map(function(entry) {
             var magics_list = entry[1];
             return magics_list;
         }).flat();
