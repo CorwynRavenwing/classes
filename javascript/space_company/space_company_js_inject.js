@@ -1697,9 +1697,9 @@ function update_clack_fields(clack, pane_title, quantities) {
         clack.clickable = "OK";
     }
 
-    // if (clack.make !== "Make not found" && clack.need !== "Need not found") {
-    //     clack.details = "";
-    // }
+    if (clack.cost !== "Cost not found" && clack.make !== "Make not found" && clack.need !== "Need not found") {
+        clack.details = "";
+    }
 
     return;
 }
