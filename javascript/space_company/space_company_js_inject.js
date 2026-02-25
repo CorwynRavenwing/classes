@@ -958,7 +958,7 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
             "batteries for all",
             "designed for mining",
             "field for pieces",
-            "for this knowledge",
+            "for this knowledge",       // NOTE: also in "}" section
             "game for tools",
             "machines, for powerful",
             "machines, for propulsion",
@@ -1038,7 +1038,7 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
             ". ",
             "each second",
             "every second",
-            "for this knowledge",
+            "for this knowledge",           // NOTE: also in "misuse of for" section
             "Improves relationship by",
             "in total",
             "per second",
