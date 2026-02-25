@@ -1379,9 +1379,14 @@ function compose_clack_object(pane_title, purchase, details, current_ob, button_
 
     clack.pane_title = pane_title;
 
-    var current = current_ob
-        .text()
-        .trim();
+    var current;
+    if (current_ob === "") {
+        current = "0";
+    } else {
+        current = current_ob
+            .text()
+            .trim();
+    }
     clack.current = to_number(current);
 
     var button_id = uniqueId(button_ob, 'btn');
@@ -1457,6 +1462,9 @@ function compose_clack_object(pane_title, purchase, details, current_ob, button_
 
 function tr_2_clack_raw(tr, pane_title) {
     "use strict";
+    var button_ob;
+    var clack;
+
     tr = $( tr );
     // TODO: this once threw an error:
     // Uncaught TypeError: can't assign to property "id" on -1.8359385912006677e+289: not an object
@@ -1478,7 +1486,14 @@ function tr_2_clack_raw(tr, pane_title) {
         ;
 
     if (! purchase) {
-        return null;
+        // no H3 value: either HR#0, or an invalid HR.
+        button_ob = td.find("hide.gainButton > div.btn-default");
+        if (button_ob.length === 0) {
+            return null;
+        }
+        purchase = "gain_" + pane_title;
+        clack = compose_clack_object(pane_title, purchase, details, "", button_ob, tr_id);
+        return clack;
     }
     var is_hidden = tr.hasClass("hidden");
     if (is_hidden) {
@@ -1619,9 +1634,9 @@ function tr_2_clack_raw(tr, pane_title) {
     var current_ob = h3
         .find("span");
 
-    var button_ob = get_button(td, purchase);
+    button_ob = get_button(td, purchase);
 
-    var clack = compose_clack_object(pane_title, purchase, details, current_ob, button_ob, tr_id);
+    clack = compose_clack_object(pane_title, purchase, details, current_ob, button_ob, tr_id);
 
     return clack;
 }
