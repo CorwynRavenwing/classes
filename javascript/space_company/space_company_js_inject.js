@@ -1333,11 +1333,7 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
 
     // XYZZY
 
-    c_n_m.details_orig = orig_details;
     c_n_m.details = details;
-    c_n_m.details_answers = answers;
-    c_n_m.details_entries = c_n_m_entries;
-    c_n_m.details_keys = c_n_m_keys;
 
     var make = c_n_m.make;
     if (make === "") {
@@ -1407,12 +1403,7 @@ function compose_clack_object(pane_title, purchase, details, current_ob, button_
     clack.make_item = cost_need_make.make_item;
     clack.junk = cost_need_make.junk;
 
-
-    clack.details_orig = cost_need_make.details_orig;
     clack.details = cost_need_make.details;
-    clack.details_answers = cost_need_make.details_answers;
-    clack.details_entries = cost_need_make.details_entries;
-    clack.details_keys = cost_need_make.details_keys;
 
     clack.tr_id = tr_id;
 
