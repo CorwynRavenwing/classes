@@ -14,3 +14,8 @@ class Solution:
             key=by_number_of_bits
         )
 
+# NOTE: Acceptance Rate 79.1% (easy)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 15 ms Beats 13.68%
+# NOTE: Memory 19.47 MB Beats 44.54%
