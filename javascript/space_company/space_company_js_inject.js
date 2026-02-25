@@ -1555,8 +1555,9 @@ function tr_2_magic_raw(tr, pane_title) {
             if (dyson_current_val < dyson_max_val) {
                 dyson_button_ob = $( dyson_buttons[8] );
             } else {
-                console.warn('dyson sphere counts: compare', dyson_current_val, dyson_max_val, 'MAX REACHED');
+                // console.warn('dyson sphere counts: compare', dyson_current_val, dyson_max_val, 'MAX REACHED');
                 dyson_button_ob = "";
+                dyson_product += " (MAX)";
             }
 
             // console.warn('compose_magic_object()', pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
