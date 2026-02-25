@@ -1971,14 +1971,22 @@ function colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes) {
         // console.log("tr_id", tr_id, "class", "high_cost", "tr", tr);
 
         var high_cost_time = magic.high_cost_time;
+        var max_time = 0;
         var pop_up = safeEntries(magic.high_cost).map(function(entry) {
             const [substance, count] = entry;
 
             var cost_time = high_cost_time[substance];
+            if (cost_time === "INF") {
+                max_time = cost_time;
+            } else if (max_time !== "INF") {
+                max_time = Math.max(cost_time, max_time);
+            }
 
             return substance + ": " + from_number(count) + " (" + toHHMMSS(cost_time) + ")";
         });
         pop_up.unshift("High cost:");
+        pop_up.push("");
+        pop_up.push("MAX: " + toHHMMSS(max_time));
         set_ob_title_by_array(tr, pop_up);
     });
 
