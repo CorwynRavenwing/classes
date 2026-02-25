@@ -531,12 +531,6 @@ function get_tabs_available() {
     return answer;
 }
 
-function cleanup_details(string) {
-    "use strict";
-
-    return string;
-}
-
 function price_2_pair(price_str) {
     "use strict";
     if (price_str === "") {
@@ -1526,7 +1520,6 @@ function tr_2_clack_raw(tr, pane_title) {
                 throw new Error("dyson_segments: Invalid dyson_details (should contain 'Build Dyson Segment'): " + dyson_details);
             }
             dyson_details = dyson_details.slice(0, position);
-            dyson_details = cleanup_details(dyson_details);
             dyson_current_ob = $("#dysonPieces2");
             dyson_button_ob = $( dyson_buttons[0] );
 
@@ -1547,7 +1540,6 @@ function tr_2_clack_raw(tr, pane_title) {
                 .text()
                 .trim()
                 ;
-            dyson_details = cleanup_details(dyson_details);
             dyson_current_ob = $("#ring");
             dyson_button_ob = $( dyson_buttons[4] );
 
@@ -1568,7 +1560,6 @@ function tr_2_clack_raw(tr, pane_title) {
                 .text()
                 .trim()
                 ;
-            dyson_details = cleanup_details(dyson_details);
             dyson_current_ob = $("#swarm");
             dyson_button_ob = $( dyson_buttons[6] );
 
@@ -1589,7 +1580,6 @@ function tr_2_clack_raw(tr, pane_title) {
                 .text()
                 .trim()
                 ;
-            dyson_details = cleanup_details(dyson_details);
             dyson_current_ob = $("#sphere");
             var dyson_max_ob = $("#sphereMax");
             var dyson_current_val = to_number(dyson_current_ob.text().trim());
