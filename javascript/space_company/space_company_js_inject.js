@@ -1141,17 +1141,29 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
         "ZZZ LAST NO COMMA"
     ];
 
+    const purchase_ignore_make = [
+        // "none yet",
+    ];
+
+    const pane_ignore_both = [
+        "dark_matter",
+        // -----
+        "carnelian_resistance",
+        "prasnian_empire",
+        "hyacinite_congregation",
+        "kitrinos_corporation",
+        "moviton_syndicate",
+        // -----
+        "ZZZ LAST NO COMMA"
+    ];
+
     const pane_ignore_need = [
         "science",
         "ZZZ LAST NO COMMA"
     ];
 
-    const purchase_ignore_make = [
-        // "none yet",
-    ];
-
     const pane_ignore_make = [
-        // "none yet",
+        // none yet
     ];
 
     // set success defaults for each Page or Clack that doesn't need a data type:
@@ -1163,7 +1175,7 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
     }
 
     if (purchase === "Rocket Ship: Built") {
-        // does not have Costs section anymore
+        // does not have Costs section anymore after being built
         c_n_m.cost = "";
     }
     if (pane_title === "travel") {
@@ -1178,10 +1190,7 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
         c_n_m.make = "";
     }
 
-    if (pane_ignore_need.includes(pane_title)) {
-        c_n_m.need = "";
-    }
-
+    // ignore, by "purchase"
     if (purchase_ignore_need.includes(clean_name)) {
         c_n_m.need = "";
     }
@@ -1191,11 +1200,21 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
         c_n_m.make = "";
     }
 
-    if (pane_ignore_make.includes(pane_title)) {
+    if (purchase_ignore_make.includes(clean_name)) {
         c_n_m.make = "";
     }
 
-    if (purchase_ignore_make.includes(clean_name)) {
+    // ignore, by "pane"
+    if (pane_ignore_need.includes(pane_title)) {
+        c_n_m.need = "";
+    }
+
+    if (pane_ignore_both.includes(pane_title)) {
+        c_n_m.need = "";
+        c_n_m.make = "";
+    }
+
+    if (pane_ignore_make.includes(pane_title)) {
         c_n_m.make = "";
     }
 
