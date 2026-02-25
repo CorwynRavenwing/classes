@@ -1469,6 +1469,8 @@ function tr_2_clack_raw(tr, pane_title) {
         .trim()
         ;
 
+    var td = tr.find("td");
+
     var h3 = tr.find("h3");
     var purchase = h3
         .text()
@@ -1616,8 +1618,6 @@ function tr_2_clack_raw(tr, pane_title) {
 
     var current_ob = h3
         .find("span");
-
-    var td = tr.find("td");
 
     var button_ob = get_button(td, purchase);
 
