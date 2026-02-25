@@ -1419,6 +1419,51 @@ function compose_clack_object(pane_title, purchase, details, current_ob, button_
     return clack;
 }
 
+/*
+    clack = {
+        // Set by tr_2_clack_raw():
+
+        "name": "Storage Upgrade #12/25",
+        "clean_name": "Storage Upgrade",
+        "pane_title": "Metal"
+
+        "current": 0,
+        "desired": 25,        // == actually "how many MORE should we get"
+        "click_requested": 1, // == 1 if desired > 0
+
+        "button_id": "uniq-btn-28",
+        "input_id": "uniq-input-99",
+
+        "desired": 12,
+        "click_requested": 1,
+
+        "cost": "" | {list of substances with count},
+
+        "need": "" | {list of substances with count},
+
+        "make": "" | {list of substances with count},
+        "make_item": "energy",
+        "make_count": 1,
+
+        "details": "description including Costs, Make, and Need",
+
+        "tr_id": "heliumStorageUpgrade",
+
+        // ----------------------------------------------------------------
+
+        // Set by update_clack_fields():
+
+        "unknown": [list of substances],
+        "bump_max": "" | {list of substances with count},
+        "high_cost": "" | {list of substances with count},
+        "high_rate": "" | {list of substances with count},
+
+        "clickable": "no_button|unknown|bump_max|high_rate|high_cost|OK",
+
+        "details": << usually deleted >>
+    };
+*/
+
 function tr_2_clack_raw(tr, pane_title) {
     "use strict";
     tr = $( tr );
@@ -1659,59 +1704,6 @@ function update_clack_fields(clack, pane_title, quantities) {
     return;
 }
 
-function tr_2_clack(tr, pane_title) {
-    "use strict";
-
-    var clack = tr_2_clack_raw(tr, pane_title);
-
-    /*
-        clack = {
-            // Set by tr_2_clack_raw():
-
-            "name": "Storage Upgrade #12/25",
-            "clean_name": "Storage Upgrade",
-            "pane_title": "Metal"
-
-            "current": 0,
-            "desired": 25,        // == actually "how many MORE should we get"
-            "click_requested": 1, // == 1 if desired > 0
-
-            "button_id": "uniq-btn-28",
-            "input_id": "uniq-input-99",
-
-            "desired": 12,
-            "click_requested": 1,
-
-            "cost": "" | {list of substances with count},
-
-            "need": "" | {list of substances with count},
-
-            "make": "" | {list of substances with count},
-            "make_item": "energy",
-            "make_count": 1,
-
-            "details": "description including Costs, Make, and Need",
-
-            "tr_id": "heliumStorageUpgrade",
-
-            // ----------------------------------------------------------------
-
-            // Set by update_clack_fields():
-
-            "unknown": [list of substances],
-            "bump_max": "" | {list of substances with count},
-            "high_cost": "" | {list of substances with count},
-            "high_rate": "" | {list of substances with count},
-
-            "clickable": "no_button|unknown|bump_max|high_rate|high_cost|OK",
-
-            "details": << usually deleted >>
-
-        };
-    */
-    return clack;
-}
-
 function trsob_2_clacksob(trs_ob) {
     "use strict";
     var clack;
@@ -1720,7 +1712,7 @@ function trsob_2_clacksob(trs_ob) {
         if (DEBUG) {console.log("DEBUG GMO", pane_title);}
         var clacks = trs.map(function(tr) {
             // console.log("DEBUG idx", "tr", tr)
-            clack = tr_2_clack(tr, pane_title);
+            clack = tr_2_clack_raw(tr, pane_title);
             return clack;
         })
         .filter((ob) => ob !== null)
