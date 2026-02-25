@@ -1006,15 +1006,29 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
             "designed for mining",
             "field for pieces",
             "for this knowledge",
+            "game for tools",
+            "machines, for powerful",
+            "machines, for propulsion",
+            "necessary for Tier",
             "pickaxe for your miner",
+            "power for your",
             "return for building",
             "return for your",
             "search for Titanium",
             "science) for each Dark Matter",
             "shovel for your woodburner",
+            "source for your",
             "store it for later use",
             "upgrade for dark matter",
             "Uranium for easy",
+            "used for advanced",
+            "used for building",
+            "used for many",
+            "used for nuclear",
+            "used for super-cooling",
+            "useful for automatic",
+            "useful for inter-star-system",
+            "Wonders, for complex",
 
             // misuse of "out of":
             "landings out of atmospheres",
@@ -1030,6 +1044,7 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
             "Cost:",
             "Cost -- ",     // ... so this is what really matches now
             "Cost ",
+            "created by infusing",
             "He requests a pyramid containing",
             "He requests a tower consisting of",
             "He requires that you donate",
@@ -1193,6 +1208,12 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
     if (details === "") {
         // details is now blank: return nothing
         c_n_m.cost = "";
+        c_n_m.need = "";
+        c_n_m.make = "";
+    }
+
+    if (purchase.includes("gain_")) {
+        c_n_m.cost = "";    // some, e.g. Plasma, do have a cost; if so, that overrides this
         c_n_m.need = "";
         c_n_m.make = "";
     }
