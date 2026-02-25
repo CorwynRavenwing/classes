@@ -535,44 +535,6 @@ function get_tabs_available() {
 
 function cleanup_details(string) {
     "use strict";
-    // var cost_flag = "Costs";
-
-    // Wonder phrases before costs:
-    string = string.replace("He requires that you donate", cost_flag);
-    string = string.replace("He requests a pyramid containing", cost_flag);
-    string = string.replace("He requests a tower consisting of", cost_flag);
-    string = string.replace("The Overlord wishes for a cube made up of", cost_flag);
-
-    // alternate cost flag
-    string = string.replace("This requires", cost_flag);
-    string = string.replace("Cost:", cost_flag);
-
-    // Wonder phrases within costs:
-    string = string.replaceAll(" and ", ", ");
-
-    // Wonder phrases after costs:
-    string = string.replace(" for this knowledge", "");
-    string = string.replace(" to acquire his methods", "");
-    string = string.replace(" to unlock this technology", "");
-    string = string.replace(" to be given this technology", "");
-
-    // Wonder phrases to clean up:
-    string = string.replace("Donate Resources", "");
-    string = string.replace(/Activate\ .*/, "");
-    string = string.replace(/Rebuild\ .*/, "");
-    string = string.replace("Unlock Plasma Research", "");
-    string = string.replace("Unlock EMC Machine Research", "");
-    string = string.replace("Unlock Dyson Sphere Research", "");
-    string = string.replace(/[0-9.]+%$/, "");
-
-    // Uses/Produces phrase to clean up:
-    string = string.replace("They produce", "produces");
-    string = string.replace("produces a lot of power", "");
-    string = string.replace("produces Gems at intense speeds", "");
-    string = string.replace("uses nano-fibres", "");
-    string = string.replace("Uses fission to create large amounts of power", "");
-
-    string = string.trim();
 
     return string;
 }
@@ -976,7 +938,6 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
         .replaceAll("{", "(")
         .replaceAll("}", ")")
         .replaceAll(":", " -- ")
-        .replaceAll(" and ", ", ")
         ;
 
     var replacements = {
@@ -1245,6 +1206,9 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
     if (pane_ignore_make.includes(pane_title)) {
         c_n_m.make = "";
     }
+
+    details = details.replaceAll(" and ", ", ");
+    details = details.replaceAll(" with ", ", ");
 
     // search for begin/end of each data type:
     safeEntries(replacements).forEach(function([new_string, target_list]) {
