@@ -32,8 +32,6 @@ var auto_request = false;
 
 var prior_cick_time;
 
-var cost_flag = "Costs";    // actually a const, injector cant re-declare them
-
 var pane_descriptors = {
     Interstellar:   "#interstellarTab_pane",
     // Machine:     "#machineTab",
