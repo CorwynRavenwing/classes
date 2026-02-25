@@ -695,6 +695,10 @@ function get_button_raw(td) {
 function verify_button(button) {
     "use strict";
 
+    if (button === "") {
+        return "";
+    }
+
     if (button.hasClass("destroy")) {
         console.error("destroy button!", button);
         return "";
