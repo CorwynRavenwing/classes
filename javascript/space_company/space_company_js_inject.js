@@ -564,10 +564,6 @@ function cleanup_details(string) {
     string = string.replace("Unlock Dyson Sphere Research", "");
     string = string.replace(/[0-9.]+%$/, "");
 
-    // Dark Matter phrases to clean up:
-    string = string.replaceAll(/Improves\ relationship\ by\ [0-9.]+/g, "");
-    string = string.replaceAll(/Improves\ relationship\ by/g, "");
-
     // Uses/Produces phrase to clean up:
     string = string.replace("They produce", "produces");
     string = string.replace("produces a lot of power", "");
@@ -985,7 +981,6 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
             /Rebuild\ .*\ Wonder/g,
             "Activate Portal",
             "Donate Resources",
-            "Improves relationship by",
             "Unlock Dyson Sphere Research",
             "Unlock EMC Machine Research",
             "Unlock Plasma Research",
@@ -1068,6 +1063,7 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
             "each second",
             "every second",
             "for this knowledge",
+            "Improves relationship by",
             "in total",
             "per second",
             "to acquire his methods",
