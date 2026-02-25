@@ -731,6 +731,11 @@ function verify_button(button) {
 function get_button(td, purchase) {
     "use strict";
 
+    if (purchase === "Rocket Ship: Built") {
+        // no button on already-built rocket ship
+        return "";
+    }
+
     if (purchase.includes("(MAX)")) {
         // console.log("found MAX:", purchase);
         return "";
