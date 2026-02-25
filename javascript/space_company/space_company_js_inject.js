@@ -28,6 +28,7 @@ var tick_seconds = 1;
 var DEBUG = false;
 var DEBUG_tick = false;
 var TEST = false;
+var auto_request = false;
 
 var prior_cick_time;
 
@@ -2092,23 +2093,24 @@ function click_something(okay_and_requested, okay_but_not_requested, all_click_c
         input.val(desired);
 
     } else if (okay_but_not_requested.length) {
-
-        // tr = $( "#" + magic.tr_id );
-        // add_class_remove_others(tr, "auto_request", all_click_classes);
-        // // button = $( "#" + magic.button_id );
-        // input = $( "#" + magic.input_id );
-        // // console.log('... tr', tr, 'desired', magic.desired, 'input', input);
-        // if (magic.desired) {
-        //     console.error("Error!  'desired' is not zero/blank!", magic.desired);
-        //     // return, maybe?
-        // } else {
-        //     desired = 1;
-        //     console.warn("AUTO-REQUEST", /* TIME, */ magic.pane_title, magic.name, "(" + magic.desired + "->" + desired + ")");
-        //     input.val(desired);
-        // }
-
         clack = choose_best_unrequested(okay_but_not_requested);
         // console.log("NO CLICK! fall back to:", clack.name, "(skip)");
+
+        if (auto_request) {
+            tr = $( "#" + clack.tr_id );
+            add_class_remove_others(tr, "auto_request", all_click_classes);
+            // button = $( "#" + clack.button_id );
+            input = $( "#" + clack.input_id );
+            // console.log('... tr', tr, 'desired', clack.desired, 'input', input);
+            if (clack.desired) {
+                console.error("Error!  'desired' is not zero/blank!", clack.desired);
+                // return, maybe?
+            } else {
+                desired = 1;
+                console.warn("AUTO-REQUEST", /* TIME, */ clack.pane_title, clack.name, "(" + clack.desired + "->" + desired + ")");
+                input.val(desired);
+            }
+        }
     } else {
         console.log("NO CLICK, no fallback");
     }
