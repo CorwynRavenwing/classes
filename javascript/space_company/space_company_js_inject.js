@@ -1363,10 +1363,10 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
     return c_n_m;
 }
 
-function compose_magic_object(pane_title, purchase, details, current_ob, button_ob, tr_id) {
+function compose_clack_object(pane_title, purchase, details, current_ob, button_ob, tr_id) {
     "use strict";
-    var magic = {};
-    magic.name = purchase;
+    var clack = {};
+    clack.name = purchase;
 
     var clean_name = purchase
         .replace(' / ', '')
@@ -1378,47 +1378,47 @@ function compose_magic_object(pane_title, purchase, details, current_ob, button_
         .replace(/^T[0-9]+\ /, '')
         .replace(/#$/, '')
         .trim();
-    magic.clean_name = clean_name;
+    clack.clean_name = clean_name;
 
-    magic.pane_title = pane_title;
+    clack.pane_title = pane_title;
 
     var current = current_ob
         .text()
         .trim();
-    magic.current = to_number(current);
+    clack.current = to_number(current);
 
     var button_id = uniqueId(button_ob, 'btn');
-    magic.button_id = button_id;
+    clack.button_id = button_id;
 
     var input_id = create_input_and_get_id(button_id, pane_title + "/" + purchase);
-    magic.input_id = input_id;
+    clack.input_id = input_id;
 
-    magic.desired = inputid_2_desired(input_id);
-    magic.click_requested = ((magic.desired > 0) ? 1 : 0);
+    clack.desired = inputid_2_desired(input_id);
+    clack.click_requested = ((clack.desired > 0) ? 1 : 0);
 
-    magic.details = details;
+    clack.details = details;
 
     var cost_need_make = details_2_cost_need_make(details, pane_title, purchase, clean_name);
 
-    magic.cost = cost_need_make.cost;
-    magic.need = cost_need_make.need;
-    magic.make = cost_need_make.make;
-    magic.make_item = cost_need_make.make_item;
-    magic.junk = cost_need_make.junk;
+    clack.cost = cost_need_make.cost;
+    clack.need = cost_need_make.need;
+    clack.make = cost_need_make.make;
+    clack.make_item = cost_need_make.make_item;
+    clack.junk = cost_need_make.junk;
 
 
-    magic.details_orig = cost_need_make.details_orig;
-    magic.details = cost_need_make.details;
-    magic.details_answers = cost_need_make.details_answers;
-    magic.details_entries = cost_need_make.details_entries;
-    magic.details_keys = cost_need_make.details_keys;
+    clack.details_orig = cost_need_make.details_orig;
+    clack.details = cost_need_make.details;
+    clack.details_answers = cost_need_make.details_answers;
+    clack.details_entries = cost_need_make.details_entries;
+    clack.details_keys = cost_need_make.details_keys;
 
-    magic.tr_id = tr_id;
+    clack.tr_id = tr_id;
 
-    return magic;
+    return clack;
 }
 
-function tr_2_magic_raw(tr, pane_title) {
+function tr_2_clack_raw(tr, pane_title) {
     "use strict";
     tr = $( tr );
     // TODO: this once threw an error:
@@ -1466,7 +1466,7 @@ function tr_2_magic_raw(tr, pane_title) {
             }
 
             var dyson_objects = [];
-            var dyson_subpage, dyson_magic, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id;
+            var dyson_subpage, dyson_clack, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id;
 
             //////////////////////////
             // Construction clack:  //
@@ -1488,11 +1488,11 @@ function tr_2_magic_raw(tr, pane_title) {
             dyson_current_ob = $("#dysonPieces2");
             dyson_button_ob = $( dyson_buttons[0] );
 
-            // console.warn('compose_magic_object()', pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
-            dyson_magic = compose_magic_object(pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
-            // console.warn('compose_magic_object()', dyson_magic);
+            // console.warn('compose_clack_object()', pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
+            dyson_clack = compose_clack_object(pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
+            // console.warn('compose_clack_object()', dyson_clack);
 
-            dyson_objects.push(dyson_magic);
+            dyson_objects.push(dyson_clack);
 
             //////////////////////////
             // Ring clack:          //
@@ -1509,11 +1509,11 @@ function tr_2_magic_raw(tr, pane_title) {
             dyson_current_ob = $("#ring");
             dyson_button_ob = $( dyson_buttons[4] );
 
-            // console.warn('compose_magic_object()', pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
-            dyson_magic = compose_magic_object(pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
-            // console.warn('compose_magic_object()', dyson_magic);
+            // console.warn('compose_clack_object()', pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
+            dyson_clack = compose_clack_object(pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
+            // console.warn('compose_clack_object()', dyson_clack);
 
-            dyson_objects.push(dyson_magic);
+            dyson_objects.push(dyson_clack);
 
             //////////////////////////
             // Swarm clack:         //
@@ -1530,11 +1530,11 @@ function tr_2_magic_raw(tr, pane_title) {
             dyson_current_ob = $("#swarm");
             dyson_button_ob = $( dyson_buttons[6] );
 
-            // console.warn('compose_magic_object()', pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
-            dyson_magic = compose_magic_object(pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
-            // console.warn('compose_magic_object()', dyson_magic);
+            // console.warn('compose_clack_object()', pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
+            dyson_clack = compose_clack_object(pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
+            // console.warn('compose_clack_object()', dyson_clack);
 
-            dyson_objects.push(dyson_magic);
+            dyson_objects.push(dyson_clack);
 
             //////////////////////////
             // Sphere clack:        //
@@ -1560,11 +1560,11 @@ function tr_2_magic_raw(tr, pane_title) {
                 dyson_product += " (MAX)";
             }
 
-            // console.warn('compose_magic_object()', pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
-            dyson_magic = compose_magic_object(pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
-            // console.warn('compose_magic_object()', dyson_magic);
+            // console.warn('compose_clack_object()', pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
+            dyson_clack = compose_clack_object(pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
+            // console.warn('compose_clack_object()', dyson_clack);
 
-            dyson_objects.push(dyson_magic);
+            dyson_objects.push(dyson_clack);
 
             // console.warn('dyson_objects', dyson_objects);
 
@@ -1585,24 +1585,24 @@ function tr_2_magic_raw(tr, pane_title) {
 
     var button_ob = get_button(td, purchase);
 
-    var magic = compose_magic_object(pane_title, purchase, details, current_ob, button_ob, tr_id);
+    var clack = compose_clack_object(pane_title, purchase, details, current_ob, button_ob, tr_id);
 
-    return magic;
+    return clack;
 }
 
-function update_magic_fields(magic, pane_title, quantities) {
+function update_clack_fields(clack, pane_title, quantities) {
     "use strict";
 
-    if (magic === null) {
-        return magic;
+    if (clack === null) {
+        return clack;
     }
 
     // console.log('quantities:', quantities);
 
     var unknown_substances_list = [
-        get_unknown_substances(magic.need, quantities),
-        get_unknown_substances(magic.make, quantities),
-        get_unknown_substances(magic.cost, quantities)
+        get_unknown_substances(clack.need, quantities),
+        get_unknown_substances(clack.make, quantities),
+        get_unknown_substances(clack.cost, quantities)
     ];
 
     // console.log('unknown_substances_list:', unknown_substances_list);
@@ -1617,55 +1617,55 @@ function update_magic_fields(magic, pane_title, quantities) {
 
     complain_about_unknown_substances_once(unknown_substances);
     if (unknown_substances.length) {
-        if (DEBUG) { console.warn("cost of UNKNOWN SUBSTANCES:", pane_title, magic.name, unknown_substances); }
+        if (DEBUG) { console.warn("cost of UNKNOWN SUBSTANCES:", pane_title, clack.name, unknown_substances); }
     } else {
         unknown_substances_ob = "";
     }
-    magic.unknown = unknown_substances_ob;
+    clack.unknown = unknown_substances_ob;
 
-    magic.bump_max = get_bump_max_ob(magic.cost, quantities);
+    clack.bump_max = get_bump_max_ob(clack.cost, quantities);
 
-    var high_cost_and_time = get_high_cost_and_time_ob(magic.cost, quantities);
+    var high_cost_and_time = get_high_cost_and_time_ob(clack.cost, quantities);
     const [high_cost, high_cost_time] = high_cost_and_time;
-    magic.high_cost = high_cost;
-    magic.high_cost_time = high_cost_time;
+    clack.high_cost = high_cost;
+    clack.high_cost_time = high_cost_time;
 
-    magic.high_rate = get_high_rate_ob(magic.need, quantities);
+    clack.high_rate = get_high_rate_ob(clack.need, quantities);
 
-    if (magic.button_id === "") {
-        magic.clickable = "no_button";
+    if (clack.button_id === "") {
+        clack.clickable = "no_button";
     }
-    else if (magic.unknown !== "") {
-        magic.clickable = "unknown";
+    else if (clack.unknown !== "") {
+        clack.clickable = "unknown";
     }
-    else if (magic.bump_max) {
-        magic.clickable = "bump_max";
+    else if (clack.bump_max) {
+        clack.clickable = "bump_max";
     }
-    else if (magic.high_rate) {
-        magic.clickable = "high_rate";
+    else if (clack.high_rate) {
+        clack.clickable = "high_rate";
     }
-    else if (magic.high_cost) {
-        magic.clickable = "high_cost";
+    else if (clack.high_cost) {
+        clack.clickable = "high_cost";
     }
     else {
-        magic.clickable = "OK";
+        clack.clickable = "OK";
     }
 
-    // if (magic.make !== "Make not found" && magic.need !== "Need not found") {
-    //     magic.details = "";
+    // if (clack.make !== "Make not found" && clack.need !== "Need not found") {
+    //     clack.details = "";
     // }
 
     return;
 }
 
-function tr_2_magic(tr, pane_title) {
+function tr_2_clack(tr, pane_title) {
     "use strict";
 
-    var magic = tr_2_magic_raw(tr, pane_title);
+    var clack = tr_2_clack_raw(tr, pane_title);
 
     /*
-        magic = {
-            // Set by tr_2_magic_raw():
+        clack = {
+            // Set by tr_2_clack_raw():
 
             "name": "Storage Upgrade #12/25",
             "clean_name": "Storage Upgrade",
@@ -1695,7 +1695,7 @@ function tr_2_magic(tr, pane_title) {
 
             // ----------------------------------------------------------------
 
-            // Set by update_magic_fields():
+            // Set by update_clack_fields():
 
             "unknown": [list of substances],
             "bump_max": "" | {list of substances with count},
@@ -1708,27 +1708,27 @@ function tr_2_magic(tr, pane_title) {
 
         };
     */
-    return magic;
+    return clack;
 }
 
-function trsob_2_magicsob(trs_ob) {
+function trsob_2_clacksob(trs_ob) {
     "use strict";
-    var magic;
+    var clack;
     var trs_array = Object.entries(trs_ob);
-    var magics_array = trs_array.map(function([pane_title, trs]) {
+    var clacks_array = trs_array.map(function([pane_title, trs]) {
         if (DEBUG) {console.log("DEBUG GMO", pane_title);}
-        var magics = trs.map(function(tr) {
+        var clacks = trs.map(function(tr) {
             // console.log("DEBUG idx", "tr", tr)
-            magic = tr_2_magic(tr, pane_title);
-            return magic;
+            clack = tr_2_clack(tr, pane_title);
+            return clack;
         })
         .filter((ob) => ob !== null)
         .flat()
         ;
-        return [pane_title, magics];
+        return [pane_title, clacks];
     });
-    var magics_ob = Object.fromEntries(magics_array);
-    return magics_ob;
+    var clacks_ob = Object.fromEntries(clacks_array);
+    return clacks_ob;
 }
 
 var GLOBAL_known_skip_page = [];
@@ -1797,25 +1797,25 @@ function panesob_2_trsob(panes_ob, quantities) {
     return trs_ob;
 }
 
-function get_magics_ob(pane_descriptors, tabs_available, quantities) {
+function get_clacks_ob(pane_descriptors, tabs_available, quantities) {
     "use strict";
     var panes_ob = panesdesc_2_panesob(pane_descriptors, tabs_available);
     var trs_ob = panesob_2_trsob(panes_ob, quantities);
-    var magics_ob = trsob_2_magicsob(trs_ob);
+    var clacks_ob = trsob_2_clacksob(trs_ob);
 
-    return magics_ob;
+    return clacks_ob;
 }
 
-function filter_magics_by(magics_list, filter_column) {
+function filter_clacks_by(clacks_list, filter_column) {
     "use strict";
 
-    if (magics_list === undefined) {
+    if (clacks_list === undefined) {
         return "";
     }
 
-    var answer_list = magics_list.map(function(magic) {
-        var filter = magic[filter_column];
-        return [filter, magic];
+    var answer_list = clacks_list.map(function(clack) {
+        var filter = clack[filter_column];
+        return [filter, clack];
     });
 
     var answer = arraysFromEntries(answer_list);
@@ -1839,47 +1839,47 @@ function choose_random(things) {
     return things[i];
 }
 
-function filter_field_equal(magics_list, field_name, skip_value) {
+function filter_field_equal(clacks_list, field_name, skip_value) {
     "use strict";
-    magics_list = magics_list.filter(function(magic) {
-        if (magic[field_name] !== skip_value) {
-            // console.log("FF(==) skip", field_name, skip_value, magic);
+    clacks_list = clacks_list.filter(function(clack) {
+        if (clack[field_name] !== skip_value) {
+            // console.log("FF(==) skip", field_name, skip_value, clack);
             return false;
         }
         return true;
     });
-    return magics_list;
+    return clacks_list;
 }
 
-function filter_field_not_equal(magics_list, field_name, skip_value) {
+function filter_field_not_equal(clacks_list, field_name, skip_value) {
     "use strict";
-    magics_list = magics_list.filter(function(magic) {
-        if (magic[field_name] === skip_value) {
-            // console.log("FF(!=) skip", field_name, skip_value, magic);
+    clacks_list = clacks_list.filter(function(clack) {
+        if (clack[field_name] === skip_value) {
+            // console.log("FF(!=) skip", field_name, skip_value, clack);
             return false;
         }
         return true;
     });
-    return magics_list;
+    return clacks_list;
 }
 
-function choose_best_requested(magics_list) {
+function choose_best_requested(clacks_list) {
     "use strict";
-    var magics_by_item = filter_magics_by(magics_list, "make_item");
-    var all_items = Object.keys(magics_by_item);
+    var clacks_by_item = filter_clacks_by(clacks_list, "make_item");
+    var all_items = Object.keys(clacks_by_item);
     var random_item = choose_random(all_items);
-    var magics_with_that_item = magics_by_item[random_item];
-    // console.log('CBR(): MBI=', magics_by_item);
+    var clacks_with_that_item = clacks_by_item[random_item];
+    // console.log('CBR(): MBI=', clacks_by_item);
     // console.log('CBR(): items=', all_items);
-    // console.log('CBR(): choosing rightmost of the', magics_with_that_item.length, 'Clacks making', random_item);
-    return choose_rightmost(magics_with_that_item);
+    // console.log('CBR(): choosing rightmost of the', clacks_with_that_item.length, 'Clacks making', random_item);
+    return choose_rightmost(clacks_with_that_item);
 }
 
-function choose_best_unrequested(magics_list) {
+function choose_best_unrequested(clacks_list) {
     "use strict";
-    magics_list = filter_field_not_equal(magics_list, "name", "Storage Upgrade");
+    clacks_list = filter_field_not_equal(clacks_list, "name", "Storage Upgrade");
     // TODO: use a better method
-    return choose_random(magics_list);
+    return choose_random(clacks_list);
 }
 
 function suppress_unused_fn_msgs() {
@@ -1895,15 +1895,15 @@ function suppress_unused_fn_msgs() {
 
 function get_all_clacks(tabs_available, quantities) {
     "use strict";
-    var clacks_ob = get_magics_ob(pane_descriptors, tabs_available, quantities);
+    var clacks_ob = get_clacks_ob(pane_descriptors, tabs_available, quantities);
     // console.warn('clacks_ob (before):', clacks_ob);
 
-    var magics_entries = safeEntries(clacks_ob);
-    magics_entries.forEach(function(entry) {
-        const [pane_title, magics_list] = entry;
-        magics_list.forEach(function(magic) {
-            // console.warn('DEBUG: updating magic', 'pane_title', pane_title, 'magic', magic);
-            update_magic_fields(magic, pane_title, quantities);
+    var clacks_entries = safeEntries(clacks_ob);
+    clacks_entries.forEach(function(entry) {
+        const [pane_title, clacks_list] = entry;
+        clacks_list.forEach(function(clack) {
+            // console.warn('DEBUG: updating clack', 'pane_title', pane_title, 'clack', clack);
+            update_clack_fields(clack, pane_title, quantities);
         });
     });
     // console.warn('clacks_ob (after):', clacks_ob);
@@ -1916,7 +1916,7 @@ function filter_clacks_ob_by_clickable(clacks_ob) {
     var clacks_list = Object.values(clacks_ob).flat();
     // console.warn('clacks_list:', clacks_list);
 
-    var clacks_by_clickable = filter_magics_by(clacks_list, "clickable");
+    var clacks_by_clickable = filter_clacks_by(clacks_list, "clickable");
     // console.warn('clacks_by_clickable:', clacks_by_clickable);
 
     return clacks_by_clickable;
@@ -1929,9 +1929,9 @@ function colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes) {
 
     filtered = clacks_by_clickable.no_button || [];
     // console.warn('filter: setting', filtered.length, 'items of type', "no_button", 'to class', "no_button");
-    filtered.forEach(function(magic) {
-        // console.log('debug; magic (no button)', magic);
-        var tr_id = magic.tr_id;
+    filtered.forEach(function(clack) {
+        // console.log('debug; clack (no button)', clack);
+        var tr_id = clack.tr_id;
         var tr = $( "#" + tr_id );
         add_class_remove_others(tr, "no_button", all_click_classes);
         // console.log("tr_id", tr_id, "class", "no_button", "tr", tr);
@@ -1941,14 +1941,14 @@ function colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes) {
 
     filtered = clacks_by_clickable.unknown || [];
     // console.warn('filter: setting', filtered.length, 'items of type', "unknown", 'to class', "unknown_substance");
-    filtered.forEach(function(magic) {
-        // console.log('debug; magic (unknown)', magic);
-        var tr_id = magic.tr_id;
+    filtered.forEach(function(clack) {
+        // console.log('debug; clack (unknown)', clack);
+        var tr_id = clack.tr_id;
         var tr = $( "#" + tr_id );
         add_class_remove_others(tr, "unknown_substance", all_click_classes);
         // console.log("tr_id", tr_id, "class", "unknown_substance", "tr", tr);
 
-        var pop_up = safeEntries(magic.unknown).map(function(entry) {
+        var pop_up = safeEntries(clack.unknown).map(function(entry) {
             const [substance, count] = entry;
             return "Unknown: " + substance + ": " + from_number(count);
         });
@@ -1957,14 +1957,14 @@ function colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes) {
 
     filtered = clacks_by_clickable.bump_max || [];
     // console.warn('filter: setting', filtered.length, 'items of type', "bump_max", 'to class', "bump_max");
-    filtered.forEach(function(magic) {
-        // console.log('debug; magic (bump max)', magic);
-        var tr_id = magic.tr_id;
+    filtered.forEach(function(clack) {
+        // console.log('debug; clack (bump max)', clack);
+        var tr_id = clack.tr_id;
         var tr = $( "#" + tr_id );
         add_class_remove_others(tr, "bump_max", all_click_classes);
         // console.log("tr_id", tr_id, "class", "bump_max", "tr", tr);
 
-        var pop_up = safeEntries(magic.bump_max).map(function(entry) {
+        var pop_up = safeEntries(clack.bump_max).map(function(entry) {
             const [substance, count] = entry;
             return substance + ": " + from_number(count);
         });
@@ -1974,16 +1974,16 @@ function colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes) {
 
     filtered = clacks_by_clickable.high_cost || [];
     // console.warn('filter: setting', filtered.length, 'items of type', "high_cost", 'to class', "high_cost");
-    filtered.forEach(function(magic) {
-        // console.log('debug; magic (high cost)', magic);
-        var tr_id = magic.tr_id;
+    filtered.forEach(function(clack) {
+        // console.log('debug; clack (high cost)', clack);
+        var tr_id = clack.tr_id;
         var tr = $( "#" + tr_id );
         add_class_remove_others(tr, "high_cost", all_click_classes);
         // console.log("tr_id", tr_id, "class", "high_cost", "tr", tr);
 
-        var high_cost_time = magic.high_cost_time;
+        var high_cost_time = clack.high_cost_time;
         var max_time = 0;
-        var pop_up = safeEntries(magic.high_cost).map(function(entry) {
+        var pop_up = safeEntries(clack.high_cost).map(function(entry) {
             const [substance, count] = entry;
 
             var cost_time = high_cost_time[substance];
@@ -2003,14 +2003,14 @@ function colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes) {
 
     filtered = clacks_by_clickable.high_rate || [];
     // console.warn('filter: setting', filtered.length, 'items of type', "high_rate", 'to class', "high_rate");
-    filtered.forEach(function(magic) {
-        // console.log('debug; magic (high rate/sec)', magic);
-        var tr_id = magic.tr_id;
+    filtered.forEach(function(clack) {
+        // console.log('debug; clack (high rate/sec)', clack);
+        var tr_id = clack.tr_id;
         var tr = $( "#" + tr_id );
         add_class_remove_others(tr, "high_rate", all_click_classes);
         // console.log("tr_id", tr_id, "class", "high_rate", "tr", tr);
 
-        var pop_up = safeEntries(magic.high_rate).map(function(entry) {
+        var pop_up = safeEntries(clack.high_rate).map(function(entry) {
             const [substance, count] = entry;
             return substance + ": " + from_number(count);
         });
@@ -2025,9 +2025,9 @@ function colorize_clacks_by_requested(okay_and_requested, okay_but_not_requested
     "use strict";
 
     // console.warn('filter: setting', okay_and_requested.length, 'items of type', "requested: yes", 'to class', "click_me");
-    okay_and_requested.forEach(function(magic) {
-        // console.log('debug; magic (requested yes)', magic);
-        var tr_id = magic.tr_id;
+    okay_and_requested.forEach(function(clack) {
+        // console.log('debug; clack (requested yes)', clack);
+        var tr_id = clack.tr_id;
         var tr = $( "#" + tr_id );
         add_class_remove_others(tr, "click_me", all_click_classes);
         // console.log("tr_id", tr_id, "class", "click_me", "tr", tr);
@@ -2037,9 +2037,9 @@ function colorize_clacks_by_requested(okay_and_requested, okay_but_not_requested
     });
 
     // console.warn('filter: setting', okay_but_not_requested.length, 'items of type', "requested: no", 'to class', "click_me_maybe");
-    okay_but_not_requested.forEach(function(magic) {
-        // console.log('debug; magic (requested no)', magic);
-        var tr_id = magic.tr_id;
+    okay_but_not_requested.forEach(function(clack) {
+        // console.log('debug; clack (requested no)', clack);
+        var tr_id = clack.tr_id;
         var tr = $( "#" + tr_id );
         add_class_remove_others(tr, "click_me_maybe", all_click_classes);
         // console.log("tr_id", tr_id, "class", "click_me_maybe", "tr", tr);
@@ -2054,21 +2054,21 @@ function colorize_clacks_by_requested(okay_and_requested, okay_but_not_requested
 function click_something(okay_and_requested, okay_but_not_requested, all_click_classes) {
     "use strict";
 
-    var magic;
+    var clack;
     var tr;
     var button;
     var input;
     var desired;
 
     if (okay_and_requested.length) {
-        magic = choose_best_requested(okay_and_requested);
-        // console.log('CLICK ON:', magic);
+        clack = choose_best_requested(okay_and_requested);
+        // console.log('CLICK ON:', clack);
 
-        tr = $( "#" + magic.tr_id );
+        tr = $( "#" + clack.tr_id );
         add_class_remove_others(tr, "clicking", all_click_classes);
-        button = $( "#" + magic.button_id );
-        input = $( "#" + magic.input_id );
-        desired = magic.desired;
+        button = $( "#" + clack.button_id );
+        input = $( "#" + clack.input_id );
+        desired = clack.desired;
         // console.log('... tr', tr, 'desired', desired, 'button', button, 'input', input);
 
         var click_time;
@@ -2087,13 +2087,11 @@ function click_something(okay_and_requested, okay_but_not_requested, all_click_c
             desired = "";
         }
 
-        console.log("AUTO-CLICK", TIME, /* GLOBAL_pane_heading, **/ magic.pane_title, magic.name, "(" + magic.desired + "->" + desired + ")");
+        console.log("AUTO-CLICK", TIME, /* GLOBAL_pane_heading, **/ clack.pane_title, clack.name, "(" + clack.desired + "->" + desired + ")");
 
         input.val(desired);
 
     } else if (okay_but_not_requested.length) {
-        magic = choose_best_unrequested(okay_but_not_requested);
-        // console.log("NO CLICK! fall back to:", magic.name, "(skip)");
 
         // tr = $( "#" + magic.tr_id );
         // add_class_remove_others(tr, "auto_request", all_click_classes);
@@ -2109,6 +2107,8 @@ function click_something(okay_and_requested, okay_but_not_requested, all_click_c
         //     input.val(desired);
         // }
 
+        clack = choose_best_unrequested(okay_but_not_requested);
+        // console.log("NO CLICK! fall back to:", clack.name, "(skip)");
     } else {
         console.log("NO CLICK, no fallback");
     }
@@ -2123,10 +2123,10 @@ function get_bump_reasons(clacks_by_clickable) {
     // console.warn('bump_max:', bump_max);
 
     var bump_max_data = bump_max.map(
-        function(magic) {
-            var pane_title = magic.pane_title;
-            var pane_name = magic.name;
-            var bump_max_items = safeEntries(magic.bump_max);
+        function(clack) {
+            var pane_title = clack.pane_title;
+            var pane_name = clack.name;
+            var bump_max_items = safeEntries(clack.bump_max);
             var bump_max_arr = bump_max_items.map(function(entry) {
                 const [substance, count] = entry;
                 // var pane_heading = "Unknown";
@@ -2212,8 +2212,8 @@ function tick() {
 
     check_energy_levels(quantities);
 
-    var magics_ob = get_all_clacks(tabs_available, quantities);
-    var clacks_by_clickable = filter_clacks_ob_by_clickable(magics_ob);
+    var clacks_ob = get_all_clacks(tabs_available, quantities);
+    var clacks_by_clickable = filter_clacks_ob_by_clickable(clacks_ob);
 
     if (TEST) { console.log('clacks_by_clickable:', clacks_by_clickable); }
 
@@ -2232,11 +2232,11 @@ function tick() {
 
     colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes);
 
-    var magic_by_requested = filter_magics_by(clacks_by_clickable.OK, "click_requested");
-    if (TEST) { console.log('magic_by_requested:', magic_by_requested); }
+    var clack_by_requested = filter_clacks_by(clacks_by_clickable.OK, "click_requested");
+    if (TEST) { console.log('clack_by_requested:', clack_by_requested); }
 
-    var okay_and_requested     = magic_by_requested[1] || [];
-    var okay_but_not_requested = magic_by_requested[0] || [];
+    var okay_and_requested     = clack_by_requested[1] || [];
+    var okay_but_not_requested = clack_by_requested[0] || [];
 
     colorize_clacks_by_requested(okay_and_requested, okay_but_not_requested, all_click_classes);
 
@@ -2247,31 +2247,31 @@ function tick() {
     colorize_left_bar(quantities, overflow_reasons);
 
     if (TEST) {
-        safeEntries(clacks_by_clickable).forEach(function([magics_label, magics_list]) {
+        safeEntries(clacks_by_clickable).forEach(function([clacks_label, clacks_list]) {
             // also should check by cost:
 
-            var check_by_make = filter_magics_by(magics_list, "make");
-            var check_by_need = filter_magics_by(magics_list, "need");
+            var check_by_make = filter_clacks_by(clacks_list, "make");
+            var check_by_need = filter_clacks_by(clacks_list, "need");
             var fail_make = check_by_make["Make not found"];
             var fail_need = check_by_need["Need not found"];
-            if (fail_make !== undefined) { console.error(magics_label, 'fail_make:', fail_make); }
-            if (fail_need !== undefined) { console.error(magics_label, 'fail_need:', fail_need); }
+            if (fail_make !== undefined) { console.error(clacks_label, 'fail_make:', fail_make); }
+            if (fail_need !== undefined) { console.error(clacks_label, 'fail_need:', fail_need); }
 
-            var magic_by_make = filter_magics_by(magics_list, "make_item");
-            // console.log(magics_label, 'by_make_item:', magic_by_make);
-            var fail_make_item = magic_by_make["ERROR: make.length > 1"];
-            if (fail_make_item !== undefined) { console.error(magics_label, 'fail make_item:', fail_make_item); }
+            var clack_by_make = filter_clacks_by(clacks_list, "make_item");
+            // console.log(clacks_label, 'by_make_item:', clack_by_make);
+            var fail_make_item = clack_by_make["ERROR: make.length > 1"];
+            if (fail_make_item !== undefined) { console.error(clacks_label, 'fail make_item:', fail_make_item); }
 
         });
         // we're checking all the clickable types together instead of separately:
-        var all_magic = safeEntries(clacks_by_clickable).map(function(entry) {
-            var magics_list = entry[1];
-            return magics_list;
+        var all_clack = safeEntries(clacks_by_clickable).map(function(entry) {
+            var clacks_list = entry[1];
+            return clacks_list;
         }).flat();
 
-        var check_by_cost = filter_magics_by(all_magic, "cost");
-        var check_by_make = filter_magics_by(all_magic, "make");
-        var check_by_need = filter_magics_by(all_magic, "need");
+        var check_by_cost = filter_clacks_by(all_clack, "cost");
+        var check_by_make = filter_clacks_by(all_clack, "make");
+        var check_by_need = filter_clacks_by(all_clack, "need");
         var fail_cost = check_by_cost["Cost not found"] || [];
         var fail_make = check_by_make["Make not found"] || [];
         var fail_need = check_by_need["Need not found"] || [];
@@ -2279,9 +2279,9 @@ function tick() {
         // if (fail_make !== undefined) { console.error('ALL', 'fail_make:', fail_make); }
         // if (fail_need !== undefined) { console.error('ALL', 'fail_need:', fail_need); }
 
-        var magic_by_make = filter_magics_by(all_magic, "make_item");
-        // console.log(magics_label, 'by_make_item:', magic_by_make);
-        var fail_make_item = magic_by_make["ERROR: make.length > 1"] || [];
+        var clack_by_make = filter_clacks_by(all_clack, "make_item");
+        // console.log(clacks_label, 'by_make_item:', clack_by_make);
+        var fail_make_item = clack_by_make["ERROR: make.length > 1"] || [];
         // if (fail_make_item !== undefined) { console.error('ALL', 'fail make_item:', fail_make_item); }
 
         var all_problems = [].concat(
