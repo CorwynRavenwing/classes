@@ -1463,7 +1463,6 @@ function tr_2_clack_raw(tr, pane_title) {
     // I have no idea how the $() fn returned a number ?!?
     var tr_id = uniqueId(tr, 'tr-right');
 
-    // console.log("->", tr);
     var details = tr
         .find("td > span")
         .text()
