@@ -1464,6 +1464,12 @@ function tr_2_clack_raw(tr, pane_title) {
     var tr_id = uniqueId(tr, 'tr-right');
 
     // console.log("->", tr);
+    var details = tr
+        .find("td > span")
+        .text()
+        .trim()
+        ;
+
     var h3 = tr.find("h3");
     var purchase = h3
         .text()
@@ -1608,12 +1614,6 @@ function tr_2_clack_raw(tr, pane_title) {
             return dyson_objects;
         }
     }
-
-    var details = tr
-        .find("td > span")
-        .text()
-        .trim()
-        ;
 
     var current_ob = h3
         .find("span");
