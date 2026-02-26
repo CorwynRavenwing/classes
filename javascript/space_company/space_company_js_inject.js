@@ -67,7 +67,7 @@ function to_number(orig_value) {
     if (typeof orig_value !== 'string') {
         // console.log('to_number(): ignoring non-string', orig_value);
         return orig_value;
-    } 
+    }
     var value = orig_value;
 
     if (value === "Dormant") { return 0; }
@@ -412,7 +412,7 @@ function get_quantities(tabs_available) {
             }).filter(function(span) {
                 // remove empty strings
                 return span.length > 0;
-            }); 
+            });
             return [tr_id, texts];
         }).filter(function(entry) {
             const texts = entry[1];
@@ -1066,7 +1066,7 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
         "Resource Efficiency",
         "Science Efficiency",
         // -----
-        "Activate Portal",        
+        "Activate Portal",
         "Activate Wonder",
         "Energetic Wonder",
         "Meteorite Wonder",
@@ -2251,21 +2251,21 @@ function tick() {
             return clacks_list;
         }).flat();
 
-        var check_by_cost = filter_clacks_by(all_clack, "cost");
-        var check_by_make = filter_clacks_by(all_clack, "make");
-        var check_by_need = filter_clacks_by(all_clack, "need");
-        var fail_cost = check_by_cost["Cost not found"] || [];
-        var fail_make = check_by_make["Make not found"] || [];
-        var fail_need = check_by_need["Need not found"] || [];
+        var clack_by_cost = filter_clacks_by(all_clack, "cost");
+        var clack_by_make = filter_clacks_by(all_clack, "make");
+        var clack_by_need = filter_clacks_by(all_clack, "need");
         var clack_by_type = filter_clacks_by(all_clack, "type");
+        var fail_cost = clack_by_cost["Cost not found"] || [];
+        var fail_make = clack_by_make["Make not found"] || [];
+        var fail_need = clack_by_need["Need not found"] || [];
         // if (fail_cost !== undefined) { console.error('ALL', 'fail_cost:', fail_cost); }
         // if (fail_make !== undefined) { console.error('ALL', 'fail_make:', fail_make); }
         // if (fail_need !== undefined) { console.error('ALL', 'fail_need:', fail_need); }
         console.log('clack_by_type:', clack_by_type);
 
-        var clack_by_make = filter_clacks_by(all_clack, "make_item");
-        // console.log(clacks_label, 'by_make_item:', clack_by_make);
-        var fail_make_item = clack_by_make["ERROR: make.length > 1"] || [];
+        var clack_by_make_item = filter_clacks_by(all_clack, "make_item");
+        // console.log(clacks_label, 'clack_by_make_item:', clack_by_make_item);
+        var fail_make_item = clack_by_make_item["ERROR: make.length > 1"] || [];
         // if (fail_make_item !== undefined) { console.error('ALL', 'fail make_item:', fail_make_item); }
 
         var all_problems = [].concat(
