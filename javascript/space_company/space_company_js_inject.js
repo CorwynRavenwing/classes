@@ -1339,10 +1339,11 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
     return c_n_m;
 }
 
-function compose_clack_object(pane_title, purchase, details, current_ob, button_ob, tr_id) {
+function compose_clack_object(pane_title, purchase, details, current_ob, button_ob, tr_id, clack_type) {
     "use strict";
     var clack = {};
     clack.name = purchase;
+    clack.type = clack_type;
 
     var clean_name = purchase
         .replace(' / ', '')
@@ -1481,6 +1482,7 @@ function tr_2_clack_raw(tr, pane_title) {
     "use strict";
     var button_ob;
     var clack;
+    var clack_type = "normal";      // should depend on pane_title
 
     tr = $( tr );
     // TODO: this once threw an error:
@@ -1509,7 +1511,7 @@ function tr_2_clack_raw(tr, pane_title) {
             return null;
         }
         purchase = "gain_" + pane_title;
-        clack = compose_clack_object(pane_title, purchase, details, "", button_ob, tr_id);
+        clack = compose_clack_object(pane_title, purchase, details, "", button_ob, tr_id, "gain");
         return clack;
     }
     var is_hidden = tr.hasClass("hidden");
@@ -1617,7 +1619,7 @@ function tr_2_clack_raw(tr, pane_title) {
 
     button_ob = get_button(td, purchase);
 
-    clack = compose_clack_object(pane_title, purchase, details, current_ob, button_ob, tr_id);
+    clack = compose_clack_object(pane_title, purchase, details, current_ob, button_ob, tr_id, clack_type);
 
     return clack;
 }
@@ -2255,9 +2257,11 @@ function tick() {
         var fail_cost = check_by_cost["Cost not found"] || [];
         var fail_make = check_by_make["Make not found"] || [];
         var fail_need = check_by_need["Need not found"] || [];
+        var clack_by_type = filter_clacks_by(all_clack, "type");
         // if (fail_cost !== undefined) { console.error('ALL', 'fail_cost:', fail_cost); }
         // if (fail_make !== undefined) { console.error('ALL', 'fail_make:', fail_make); }
         // if (fail_need !== undefined) { console.error('ALL', 'fail_need:', fail_need); }
+        console.log('clack_by_type:', clack_by_type);
 
         var clack_by_make = filter_clacks_by(all_clack, "make_item");
         // console.log(clacks_label, 'by_make_item:', clack_by_make);
