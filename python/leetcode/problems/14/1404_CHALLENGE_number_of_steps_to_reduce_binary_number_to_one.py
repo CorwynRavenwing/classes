@@ -24,3 +24,8 @@ class Solution:
 
         return steps
 
+# NOTE: Acceptance Rate 61.6% (medium)
+
+# NOTE: re-ran for challenge
+# NOTE: Runtime 97 ms Beats 5.11%
+# NOTE: Memory 19.58 MB Beats 6.81%
