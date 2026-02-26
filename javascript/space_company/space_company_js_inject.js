@@ -1153,11 +1153,13 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
         // does not have Costs section anymore after being built
         c_n_m.cost = "";
     }
+
     if (pane_title === "travel") {
         // Interstellar.
         // does not have Costs section
         c_n_m.cost = "";
     }
+
     if (details === "") {
         // details is now blank: return nothing
         c_n_m.cost = "";
@@ -1437,6 +1439,44 @@ function compose_clack_object(pane_title, purchase, details, current_ob, button_
     };
 */
 
+function create_dyson_clack(pane_title, dyson_product, dyson_subpage, details_end_str, dyson_current_id, dyson_max_id, dyson_button_ob) {
+    "use strict";
+    dyson_subpage = $( dyson_subpage );
+    var dyson_tr_id = uniqueId(dyson_subpage);
+    var dyson_details = dyson_subpage
+        .text()
+        .trim()
+        ;
+
+    if (details_end_str !== "") {
+        var position = dyson_details.search(details_end_str);
+        if (position === -1) {
+            throw new Error("dyson_segments: Invalid dyson_details (should contain '" + details_end_str + "'): " + dyson_details);
+        }
+        dyson_details = dyson_details.slice(0, position);
+    }
+
+    var dyson_current_ob = $( dyson_current_id );
+    dyson_button_ob = $( dyson_button_ob );
+
+    if (dyson_max_id !== "") {
+        var dyson_max_ob = $( dyson_max_id );
+        var dyson_current_val = to_number(dyson_current_ob.text().trim());
+        var dyson_max_val = to_number(dyson_max_ob.text().trim());
+        if (dyson_current_val >= dyson_max_val) {
+            // console.warn('dyson sphere counts: compare', dyson_current_val, dyson_max_val, 'MAX REACHED');
+            dyson_button_ob = "";
+            dyson_product += " (MAX)";
+        }
+    }
+
+    // console.warn('compose_clack_object()', pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id, "dyson");
+    var dyson_clack = compose_clack_object(pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id, "dyson");
+    // console.warn('compose_clack_object()', dyson_clack);
+
+    return dyson_clack;
+}
+
 function tr_2_clack_raw(tr, pane_title) {
     "use strict";
     var button_ob;
@@ -1502,101 +1542,69 @@ function tr_2_clack_raw(tr, pane_title) {
             }
 
             var dyson_objects = [];
-            var dyson_subpage, dyson_clack, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id;
 
             //////////////////////////
             // Construction clack:  //
             //////////////////////////
 
-            dyson_product = "Dyson Segment";
-            dyson_subpage = dyson_page;
-            dyson_tr_id = uniqueId(dyson_subpage);
-            dyson_details = dyson_subpage
-                .text()
-                .trim()
-                ;
-            var position = dyson_details.search("Build Dyson Segment");
-            if (position === -1) {
-                throw new Error("dyson_segments: Invalid dyson_details (should contain 'Build Dyson Segment'): " + dyson_details);
-            }
-            dyson_details = dyson_details.slice(0, position);
-            dyson_current_ob = $("#dysonPieces2");
-            dyson_button_ob = $( dyson_buttons[0] );
-
-            // console.warn('compose_clack_object()', pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
-            dyson_clack = compose_clack_object(pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
-            // console.warn('compose_clack_object()', dyson_clack);
-
-            dyson_objects.push(dyson_clack);
+            dyson_objects.push(
+                create_dyson_clack(
+                    pane_title,
+                    "Dyson Segment",
+                    dyson_page,
+                    "Build Dyson Segment",
+                    "#dysonPieces2",
+                    "",
+                    dyson_buttons[0]
+                )
+            );
 
             //////////////////////////
             // Ring clack:          //
             //////////////////////////
 
-            dyson_product = "Dyson Ring";
-            dyson_subpage = $( dyson_spans[6] );
-            dyson_tr_id = uniqueId(dyson_subpage);
-            dyson_details = dyson_subpage
-                .text()
-                .trim()
-                ;
-            dyson_current_ob = $("#ring");
-            dyson_button_ob = $( dyson_buttons[4] );
-
-            // console.warn('compose_clack_object()', pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
-            dyson_clack = compose_clack_object(pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
-            // console.warn('compose_clack_object()', dyson_clack);
-
-            dyson_objects.push(dyson_clack);
+            dyson_objects.push(
+                create_dyson_clack(pane_title,
+                    "Dyson Ring",
+                    dyson_spans[6],
+                    "",
+                    "#ring",
+                    "",
+                    dyson_buttons[4]
+                )
+            );
 
             //////////////////////////
             // Swarm clack:         //
             //////////////////////////
 
-            dyson_product = "Dyson Swarm";
-            dyson_subpage = $( dyson_spans[10] );
-            dyson_tr_id = uniqueId(dyson_subpage);
-            dyson_details = dyson_subpage
-                .text()
-                .trim()
-                ;
-            dyson_current_ob = $("#swarm");
-            dyson_button_ob = $( dyson_buttons[6] );
-
-            // console.warn('compose_clack_object()', pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
-            dyson_clack = compose_clack_object(pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
-            // console.warn('compose_clack_object()', dyson_clack);
-
-            dyson_objects.push(dyson_clack);
+            dyson_objects.push(
+                create_dyson_clack(
+                    pane_title,
+                    "Dyson Swarm",
+                    dyson_spans[10],
+                    "",
+                    "#swarm",
+                    "",
+                    dyson_buttons[6]
+                )
+            );
 
             //////////////////////////
             // Sphere clack:        //
             //////////////////////////
 
-            dyson_product = "Dyson Sphere";
-            dyson_subpage = $( dyson_spans[15] );
-            dyson_tr_id = uniqueId(dyson_subpage);
-            dyson_details = dyson_subpage
-                .text()
-                .trim()
-                ;
-            dyson_current_ob = $("#sphere");
-            var dyson_max_ob = $("#sphereMax");
-            var dyson_current_val = to_number(dyson_current_ob.text().trim());
-            var dyson_max_val = to_number(dyson_max_ob.text().trim());
-            if (dyson_current_val < dyson_max_val) {
-                dyson_button_ob = $( dyson_buttons[8] );
-            } else {
-                // console.warn('dyson sphere counts: compare', dyson_current_val, dyson_max_val, 'MAX REACHED');
-                dyson_button_ob = "";
-                dyson_product += " (MAX)";
-            }
-
-            // console.warn('compose_clack_object()', pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
-            dyson_clack = compose_clack_object(pane_title, dyson_product, dyson_details, dyson_current_ob, dyson_button_ob, dyson_tr_id);
-            // console.warn('compose_clack_object()', dyson_clack);
-
-            dyson_objects.push(dyson_clack);
+            dyson_objects.push(
+                create_dyson_clack(
+                    pane_title,
+                    "Dyson Sphere",
+                    dyson_spans[15],
+                    "",
+                    "#sphere",
+                    "#sphereMax",
+                    dyson_buttons[8]
+                )
+            );
 
             // console.warn('dyson_objects', dyson_objects);
 
@@ -2272,7 +2280,6 @@ function tick() {
         var all_details = Object.fromEntries(all_details_entries);
         if (all_problems.length > 0) { console.warn('ALL', 'all_details:', all_details); }
     }
-    // XYZZY
 
     return;
 }
