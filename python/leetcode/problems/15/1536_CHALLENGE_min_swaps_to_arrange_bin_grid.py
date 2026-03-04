@@ -73,3 +73,8 @@ class Solution:
         
         return getSolutionSwaps(zeros)
 
+# NOTE: Acceptance Rate 53.0% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 52 ms Beats 7.58%
+# NOTE: Memory 21.45 MB Beats 24.24%
