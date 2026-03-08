@@ -1,5 +1,6 @@
 class Solution:
     def findDifferentBinaryString(self, nums: List[str]) -> str:
+
         OTHER = lambda x: ('1' if x == '0' else '0')
         answer = []
         for i, N in enumerate(nums):
@@ -17,3 +18,9 @@ class Solution:
 # NOTE: re-ran for challenge:
 # NOTE: Runtime 0 ms Beats 100.00%
 # NOTE: Memory 17.74 MB Beats 69.31%
+
+# NOTE: Acceptance Rate 79.5% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 2 ms Beats 27.17%
+# NOTE: Memory 19.28 MB Beats 90.94%
