@@ -1,63 +1,58 @@
 class Solution:
     def numberOfStableArrays(self, zero: int, one: int, limit: int) -> int:
-
-        # SHORTCUT: "each subarray of size greater than limit must contain both 0 and 1"
-        # === "maximum run length of 0s or 1s is no more than limit"
-
-        # SHORTCUT: for a combination of Z zeros and Y ones, there *cannot* be a run
-        # of more than max(Y,Z): therefore a limit greater than that is irrelevant
-
-        limit = min(
-            limit,
-            max(zero, one)
-        )
-
+        
         mod = 10 ** 9 + 7
 
-        @cache
-        def dp(zeros_remain: int, ones_remain: int, lastNum: int, countOfLastNum: int, d=0) -> int:
+        seen = set()
+        # queue = {(0,0,0,0),(0,0,1,0)}
+        queue = {(0,0,0,0)}     # "no zeros === no ones"
+        answer = 0
+        while queue:
+            state = queue.pop()
+            print(f'{state=}')
+            if state in seen:
+                print(f'  seen')
+                continue
+            else:
+                seen.add(state)
 
-            margin = '  ' * d
-
-            if countOfLastNum > limit:
-                return 0
-                
-            if zeros_remain < 0 or ones_remain < 0:
-                return 0
+            (a,b,c,d) = state
+            if a > zero:
+                print(f'  >0')
+                continue
+            if b > one:
+                print(f'  >1')
+                continue
             
-            if zeros_remain == ones_remain == 0:
-                return 1
+            if a == zero and b == one:
+                answer += 1
+                print(f'  {answer=}')
+                continue
             
-            # print(f'{margin}dp({zeros_remain},{ones_remain},{lastNum},{countOfLastNum})')
+            if d > limit:
+                print(f'  >D')
+                continue
+            
+            # add another C:
+            print(f'  + C')
+            if c == 0:
+                state = (a+1, b, c, d+1)
+            else:
+                state = (a, b+1, c, d+1)
+            queue.add(state)
 
-            answer = 0
-            if lastNum is None or lastNum == 1:
-                for i in range(1, min(zeros_remain, limit) + 1):
-                    answer += (
-                        dp(
-                            zeros_remain - i,
-                            ones_remain,
-                            0,
-                            i,
-                            d+1
-                        )
-                    )
-            if lastNum is None or lastNum == 0:
-                for i in range(1, min(ones_remain, limit) + 1):
-                    answer += (
-                        dp(
-                            zeros_remain,
-                            ones_remain - i,
-                            1,
-                            i,
-                            d+1
-                        )
-                    )
-            # print(f'{margin}  {answer=}')
-            return answer % mod
+            # add another not-C:
+            print(f'  +!C')
+            if c == 0:
+                not_c = 1
+                state = (a, b+1, not_c, 1)
+            else:
+                not_c = 0
+                state = (a+1, b, not_c, 1)
+            queue.add(state)
 
-        answer = dp(zero, one, None, 0)
+        return answer
+        
+# NOTE: Acceptance Rate 30.0% (medium)
 
-        return answer % mod
-
-# NOTE: Time Limit Exceeded for huge inputs
+# NOTE: wrong answer for some inputs
