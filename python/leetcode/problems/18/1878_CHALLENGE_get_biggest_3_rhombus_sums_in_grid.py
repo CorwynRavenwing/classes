@@ -76,3 +76,8 @@ class Solution:
 
         return top3
 
+# NOTE: Acceptance Rate 53.8% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 3933 ms Beats 5.82%
+# NOTE: Memory 20.24 MB Beats 58.25%
