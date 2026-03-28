@@ -38,3 +38,8 @@ class Solution:
         mod = 10 ** 9 + 7
         return A % mod
 
+# NOTE: Acceptance Rate 37.3% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 63 ms Beats 5.26%
+# NOTE: Memory 20.99 MB Beats 27.19%
