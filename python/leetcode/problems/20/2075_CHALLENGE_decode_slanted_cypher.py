@@ -39,3 +39,8 @@ class Solution:
         # print(f'{plainText=}')
         return plainText
 
+# NOTE: Acceptance Rate 67.8% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 479 ms Beats 5.19%
+# NOTE: Memory 141.58 MB Beats 5.19%

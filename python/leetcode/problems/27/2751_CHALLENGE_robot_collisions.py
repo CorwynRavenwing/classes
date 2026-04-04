@@ -1,5 +1,6 @@
 class Solution:
     def survivedRobotsHealths(self, positions: List[int], healths: List[int], directions: str) -> List[int]:
+
         robots = list(zip(positions, directions, healths, range(len(positions))))
         robots.sort()
         round = 0
@@ -76,3 +77,8 @@ class Solution:
         ]
         return healths
 
+# NOTE: Acceptance Rate 56.2% (HARD)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 195 ms Beats 27.38%
+# NOTE: Memory 49.92 MB Beats 39.88%
