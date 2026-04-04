@@ -1,11 +1,20 @@
 /* CSS for Space Company game autorunner */
 
-/* this can be used in either the left sidebar or the right pane */
+/* left sidebar of substances: */
+
+.already_bumped {
+    border: 2px solid orange;
+}
+
+.bump_my_max {
+    border: 2px solid red;
+}
+
+/* right pane of clacks: */
 .bump_max {
     background-color: pink;
 }
 
-/* these three only apply to the right pane */
 .unknown_substance {
     background-color: lightgray;
 }

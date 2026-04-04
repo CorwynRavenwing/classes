@@ -2142,7 +2142,9 @@ function doublings_between(from_val, to_val) {
 function colorize_left_bar(quantities, overflow_reasons) {
     "use strict";
 
-    var all_overflow_classes = ["bump_max"];
+    var all_overflow_classes = ["bump_my_max", "already_bumped"];
+
+    var substances_that_need_bumping = [];
 
     safeEntries(quantities).forEach(function(quant) {
         const [substance, leftbar_tab] = quant;
@@ -2169,14 +2171,22 @@ function colorize_left_bar(quantities, overflow_reasons) {
         // console.log('debug: overflow reason_arr', reason_arr);
 
         var tr = $( '#' + leftbar_tab.tr_id );
-        var overflow_class = (reason_arr.length ? "bump_max" : "");
+        var overflow_class = "";
+        if (reason_arr.length) {
+            if (storage_numbers[substance]) {
+                overflow_class = "already_bumped";
+            } else {
+                overflow_class = "bump_my_max";
+                substances_that_need_bumping.push(substance);
+            }
+        }
         // console.log('debug: overflow overflow_class', overflow_class);
         add_class_remove_others(tr, overflow_class, all_overflow_classes);
 
         set_ob_title_by_array(tr, reason_arr);
     });
 
-    return;
+    return substances_that_need_bumping;
 }
 
 // global variable
