@@ -2211,7 +2211,6 @@ function tick() {
 
     var all_click_classes = [
         "bump_max",
-        "cant_click",   // deprecated
         "high_cost",
         "high_rate",
         "click_me",
