@@ -1388,6 +1388,13 @@ function compose_clack_object(pane_title, purchase, details, current_ob, button_
 
     clack.pane_title = pane_title;
 
+    if (clack.name === "Exploration") {
+        var explore_where = ":" + clack.pane_title;
+        clack.name += explore_where;
+        purchase = clack.name;
+        clack.clean_name += explore_where;
+    }
+
     var current;
     if (current_ob === "") {
         current = "0";
