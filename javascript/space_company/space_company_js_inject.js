@@ -744,6 +744,10 @@ function inputid_2_desired(input_id) {
         var val = $("#" + input_id).val();
         if (val) {
             desired = val.trim();
+            if (desired < 0) {
+                // don't allow negative values
+                desired = "";
+            }
         }
     }
     return to_number(desired);
