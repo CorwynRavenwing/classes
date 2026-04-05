@@ -685,6 +685,10 @@ function verify_button(button) {
         return "";
     }
 
+    if (button.hasClass("disabled")) {
+        return "";
+    }
+
     var button_is_hidden = button
         .hasClass("hidden");
 
