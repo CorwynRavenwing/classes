@@ -965,13 +965,16 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
             "asteroids for gold",
             "axe for your woodcutter",
             "batteries for all",
+            "blueprints for this",
             "designed for mining",
             "field for pieces",
             "for this knowledge",       // NOTE: also in "}" section
             "game for tools",
             "machines, for powerful",
             "machines, for propulsion",
+            "makes up for in",
             "necessary for Tier",
+            "need for fuel",
             "pickaxe for your miner",
             "power for your",
             "return for building",
@@ -1065,16 +1068,19 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
 
     // things which have neither a Need nor a Make section:
     const purchase_ignore_both = [
+        "Basic Energy Production",
         "Batteries",
         "Plasma Storage Units",
         'PSUs',
         "Storage Upgrade",
+        "Storage Upgrades",
         // -----
         "Battery Efficiency",
         "Energy Efficiency",
         "Resource Efficiency",
         "Science Efficiency",
         // -----
+        "Research",
         "Activate Portal",
         "Activate Wonder",
         "Energetic Wonder",
@@ -1131,6 +1137,20 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
 
     const pane_ignore_both = [
         "dark_matter",
+        "rocket",
+        "technologies",
+        // -----
+        "moon",
+        "venus",
+        "mars",
+        "asteroid_belt",
+        "wonder_station",
+        "jupiter",
+        "saturn",
+        "pluto",
+        "kuiper_belt",
+        "sol_scientific_center",
+        "military",
         // -----
         "carnelian_resistance",
         "prasnian_empire",
