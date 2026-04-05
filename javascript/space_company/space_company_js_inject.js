@@ -1486,6 +1486,8 @@ function compose_clack_object(pane_title, purchase, details, current_ob, button_
 
         "clickable": "no_button|unknown|bump_max|high_rate|high_cost|OK",
 
+        "type": "normal|gain|storage|dyson",    // TODO: should add some types here
+
         "details": << usually deleted >>
     };
 */
@@ -1533,6 +1535,10 @@ function tr_2_clack_raw(tr, pane_title) {
     var button_ob;
     var clack;
     var clack_type = "normal";      // should depend on pane_title
+
+    // if (pane_title === "technologies") {
+    //     clack_type = "science";
+    // }
 
     tr = $( tr );
     // TODO: this once threw an error:
@@ -1668,6 +1674,10 @@ function tr_2_clack_raw(tr, pane_title) {
         .find("span");
 
     button_ob = get_button(td, purchase);
+
+    if (purchase === "Storage Upgrade") {
+        clack_type = "storage";
+    }
 
     clack = compose_clack_object(pane_title, purchase, details, current_ob, button_ob, tr_id, clack_type);
 
@@ -1908,7 +1918,14 @@ function choose_best_requested(clacks_list) {
 
 function choose_best_unrequested(clacks_list) {
     "use strict";
-    clacks_list = filter_field_not_equal(clacks_list, "name", "Storage Upgrade");
+
+    // var verify_no_storage_upgrades = filter_field_equal(clacks_list, "name", "Storage Upgrade");
+    // if (verify_no_storage_upgrades.length) {
+    //     tick_stop();
+    //     console.error('throwing an error: verify_no_storage_upgrades=', verify_no_storage_upgrades);
+    //     throw new Error('we have storage upgrades here');
+    // }
+
     // TODO: use a better method
     return choose_random(clacks_list);
 }
