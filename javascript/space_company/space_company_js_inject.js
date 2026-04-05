@@ -536,6 +536,31 @@ function get_tabs_available() {
     return answer;
 }
 
+// fails gently if passed a non-object, and
+// its output may always call .map or .filter:
+function safeEntries(thing) {
+    "use strict";
+    if (thing === undefined) {
+        return [];
+    }
+    return Object.entries(thing);
+}
+
+// creates an object whose keys are from column 1 and where *all* records
+// from column 2 are joined into an array:
+function arraysFromEntries(arr) {
+    "use strict";
+    var answer = {};
+    arr.forEach(function(entry) {
+        const [first, second] = entry;
+        if (answer[first] === undefined) {
+            answer[first] = [];
+        }
+        answer[first].push(second);
+    });
+    return answer;
+}
+
 function price_2_pair(price_str) {
     "use strict";
     if (price_str === "") {
@@ -603,31 +628,6 @@ function set_ob_title_by_array(ob, arr) {
     } else {
         set_ob_title_blank(ob);
     }
-}
-
-// fails gently if passed a non-object, and
-// its output may always call .map or .filter:
-function safeEntries(thing) {
-    "use strict";
-    if (thing === undefined) {
-        return [];
-    }
-    return Object.entries(thing);
-}
-
-// creates an object whose keys are from column 1 and where *all* records
-// from column 2 are joined into an array:
-function arraysFromEntries(arr) {
-    "use strict";
-    var answer = {};
-    arr.forEach(function(entry) {
-        const [first, second] = entry;
-        if (answer[first] === undefined) {
-            answer[first] = [];
-        }
-        answer[first].push(second);
-    });
-    return answer;
 }
 
 function get_button_raw(td) {
