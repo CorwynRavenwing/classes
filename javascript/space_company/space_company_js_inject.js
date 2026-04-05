@@ -2258,23 +2258,23 @@ function perform_click(clack, all_click_classes) {
     var desired = clack.desired;
     // console.log('... tr', tr, 'desired', desired, 'button', button, 'input', input);
 
-        var click_time;
-        click_time = Math.floor(new Date().getTime() / 1000);
+    var click_time;
+    click_time = Math.floor(new Date().getTime() / 1000);
 
-        var elapsed_s = (click_time - prior_cick_time);
-        var TIME = toHHMMSS(elapsed_s);
-        TIME = "(" + TIME.trim() + ")";
+    var elapsed_s = (click_time - prior_cick_time);
+    var TIME = toHHMMSS(elapsed_s);
+    TIME = "(" + TIME.trim() + ")";
 
-        button.click();
+    button.click();
 
-        prior_cick_time = click_time;
+    prior_cick_time = click_time;
 
-        desired -= 1;
-        if (! desired) {
-            desired = "";
-        }
+    desired -= 1;
+    if (! desired) {
+        desired = "";
+    }
 
-        console.log("AUTO-CLICK", TIME, /* GLOBAL_pane_heading, **/ clack.pane_title, clack.name, "(" + clack.desired + "->" + desired + ")");
+    console.log("AUTO-CLICK", TIME, /* GLOBAL_pane_heading, **/ clack.pane_title, clack.name, "(" + clack.desired + "->" + desired + ")");
 
     input.val(desired);
 
