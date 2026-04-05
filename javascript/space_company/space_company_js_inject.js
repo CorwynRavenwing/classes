@@ -597,6 +597,19 @@ function prices_2_priceob(prices_str) {
     return prices_ob;
 }
 
+function multiply_price(price_ob, multiplier) {
+    "use strict";
+    if (multiplier === 1) {
+        return price_ob;
+    }
+    var price_entries = safeEntries(price_ob);
+    var updated_price_entries = price_entries.map(function([substance, price]){
+        return [substance, price * multiplier];
+    });
+    var updated_prices_ob = Object.fromEntries(updated_price_entries);
+    return updated_prices_ob;
+}
+
 function panesdesc_2_panesob(pane_descriptors, tabs_available) {
     "use strict";
     var panes_allowed = panesdesc_2_allowed(pane_descriptors, tabs_available);
@@ -1418,10 +1431,11 @@ function compose_clack_object(pane_title, purchase, details, current_ob, button_
 
     var cost_need_make = details_2_cost_need_make(details, pane_title, purchase, clean_name);
 
-    clack.cost = cost_need_make.cost;
+    clack.cost = multiply_price(cost_need_make.cost, multiplier);
     clack.need = cost_need_make.need;
     clack.make = cost_need_make.make;
     clack.make_item = cost_need_make.make_item;
+    clack.make_count = cost_need_make.make_count;
     clack.junk = cost_need_make.junk;
 
     clack.details = cost_need_make.details;
