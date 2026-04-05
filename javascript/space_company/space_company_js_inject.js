@@ -1927,6 +1927,24 @@ function filter_field_not_equal(clacks_list, field_name, skip_value) {
 
 function choose_best_requested(clacks_list) {
     "use strict";
+    var clacks_requested_by_type = filter_clacks_by(clacks_list, "type");
+    var clacks_dyson = clacks_requested_by_type.dyson;
+    if (clacks_dyson) {
+        var dyson_stuff_clacks = filter_field_not_equal(clacks_dyson, "clean_name", "Dyson Segment");
+        if (dyson_stuff_clacks.length > 0) {
+            var dyson_clacks_by_make_count = filter_clacks_by(dyson_stuff_clacks, "make_count");
+            var dyson_make_counts = Object.keys(dyson_clacks_by_make_count);
+            var dyson_max_make_count = Math.max(...dyson_make_counts);
+            var correct_dyson_to_click_jQuery = dyson_clacks_by_make_count[dyson_max_make_count];
+            var correct_dyson_to_click_DOM = correct_dyson_to_click_jQuery[0];
+            return correct_dyson_to_click_DOM;
+        }
+        var dyson_segment_clacks = filter_field_equal(clacks_dyson, "clean_name", "Dyson Segment");
+        if (dyson_segment_clacks.length > 0) {
+            var dyson_segment_ob = dyson_segment_clacks[0];
+            return dyson_segment_ob;
+        }
+    }
     var clacks_by_item = filter_clacks_by(clacks_list, "make_item");
     var all_items = Object.keys(clacks_by_item);
     var random_item = choose_random(all_items);
