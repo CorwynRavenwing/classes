@@ -2078,11 +2078,11 @@ function colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes) {
     return;
 }
 
-function colorize_clacks_by_requested(okay_and_requested, okay_but_not_requested, all_click_classes) {
+function colorize_clacks_by_requested(ok_requested, ok_UNrequested, all_click_classes) {
     "use strict";
 
-    // console.warn('filter: setting', okay_and_requested.length, 'items of type', "requested: yes", 'to class', "click_me");
-    okay_and_requested.forEach(function(clack) {
+    // console.warn('filter: setting', ok_requested.length, 'items of type', "requested: yes", 'to class', "click_me");
+    ok_requested.forEach(function(clack) {
         // console.log('debug; clack (requested yes)', clack);
         var tr_id = clack.tr_id;
         var tr = $( "#" + tr_id );
@@ -2093,8 +2093,8 @@ function colorize_clacks_by_requested(okay_and_requested, okay_but_not_requested
         // set_ob_title_blank(tr);
     });
 
-    // console.warn('filter: setting', okay_but_not_requested.length, 'items of type', "requested: no", 'to class', "click_me_maybe");
-    okay_but_not_requested.forEach(function(clack) {
+    // console.warn('filter: setting', ok_UNrequested.length, 'items of type', "requested: no", 'to class', "click_me_maybe");
+    ok_UNrequested.forEach(function(clack) {
         // console.log('debug; clack (requested no)', clack);
         var tr_id = clack.tr_id;
         var tr = $( "#" + tr_id );
