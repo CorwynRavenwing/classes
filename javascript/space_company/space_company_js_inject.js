@@ -29,6 +29,7 @@ var DEBUG = false;
 var DEBUG_tick = false;
 var TEST = false;
 var auto_request = false;
+var auto_gain = false;
 
 var prior_cick_time;
 
