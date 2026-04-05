@@ -47,23 +47,6 @@
     background-color: lavender;
 }
 
-/* hyper-specific codes to override .info elements in cerulean-bootstrap.css */
-/* this only applies to the left sidebar */
-.table>thead>tr>td.info.bump_max,
-.table>tbody>tr>td.info.bump_max,
-.table>tfoot>tr>td.info.bump_max,
-.table>thead>tr>th.info.bump_max,
-.table>tbody>tr>th.info.bump_max,
-.table>tfoot>tr>th.info.bump_max,
-.table>thead>tr.info.bump_max>td,
-.table>tbody>tr.info.bump_max>td,
-.table>tfoot>tr.info.bump_max>td,
-.table>thead>tr.info.bump_max>th,
-.table>tbody>tr.info.bump_max>th,
-.table>tfoot>tr.info.bump_max>th,
-.info.bump_max {
-    background-color:#CBC3E3;       /* pastel purple */
-}
 
 .energy-deficit {
     border: 5px solid red;
