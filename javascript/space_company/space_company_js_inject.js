@@ -2017,6 +2017,79 @@ function choose_best_unrequested(clacks_list) {
     return choose_random(clacks_list);
 }
 
+function choose_best_gain(clack_type_gain, quantities) {
+    "use strict";
+    // console.warn('DEBUG: clack_type_gain:', clack_type_gain);
+    var gains_with_counts = clack_type_gain.map(function(gain_ob) {
+        // console.warn('  DEBUG: gain_ob:', gain_ob);
+        if (gain_ob === undefined) {
+            console.error("  DEBUG: no because no gain object", gain_ob);
+            return [];
+        }
+        if (gain_ob.type === undefined) {
+            var new_gain_ob = gain_ob[0];           // translate jquery->DOM object
+            if (new_gain_ob === undefined) {
+                console.error("  DEBUG: no because type and [0] undefined", gain_ob);
+                return [];
+            }
+
+            gain_ob = new_gain_ob;
+        }
+        // console.log("DEBUG: gain_ob", gain_ob);
+        var high_cost = gain_ob.high_cost;
+        if (high_cost !== "") {
+            // console.log("  DEBUG: no because high cost");
+            return [];
+        }
+        var substance = gain_ob.pane_title;
+        var substance_ob = quantities[substance];
+        if (! substance_ob) {
+            // console.log("  DEBUG: no because no quantity object");
+            return [];
+        }
+        // console.log("  => DEBUG: substance_ob", substance_ob);
+        var rate = substance_ob.rate;
+        if (rate) {
+            // console.log("  DEBUG: no because yes rate");
+            return [];
+        }
+        var max = substance_ob.max;
+        var count = substance_ob.count;
+        if (count >= max) {
+            // console.log("  DEBUG: no because max");
+            return [];
+        }
+        return [gain_ob, count];
+    })
+    .filter(filter_not_empty)
+    ;
+    // console.log("DEBUG: gains_with_counts=", gains_with_counts);
+    var all_counts = gains_with_counts.map(function(entry) {
+        var count = entry[1];
+        return count;
+    });
+    // console.log("  DEBUG: all_counts=", all_counts);
+    if (! all_counts.length) {
+        // console.log("DEBUG: no gains found");
+        return "";
+    }
+    var min_count = Math.min(...all_counts);
+    // console.log("  DEBUG: min_count=", min_count);
+    var matching_gains = gains_with_counts.map(function(entry) {
+        const [gainC, countC] = entry;
+        var gain = gainC;
+        if (countC !== min_count) {
+            gain = "";
+        }
+        return gain;
+    })
+    .filter(filter_not_empty)
+    ;
+    // console.log("  DEBUG: matching_gains=", matching_gains);
+
+    return choose_random(matching_gains);
+}
+
 function suppress_unused_fn_msgs() {
     "use strict";
     if (false) {
