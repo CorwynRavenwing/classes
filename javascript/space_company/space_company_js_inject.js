@@ -1428,7 +1428,19 @@ function compose_clack_object(pane_title, purchase, details, current_ob, button_
 
     var button_id = uniqueId(button_ob, 'btn');
     clack.button_id = button_id;
+    var button_text = "";
+    var multiplier = 1;
 
+    if (button_ob !== "") {
+        button_text = button_ob.text().trim();
+        clack.button_text_DEBUG = button_text;
+        if (clack_type === "gain") {
+            if (button_text.includes("20")) {
+                multiplier = 20;
+                clack.button_multiplier_DEBUG = multiplier;
+            }
+        }
+    }
     var input_id = create_input_and_get_id(button_id, pane_title + "/" + purchase);
     clack.input_id = input_id;
 
