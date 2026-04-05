@@ -1955,6 +1955,54 @@ function choose_best_requested(clacks_list) {
     return choose_rightmost(clacks_with_that_item);
 }
 
+function choose_best_dyson_and_desired(clack_type_dyson) {
+    "use strict";
+
+    const NOOP = ["", 0];
+
+    var clack_dyson_by_name = filter_clacks_by(clack_type_dyson, "clean_name");
+
+    var dyson_segment_jquery_ob = clack_dyson_by_name['Dyson Segment'];
+    if (! dyson_segment_jquery_ob) {
+        return NOOP;
+    }
+    if (! dyson_segment_jquery_ob.length) {
+        return NOOP;
+    }
+    var dyson_segment_dom_ob = dyson_segment_jquery_ob[0];
+
+    var dyson_segment_desired = dyson_segment_dom_ob.desired;
+    var dyson_segment_current = dyson_segment_dom_ob.current;
+
+    if (dyson_segment_desired) {
+        // Already making Dyson Segments
+        return NOOP;
+    }
+
+    var dyson_ring_ob = clack_dyson_by_name['Dyson Ring'];
+    var dyson_swarm_ob = clack_dyson_by_name['Dyson Swarm'];
+    var dyson_sphere_ob = clack_dyson_by_name['Dyson Sphere'];
+
+    var dyson_obs = [dyson_ring_ob, dyson_swarm_ob, dyson_sphere_ob];
+    var needed_list = dyson_obs.map(function(dyson_jquery_ob) {
+        var dyson_dom_ob = dyson_jquery_ob[0];
+        // console.log("DEBUG: dyson_ob:", dyson_dom_ob);
+        var ob_desired = dyson_dom_ob.desired;
+        var cost_per_each = dyson_dom_ob.cost.dyson_segments;
+        return ob_desired * cost_per_each;
+    });
+    var needed_total = sum(needed_list);
+    var need_to_add = needed_total - dyson_segment_current;
+    // console.log("DEBUG: dyson question: segment_ob=", dyson_segment_dom_ob);
+    // console.log("DEBUG: dyson question: needed=", needed_list, "sum=", needed_total, "dyson_current=", dyson_segment_current, "add=", need_to_add);
+    if (need_to_add > 0) {
+        // console.log("DEBUG: dyson clicking (?)", dyson_segment_jquery_ob, need_to_add);
+        return [dyson_segment_dom_ob, need_to_add];
+    }
+
+    return NOOP;
+}
+
 function choose_best_unrequested(clacks_list) {
     "use strict";
 
