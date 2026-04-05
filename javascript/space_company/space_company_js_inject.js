@@ -2248,25 +2248,15 @@ function colorize_clacks_by_requested(ok_requested, ok_UNrequested, all_click_cl
     return;
 }
 
-function click_something(okay_and_requested, okay_but_not_requested, all_click_classes) {
+function perform_click(clack, all_click_classes) {
     "use strict";
 
-    var clack;
-    var tr;
-    var button;
-    var input;
-    var desired;
-
-    if (okay_and_requested.length) {
-        clack = choose_best_requested(okay_and_requested);
-        // console.log('CLICK ON:', clack);
-
-        tr = $( "#" + clack.tr_id );
-        add_class_remove_others(tr, "clicking", all_click_classes);
-        button = $( "#" + clack.button_id );
-        input = $( "#" + clack.input_id );
-        desired = clack.desired;
-        // console.log('... tr', tr, 'desired', desired, 'button', button, 'input', input);
+    var tr = $( "#" + clack.tr_id );
+    add_class_remove_others(tr, "clicking", all_click_classes);
+    var button = $( "#" + clack.button_id );
+    var input = $( "#" + clack.input_id );
+    var desired = clack.desired;
+    // console.log('... tr', tr, 'desired', desired, 'button', button, 'input', input);
 
         var click_time;
         click_time = Math.floor(new Date().getTime() / 1000);
@@ -2286,30 +2276,114 @@ function click_something(okay_and_requested, okay_but_not_requested, all_click_c
 
         console.log("AUTO-CLICK", TIME, /* GLOBAL_pane_heading, **/ clack.pane_title, clack.name, "(" + clack.desired + "->" + desired + ")");
 
-        input.val(desired);
+    input.val(desired);
 
-    } else if (okay_but_not_requested.length) {
-        clack = choose_best_unrequested(okay_but_not_requested);
-        // console.log("NO CLICK! fall back to:", clack.name, "(skip)");
+    return;
+}
 
-        if (auto_request) {
-            tr = $( "#" + clack.tr_id );
-            add_class_remove_others(tr, "auto_request", all_click_classes);
-            // button = $( "#" + clack.button_id );
-            input = $( "#" + clack.input_id );
-            // console.log('... tr', tr, 'desired', clack.desired, 'input', input);
-            if (clack.desired) {
-                console.error("Error!  'desired' is not zero/blank!", clack.desired);
-                // return, maybe?
-            } else {
-                desired = 1;
-                console.warn("AUTO-REQUEST", /* TIME, */ clack.pane_title, clack.name, "(" + clack.desired + "->" + desired + ")");
-                input.val(desired);
-            }
-        }
-    } else {
-        console.log("NO CLICK, no fallback");
+function perform_auto_request(clack, desired, all_click_classes) {
+    "use strict";
+
+    var tr = $( "#" + clack.tr_id );
+    add_class_remove_others(tr, "auto_request", all_click_classes);
+    // var button = $( "#" + clack.button_id );
+    var input = $( "#" + clack.input_id );
+    // console.log('... tr', tr, 'desired', clack.desired, 'input', input);
+    if (clack.desired) {
+        console.error("Error!  'desired' is not zero/blank!", clack.desired);
+        return;
     }
+    if (clack.pane_title === undefined) {
+        console.error("AUTO-REQUEST", "invalid clack:", clack);
+        return;
+    }
+
+    console.warn("AUTO-REQUEST", /* TIME, */ clack.pane_title, clack.name, "(" + clack.desired + "->" + desired + ")");
+    input.val(desired);
+
+    return;
+}
+
+function choose_and_perform_action(
+    ok_normal_requested,
+    ok_normal_UNrequested,
+    clack_type_dyson,
+    clack_type_gain,
+    clack_type_storage,
+    substances_that_need_bumping,
+    quantities,
+    all_click_classes
+) {
+    "use strict";
+
+    var clack;
+    var desired;
+
+    if (TEST) { console.log('TEST: ok_normal_requested=', ok_normal_requested); }
+    if (ok_normal_requested.length) {
+        clack = choose_best_requested(ok_normal_requested);
+
+        perform_click(clack, all_click_classes);
+
+        return;
+    }
+
+    const [clackC, desiredC] = choose_best_dyson_and_desired(clack_type_dyson);
+    if (TEST) { console.log('TEST: [clackC, desiredC]=', [clackC, desiredC]); }
+    if (clackC) {
+        // console.log("DEBUG: performing auto_request");
+        perform_auto_request(clackC, desiredC, all_click_classes);
+        return;
+    }
+
+    if (TEST) { console.log('TEST: clack_type_storage=', clack_type_storage); }
+    if (clack_type_storage.length) {
+        var possibles = clack_type_storage.filter(function(clack) {
+            if (clack.desired) {
+                // desired is already set: ignore
+                return false;
+            }
+            var substance = clack.pane_title;
+            var bump_this_substance = substances_that_need_bumping.includes(substance);
+            if (! bump_this_substance) {
+                // no need to bump
+                return false;
+            }
+            return true;
+        });
+
+        if (possibles.length) {
+            clack = choose_random(possibles);
+            desired = 1;
+            perform_auto_request(clack, desired, all_click_classes);
+            return;
+        }
+    }
+
+    if (TEST) { console.log('TEST: ok_normal_UNrequested=', ok_normal_UNrequested); }
+    if (ok_normal_UNrequested.length) {
+        clack = choose_best_unrequested(ok_normal_UNrequested);
+
+        if (clack && auto_request) {
+            desired = 1;
+            perform_auto_request(clack, desired, all_click_classes);
+            return;
+        }
+    }
+
+    if (TEST) { console.log('TEST: clack_type_gain=', clack_type_gain); }
+    if (clack_type_gain.length > 0) {
+        // console.log("NO CLICK, try clicking a Gain button?");
+
+        clack = choose_best_gain(clack_type_gain, quantities);
+        if (clack && auto_gain) {
+            desired = 1;
+            perform_auto_request(clack, desired, all_click_classes);
+            return;
+        }
+    }
+
+    // console.log("NO CLICK, no fallback");
 
     return;
 }
