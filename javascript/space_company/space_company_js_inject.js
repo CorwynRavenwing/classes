@@ -2529,16 +2529,35 @@ function tick() {
     var clack_by_requested = filter_clacks_by(clacks_by_clickable.OK, "click_requested");
     if (TEST) { console.log('clack_by_requested:', clack_by_requested); }
 
-    var okay_and_requested     = clack_by_requested[1] || [];
-    var okay_but_not_requested = clack_by_requested[0] || [];
+    var clack_by_type = filter_clacks_by(all_clacks_list, "type");
 
-    colorize_clacks_by_requested(okay_and_requested, okay_but_not_requested, all_click_classes);
+    var ok_requested   = clack_by_requested[1] || [];
+    var ok_UNrequested = clack_by_requested[0] || [];
 
-    click_something(okay_and_requested, okay_but_not_requested, all_click_classes);
+    var clack_type_gain    = clack_by_type.gain    || [];
+    var clack_type_storage = clack_by_type.storage || [];
+    var clack_type_dyson   = clack_by_type.dyson   || [];
+
+    colorize_clacks_by_requested(ok_requested, ok_UNrequested, all_click_classes);
+
+    // var ok_normal_requested = filter_field_equal(ok_requested, "type", "normal");
+    var ok_normal_UNrequested = filter_field_equal(ok_UNrequested, "type", "normal");
 
     var overflow_reasons = get_bump_reasons(clacks_by_clickable);
+    var storage_numbers = get_storage_numbers(clack_by_type);
 
-    colorize_left_bar(quantities, overflow_reasons);
+    var substances_that_need_bumping = colorize_left_bar(quantities, overflow_reasons, storage_numbers);
+
+    choose_and_perform_action(
+        ok_requested,
+        ok_normal_UNrequested,
+        clack_type_dyson,
+        clack_type_gain,
+        clack_type_storage,
+        substances_that_need_bumping,
+        quantities,
+        all_click_classes
+    );
 
     if (TEST) {
         safeEntries(clacks_by_clickable).forEach(function([clacks_label, clacks_list]) {
@@ -2557,16 +2576,10 @@ function tick() {
             if (fail_make_item !== undefined) { console.error(clacks_label, 'fail make_item:', fail_make_item); }
 
         });
-        // we're checking all the clickable types together instead of separately:
-        var all_clack = safeEntries(clacks_by_clickable).map(function(entry) {
-            var clacks_list = entry[1];
-            return clacks_list;
-        }).flat();
 
-        var clack_by_cost = filter_clacks_by(all_clack, "cost");
-        var clack_by_make = filter_clacks_by(all_clack, "make");
-        var clack_by_need = filter_clacks_by(all_clack, "need");
-        var clack_by_type = filter_clacks_by(all_clack, "type");
+        var clack_by_cost = filter_clacks_by(all_clacks_list, "cost");
+        var clack_by_make = filter_clacks_by(all_clacks_list, "make");
+        var clack_by_need = filter_clacks_by(all_clacks_list, "need");
         var fail_cost = clack_by_cost["Cost not found"] || [];
         var fail_make = clack_by_make["Make not found"] || [];
         var fail_need = clack_by_need["Need not found"] || [];
@@ -2575,7 +2588,7 @@ function tick() {
         // if (fail_need !== undefined) { console.error('ALL', 'fail_need:', fail_need); }
         console.log('clack_by_type:', clack_by_type);
 
-        var clack_by_make_item = filter_clacks_by(all_clack, "make_item");
+        var clack_by_make_item = filter_clacks_by(all_clacks_list, "make_item");
         // console.log(clacks_label, 'clack_by_make_item:', clack_by_make_item);
         var fail_make_item = clack_by_make_item["ERROR: make.length > 1"] || [];
         // if (fail_make_item !== undefined) { console.error('ALL', 'fail make_item:', fail_make_item); }
