@@ -290,6 +290,7 @@ function cleanup_substance_name_simple(name) {
         .replace("stargate", "stargate room")
         .replace("room room", "room")
         .replace("dyson swarms and sphere", "dyson segments")
+        .replace("space rocket", "rocket")
         .replace(" production", "")
         .replace(": dormant", "")
         .replace(": activated", "")
@@ -377,7 +378,10 @@ function textlist_2_substance(pane_heading, tr_id, texts) {
     }
     substance.pane = pane_heading;
     substance.tr_id = tr_id;
-
+    if ((substance.name === "Space Rocket") && (substance.count === "")) {
+        var rocket_count = $("#rocketRocketCost").text().trim();
+        substance.count = to_number(rocket_count);
+    }
     return substance;
 }
 
