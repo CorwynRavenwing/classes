@@ -1979,17 +1979,6 @@ function get_all_clacks(tabs_available, quantities) {
     return clacks_ob;
 }
 
-function filter_clacks_ob_by_clickable(clacks_ob) {
-    "use strict";
-    var clacks_list = Object.values(clacks_ob).flat();
-    // console.warn('clacks_list:', clacks_list);
-
-    var clacks_by_clickable = filter_clacks_by(clacks_list, "clickable");
-    // console.warn('clacks_by_clickable:', clacks_by_clickable);
-
-    return clacks_by_clickable;
-}
-
 function colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes) {
     "use strict";
 
@@ -2292,7 +2281,8 @@ function tick() {
     check_energy_levels(quantities);
 
     var clacks_ob = get_all_clacks(tabs_available, quantities);
-    var clacks_by_clickable = filter_clacks_ob_by_clickable(clacks_ob);
+    var all_clacks_list = Object.values(clacks_ob).flat();
+    var clacks_by_clickable = filter_clacks_by(all_clacks_list, "clickable");
 
     if (TEST) { console.log('clacks_by_clickable:', clacks_by_clickable); }
 
