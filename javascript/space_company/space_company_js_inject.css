@@ -1,7 +1,6 @@
 /* CSS for Space Company game autorunner */
 
 /* left sidebar of substances: */
-
 .already_bumped {
     border: 2px solid orange;
 }
@@ -47,7 +46,7 @@
     background-color: lavender;
 }
 
-
+/* change the screen border depending on energy emergency status: */
 .energy-deficit {
     border: 5px solid red;
 }
@@ -60,6 +59,7 @@
     border: 5px solid lightgreen;
 }
 
+/* Since the "make Destroy buttons red" option doesn't work: */
 button.destroy {
     color: red;
     background-color: red;
