@@ -154,9 +154,9 @@ function jQuery_to_array(jquery_object) {
     return array;
 }
 
-function filter_not_blank(thing) {
+function filter_not_empty(thing) {
     "use strict";
-    return thing !== "";
+    return thing.length !== 0;
 }
 
 // some logic from Underscore UNIQUEID.JS:
@@ -1225,14 +1225,14 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
     details = JUNK + details;
     var sections = details
         .split("{")
-        .filter(filter_not_blank)
+        .filter(filter_not_empty)
         ;
     // console.log('sections:', sections);
     var cleaned = sections.map(
         function(section){
             var fragments = section
                 .split("}")
-                .filter(filter_not_blank)
+                .filter(filter_not_empty)
                 ;
             if (fragments.length > 1) {
                 fragments = fragments.map(function(frag, idx) {
@@ -1246,7 +1246,7 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
             return fragments;
         })
         .flat()
-        .filter(filter_not_blank)
+        .filter(filter_not_empty)
         ;
 
     var answers = cleaned.map(function(section) {
