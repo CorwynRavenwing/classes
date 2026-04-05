@@ -32,3 +32,8 @@ class Solution:
         
         return (pos == origin)
 
+# NOTE: Acceptance Rate 76.6% (easy)
+
+# NOTE: re-ran for challenge
+# NOTE: Runtime 7 ms Beats 80.24%
+# NOTE: Memory 19.25 MB Beats 67.40%
