@@ -2205,6 +2205,18 @@ function get_bump_reasons(clacks_by_clickable) {
     return overflow_reasons;
 }
 
+function get_storage_numbers(clack_by_type) {
+    "use strict";
+    var storage_obs = clack_by_type.storage || [];
+    var storage_numbers_entries = storage_obs.map(function(clack) {
+        var substance = clack.pane_title;
+        var desired = clack.desired;
+        return [substance, desired];
+    });
+    var storage_numbers = Object.fromEntries(storage_numbers_entries);
+    return storage_numbers;
+}
+
 function doublings_between(from_val, to_val) {
     "use strict";
     var answer = 0;
@@ -2215,7 +2227,7 @@ function doublings_between(from_val, to_val) {
     return answer;
 }
 
-function colorize_left_bar(quantities, overflow_reasons) {
+function colorize_left_bar(quantities, overflow_reasons, storage_numbers) {
     "use strict";
 
     var all_overflow_classes = ["bump_my_max", "already_bumped"];
