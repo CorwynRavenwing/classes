@@ -762,9 +762,10 @@ function create_input_and_get_id(button_id, debug_label) {
         return "";
     }
 
+    var desired_class = "desired";
     var input_class = button_id;    // yes, using button_id as a class here
 
-    var input = $("." + input_class);
+    var input = $("." + desired_class + "." + input_class);
     if (input.length === 0) {
         // "input" not found
         if (! button_id) {
@@ -772,8 +773,8 @@ function create_input_and_get_id(button_id, debug_label) {
             return;
         }
         // button but no input: create input
-        // console.log(debug_label, "Creating input object:")
-        input = $("<input type='textbox' class='desired'/>");
+        // console.log(debug_label, "Creating input object:");
+        input = $("<input type='textbox' class='" + desired_class + "'/>");
         var button_ob = $("#" + button_id);
         button_ob.after(input);
     } else {
