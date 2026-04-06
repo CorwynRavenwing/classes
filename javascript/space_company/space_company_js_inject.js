@@ -1653,7 +1653,7 @@ function tr_2_clack_raw(tr, pane_title) {
 
             var dyson_page = tr.find('td').find('> span');
             var dyson_buttons = dyson_page.find('button');
-            var dyson_spans = dyson_page.find('span');
+            var dyson_spans = dyson_page.find('span').not('.display');
 
             if (dyson_buttons.length !== 10) {
                 console.error('THROWING ERROR');
