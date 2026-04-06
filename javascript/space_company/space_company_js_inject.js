@@ -792,6 +792,44 @@ function create_input_and_get_id(button_id, debug_label) {
     return uniqueId(input, 'input');
 }
 
+function create_display_and_get_id(button_id, debug_label) {
+    "use strict";
+
+    if (button_id === "") {
+        // no button: don't create a display
+        return "";
+    }
+
+    var display_class = "display";
+    var span_class = button_id;    // yes, using button_id as a class here
+
+    var display = $("." + display_class + "." + span_class);
+    if (display.length === 0) {
+        // "display" not found
+        if (! button_id) {
+            // no button or input --> okay
+            return;
+        }
+        // button but no display: create display
+        console.log(debug_label, "Creating display object:");
+        display = $("<span class='" + display_class + "'>SET ME</span>");
+        var button_ob = $("#" + button_id);
+        button_ob.after(display);
+    } else {
+        // "display" is found
+        if (! button_id) {
+            // display but no button: display is obsolete
+            console.warn(debug_label, "Destroying display object:");
+            display.remove();
+        // } else {
+        //     // both button and display: okay
+        }
+    }
+    display.addClass(span_class);
+
+    return uniqueId(display, 'display');
+}
+
 var GLOBAL_known_unknowns = [];
 function complain_about_unknown_substances_once(unknown_substances_list) {
     "use strict";
@@ -1448,6 +1486,13 @@ function compose_clack_object(pane_title, purchase, details, current_ob, button_
 
     clack.desired = inputid_2_desired(input_id);
     clack.click_requested = ((clack.desired > 0) ? 1 : 0);
+
+    var display_id = create_display_and_get_id(button_id, pane_title + "/" + purchase);
+    clack.display_id = display_id;
+    if (display_id) {
+        var display = $('#' + display_id);
+        display.text('TEST');
+    }
 
     clack.details = details;
 
