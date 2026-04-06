@@ -1429,6 +1429,14 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
     return c_n_m;
 }
 
+function set_display_value(display_id, value) {
+    "use strict";
+    if (display_id) {
+        var display = $('#' + display_id);
+        display.text(value);
+    }
+}
+
 function compose_clack_object(pane_title, purchase, details, current_ob, button_ob, tr_id, clack_type) {
     "use strict";
     var clack = {};
@@ -1489,10 +1497,7 @@ function compose_clack_object(pane_title, purchase, details, current_ob, button_
 
     var display_id = create_display_and_get_id(button_id, pane_title + "/" + purchase);
     clack.display_id = display_id;
-    if (display_id) {
-        var display = $('#' + display_id);
-        display.text('TEST');
-    }
+    set_display_value(display_id, "TEST");
 
     clack.details = details;
 
