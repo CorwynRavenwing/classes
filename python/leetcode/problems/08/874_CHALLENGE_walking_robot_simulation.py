@@ -1,5 +1,6 @@
 class Solution:
     def robotSim(self, commands: List[int], obstacles: List[List[int]]) -> int:
+
         obstacleX = {}
         for (X, Y) in obstacles:
             obstacleX.setdefault(X, set())
@@ -68,3 +69,9 @@ class Solution:
 
 # NOTE: Runtime 452 ms Beats 5.14%
 # NOTE: Memory 23.51 MB Beats 12.86%
+
+# NOTE: Acceptance Rate 58.6% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 214 ms Beats 5.14%
+# NOTE: Memory 24.38 MB Beats 13.31%
