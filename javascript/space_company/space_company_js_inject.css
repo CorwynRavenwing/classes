@@ -66,3 +66,9 @@ button.destroy {
     width: 3em;
     overflow: hidden;
 }
+
+/* For some reason they don't already mark the active menu item: */
+li.active {
+    /* background-color: lightblue; */  /* this is overridden to #FFFFFF in the game */
+    border: dashed 2px blue;
+}
