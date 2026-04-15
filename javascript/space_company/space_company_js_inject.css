@@ -46,6 +46,12 @@
     background-color: lavender;
 }
 
+/* per-clack display field */
+.display {
+    font-weight: bold;
+    margin: 10px;
+}
+
 /* change the screen border depending on energy emergency status: */
 .energy-deficit {
     border: 5px solid red;

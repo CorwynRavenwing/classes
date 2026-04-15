@@ -109,15 +109,41 @@ function toHHMMSS(total_sec) {
     if (total_sec === "INF") {
         return total_sec;
     }
-    var hours   = Math.floor(total_sec / 3600);
+    var days    = Math.floor(total_sec / 3600 / 24);
+    var hours   = Math.floor(total_sec / 3600) % 24;
     var minutes = Math.floor(total_sec / 60) % 60;
     var seconds = Math.floor(total_sec % 60);
 
+    days    = days.toString();
+    hours   = hours.toString();   if (hours.length   < 2) { hours   = "0" + hours;   }
+    minutes = minutes.toString(); if (minutes.length < 2) { minutes = "0" + minutes; }
+    seconds = seconds.toString(); if (seconds.length < 2) { seconds = "0" + seconds; }
+
+    var answers = [hours,minutes,seconds];
+
+    var answer = "#" + days + "d " + answers.join(":").trim();
+
+    answer = answer.replace("#0d ", "");
+    answer = answer.replace("#", "");
+    return answer;
+}
+
+function toElapsedTime(total_sec) {
+    "use strict";
+    if (total_sec === "INF") {
+        return total_sec;
+    }
+    var days    = Math.floor(total_sec / 3600 / 24);
+    var hours   = Math.floor(total_sec / 3600) % 24;
+    var minutes = Math.floor(total_sec / 60) % 60;
+    var seconds = Math.floor(total_sec % 60);
+
+    if (days) { days += " days"; } else { days = ""; }
     if (hours) { hours += " hour"; } else { hours = ""; }
     if (minutes) { minutes += " min"; } else { minutes = ""; }
     if (seconds) { seconds += " sec"; } else { seconds = ""; }
 
-    var answers = [hours,minutes,seconds];
+    var answers = [days,hours,minutes,seconds];
 
     var answer = answers.join(" ").trim();
     if (answer === "") {
@@ -1004,7 +1030,8 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
 
     var replacements = {
         "---": [
-            /\ [0-9.]+%/g,
+            /\ [0-9.]+%/g,          // " 99.5%"
+            /\[.*\]/g,              // "[3d 23:59:59]"
             /Activate\ .*\ Wonder/g,
             /Rebuild\ .*\ Wonder/g,
             "Activate Portal",
@@ -1433,6 +1460,10 @@ function set_display_value(display_id, value) {
     "use strict";
     if (display_id) {
         var display = $('#' + display_id);
+        if (value) {
+            // NOTE: this bracket MUST be here, to separate this from the Costs section:
+            value = "[" + value + "]";
+        }
         display.text(value);
     }
 }
@@ -1497,7 +1528,6 @@ function compose_clack_object(pane_title, purchase, details, current_ob, button_
 
     var display_id = create_display_and_get_id(button_id, pane_title + "/" + purchase);
     clack.display_id = display_id;
-    set_display_value(display_id, "TEST");
 
     clack.details = details;
 
@@ -2183,6 +2213,7 @@ function colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes) {
         var tr = $( "#" + tr_id );
         add_class_remove_others(tr, "no_button", all_click_classes);
         // console.log("tr_id", tr_id, "class", "no_button", "tr", tr);
+        set_display_value(clack.display_id, "");
         set_ob_title_by_string(tr, "No button");
         // set_ob_title_blank(tr);
     });
@@ -2200,6 +2231,7 @@ function colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes) {
             const [substance, count] = entry;
             return "Unknown: " + substance + ": " + from_number(count);
         });
+        set_display_value(clack.display_id, pop_up[0]);
         set_ob_title_by_array(tr, pop_up);
     });
 
@@ -2216,6 +2248,7 @@ function colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes) {
             const [substance, count] = entry;
             return substance + ": " + from_number(count);
         });
+        set_display_value(clack.display_id, pop_up[0]);
         pop_up.unshift("Bump max:");
         set_ob_title_by_array(tr, pop_up);
     });
@@ -2231,21 +2264,27 @@ function colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes) {
 
         var high_cost_time = clack.high_cost_time;
         var max_time = 0;
+        var max_substance = "";
         var pop_up = safeEntries(clack.high_cost).map(function(entry) {
             const [substance, count] = entry;
 
             var cost_time = high_cost_time[substance];
             if (cost_time === "INF") {
                 max_time = cost_time;
+                max_substance = substance;
             } else if (max_time !== "INF") {
-                max_time = Math.max(cost_time, max_time);
+                if (cost_time > max_time) {
+                    max_time = cost_time;
+                    max_substance = substance;
+                }
             }
 
-            return substance + ": " + from_number(count) + " (" + toHHMMSS(cost_time) + ")";
+            return substance + ": " + from_number(count) + " (" + toElapsedTime(cost_time) + ")";
         });
+        set_display_value(clack.display_id, toHHMMSS(max_time) + " " + max_substance);
         pop_up.unshift("High cost:");
         pop_up.push("");
-        pop_up.push("MAX: " + toHHMMSS(max_time));
+        pop_up.push("MAX: " + toElapsedTime(max_time));
         set_ob_title_by_array(tr, pop_up);
     });
 
@@ -2262,6 +2301,7 @@ function colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes) {
             const [substance, count] = entry;
             return substance + ": " + from_number(count);
         });
+        set_display_value(clack.display_id, pop_up[0]);
         pop_up.unshift("High rate/sec:");
         set_ob_title_by_array(tr, pop_up);
     });
@@ -2280,6 +2320,7 @@ function colorize_clacks_by_requested(ok_requested, ok_UNrequested, all_click_cl
         add_class_remove_others(tr, "click_me", all_click_classes);
         // console.log("tr_id", tr_id, "class", "click_me", "tr", tr);
 
+        set_display_value(clack.display_id, "");
         set_ob_title_by_string(tr, "Okay: requested");
         // set_ob_title_blank(tr);
     });
@@ -2292,6 +2333,7 @@ function colorize_clacks_by_requested(ok_requested, ok_UNrequested, all_click_cl
         add_class_remove_others(tr, "click_me_maybe", all_click_classes);
         // console.log("tr_id", tr_id, "class", "click_me_maybe", "tr", tr);
 
+        set_display_value(clack.display_id, "");
         set_ob_title_by_string(tr, "Okay: NOT requested");
         // set_ob_title_blank(tr);
     });
@@ -2313,7 +2355,7 @@ function perform_click(clack, all_click_classes) {
     click_time = Math.floor(new Date().getTime() / 1000);
 
     var elapsed_s = (click_time - prior_cick_time);
-    var TIME = toHHMMSS(elapsed_s);
+    var TIME = toElapsedTime(elapsed_s);
     TIME = "(" + TIME.trim() + ")";
 
     button.click();
