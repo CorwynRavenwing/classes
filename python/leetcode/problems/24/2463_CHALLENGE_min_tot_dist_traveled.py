@@ -1,5 +1,6 @@
 class Solution:
     def minimumTotalDistance(self, robot: List[int], factory: List[List[int]]) -> int:
+
         robot.sort()
         # print(f'{robot=}')
         factory.sort()
@@ -72,6 +73,11 @@ class Solution:
         return DP(len(robot) - 1, len(factory_multiple) - 1)
 
 # NOTE: Acceptance Rate 56.8% (HARD)
+
 # NOTE: was the challenge 2024-10-31: did not complete it in time
 # NOTE: Runtime 2704 ms Beats 8.00%
 # NOTE: Memory 60.39 MB Beats 27.89%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 2655 ms Beats 6.17%
+# NOTE: Memory 100.82 MB Beats 17.28%
