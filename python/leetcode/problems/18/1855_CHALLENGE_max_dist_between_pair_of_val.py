@@ -53,3 +53,9 @@ class Solution:
 # NOTE: Accepted on second Submit (Output Exceeded)
 # NOTE: Runtime 943 ms Beats 5.26%
 # NOTE: Memory 32.76 MB Beats 24.14%
+
+# NOTE: Acceptance Rate 55.5% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 839 ms Beats 5.16%
+# NOTE: Memory 36.14 MB Beats 21.31%
