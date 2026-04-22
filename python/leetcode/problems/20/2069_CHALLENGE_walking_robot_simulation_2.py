@@ -99,3 +99,9 @@ class Robot:
 
 # NOTE: Runtime 467 ms Beats 25.40%
 # NOTE: Memory 21.77 MB Beats 11.11%
+
+# NOTE: Acceptance Rate 43.2% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 246 ms Beats 13.72%
+# NOTE: Memory 24.03 MB Beats 37.32%

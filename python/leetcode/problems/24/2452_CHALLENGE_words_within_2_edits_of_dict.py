@@ -62,3 +62,7 @@ class Solution:
 # NOTE: Accepted on second Submit (edge case: repeated query)
 # NOTE: Runtime 6408 ms Beats 5.71%
 # NOTE: Memory 252.85 MB Beats 6.43%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 5806 ms Beats 5.21%
+# NOTE: Memory 239.43 MB Beats 5.69%

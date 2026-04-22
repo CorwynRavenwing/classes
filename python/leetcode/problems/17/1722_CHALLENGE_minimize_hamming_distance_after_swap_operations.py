@@ -96,4 +96,11 @@ class Solution:
             hd += change
 
         return hd
+
+# NOTE: Acceptance Rate 69.7% (medium)
+
 # NOTE: 933 ms; Beats 86.52%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 167 ms Beats 89.21%
+# NOTE: Memory 65.62 MB Beats 23.04%

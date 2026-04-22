@@ -19,3 +19,8 @@ class Solution:
         print(f'{answer=}')
         return answer[0]
 
+# NOTE: Acceptance Rate 66.8% (easy)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 3 ms Beats 38.96%
+# NOTE: Memory 20.42 MB Beats 6.45%
