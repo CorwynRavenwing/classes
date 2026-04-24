@@ -50,5 +50,12 @@ class Solution:
                 arr[numIndex] = answer
 
         return arr
+
 # NOTE: Runtime 652 ms Beats 21.55%
 # NOTE: Memory 49.04 MB Beats 67.07%
+
+# NOTE: Acceptance Rate 49.8% (medium)
+
+# NOTE: re-ran for challenge
+# NOTE: Runtime 247 ms Beats 13.39%
+# NOTE: Memory 53.56 MB Beats 76.77%
