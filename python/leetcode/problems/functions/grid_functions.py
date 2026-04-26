@@ -46,3 +46,10 @@
                 if getValue((X, Y)) == value
             ]
 
+        def allValues() -> Set[Tuple[int,int]]:
+            return {
+                V
+                for row in grid
+                for V in row
+            }
+
