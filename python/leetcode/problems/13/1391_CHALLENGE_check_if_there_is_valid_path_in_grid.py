@@ -73,3 +73,8 @@ class Solution:
         print(f'FAIL')
         return False
 
+# NOTE: Acceptance Rate 50.4% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 837 ms Beats 5.97%
+# NOTE: Memory 55.30 MB Beats 31.72%
