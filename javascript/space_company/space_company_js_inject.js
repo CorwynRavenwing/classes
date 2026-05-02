@@ -2437,7 +2437,7 @@ function choose_and_perform_action(
                 return false;
             }
             var substance = clack.pane_title;
-            var bump_this_substance = substances_that_need_bumping.includes(substance);
+            var bump_this_substance = substances_that_need_bumping.hasOwnProperty(substance);
             if (! bump_this_substance) {
                 // no need to bump
                 return false;
@@ -2447,7 +2447,8 @@ function choose_and_perform_action(
 
         if (possibles.length) {
             clack = choose_random(possibles);
-            desired = 1;
+            var substance = clack.pane_title;
+            desired = substances_that_need_bumping[substance];
             perform_auto_request(clack, desired, all_click_classes);
             return;
         }
@@ -2539,7 +2540,7 @@ function colorize_left_bar(quantities, overflow_reasons, storage_numbers) {
 
     var all_overflow_classes = ["bump_my_max", "already_bumped"];
 
-    var substances_that_need_bumping = [];
+    var substances_that_need_bumping = {};
 
     safeEntries(quantities).forEach(function(quant) {
         const [substance, leftbar_tab] = quant;
@@ -2555,12 +2556,15 @@ function colorize_left_bar(quantities, overflow_reasons, storage_numbers) {
         // var overflow_reasons_arr = overflow_reasons ? (overflow_reasons[substance] || []) : [];
         // console.log('debug: overflow overflow_reasons_arr', overflow_reasons_arr);
 
+        var max_multiplier = 0;
+
         var reason_arr = overflow_reasons_arr.map(function(item) {
             const [reason, count] = item;
             var max = leftbar_tab.max;
             if (! max) { return "[no max]"; }
             max = to_number(max);
             var multiplier = doublings_between(max, count);
+            max_multiplier = Math.max(multiplier, max_multiplier);
             return reason + ": " + from_number(count) + " (" + multiplier + " x)";
         });
         // console.log('debug: overflow reason_arr', reason_arr);
@@ -2572,7 +2576,7 @@ function colorize_left_bar(quantities, overflow_reasons, storage_numbers) {
                 overflow_class = "already_bumped";
             } else {
                 overflow_class = "bump_my_max";
-                substances_that_need_bumping.push(substance);
+                substances_that_need_bumping[substance] = max_multiplier;
             }
         }
         // console.log('debug: overflow overflow_class', overflow_class);
