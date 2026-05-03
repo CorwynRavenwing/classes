@@ -9,3 +9,9 @@ class Solution:
 # NOTE: O(N)
 # NOTE: Memory 16.67 MB Beats 9.22%
 # NOTE: O(N)
+
+# NOTE: Acceptance Rate 65.4% (easy)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 0 ms Beats 100.00%
+# NOTE: Memory 19.30 MB Beats 51.56%
