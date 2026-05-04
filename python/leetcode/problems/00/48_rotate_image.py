@@ -39,3 +39,8 @@ class Solution:
         Do not return anything, modify matrix in-place instead.
         """
 
+# NOTE: Acceptance Rate 79.7% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 0 ms Beats 100.00%
+# NOTE: Memory 19.45 MB Beats 5.57%
