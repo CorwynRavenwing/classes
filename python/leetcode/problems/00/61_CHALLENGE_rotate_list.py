@@ -50,3 +50,8 @@ class Solution:
 
         return head
 
+# NOTE: Acceptance Rate 41.7% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 1 ms Beats 20.71%
+# NOTE: Memory 19.51 MB Beats 8.10%

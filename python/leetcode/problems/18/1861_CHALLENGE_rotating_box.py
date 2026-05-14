@@ -25,7 +25,7 @@ class Solution:
 
         box_after_gravity = [
             gravity_towards_right(row)
-            for row in box
+            for row in boxGrid
         ]
         box_transposed = tuple(zip(*box_after_gravity))
         box_rotated = [
@@ -38,3 +38,10 @@ class Solution:
 # NOTE: Accepted on second Submit (first was Output Exceeded)
 # NOTE: Runtime 5367 ms Beats 5.06%
 # NOTE: Memory 29.04 MB Beats 43.28%
+
+# NOTE: Acceptance Rate 79.2% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: had a typo somehow
+# NOTE: Runtime 4278 ms Beats 5.07%
+# NOTE: Memory 58.20 MB Beats 5.27%

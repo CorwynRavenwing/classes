@@ -96,3 +96,8 @@ class Solution:
 
         return new_grid
 
+# NOTE: Acceptance Rate 74.1% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 200 ms Beats 18.03%
+# NOTE: Memory 20.21 MB Beats 6.03%

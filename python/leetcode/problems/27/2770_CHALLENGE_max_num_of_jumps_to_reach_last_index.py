@@ -31,5 +31,12 @@ class Solution:
         
         answer = maxJumps[-1]
         return answer if answer else -1
+
 # NOTE: Runtime 810 ms Beats 6.64%
 # NOTE: Memory 45.85 MB Beats 5.21%
+
+# NOTE: Acceptance Rate 50.8% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 678 ms Beats 5.08%
+# NOTE: Memory 49.92 MB Beats 5.89%

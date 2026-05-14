@@ -9,3 +9,8 @@ class Solution:
         print(f'base_n   {base_n}')
         return nums == base_n
 
+# NOTE: Acceptance Rate 49.2% (easy)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 0 ms Beats 100.00%
+# NOTE: Memory 19.40 MB Beats 17.79%
