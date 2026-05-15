@@ -34,3 +34,8 @@ class Solution:
             raise Exception(f'{left=} should not be < {first=} here')
         raise Exception(f'should not get here ({left=},{right=})')
 
+# NOTE: Acceptance Rate 54.2% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 0 ms Beats 100.00%
+# NOTE: Memory 19.52 MB Beats 24.97%
