@@ -78,3 +78,8 @@ class Solution:
         print('  Target not found')
         return -1
 
+# NOTE: Acceptance Rate 44.6% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 0 ms Beats 100.00%
+# NOTE: Memory 19.51 MB Beats 10.24%
