@@ -42,3 +42,9 @@ class Solution:
 # NOTE: Accepted on second Submit (edge case with duplicate low value)
 # NOTE: Runtime 0 ms Beats 100.00%
 # NOTE: Memory 17.84 MB Beats 29.61%
+
+# NOTE: Acceptance Rate 56.0% (easy)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 0 ms Beats 100.00%
+# NOTE: Memory 19.40 MB Beats 16.10%
