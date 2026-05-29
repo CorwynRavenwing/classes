@@ -60,3 +60,9 @@ class Solution:
 # NOTE: ... and this is *ridiculously* worse!
 
 # NOTE: The lesson here is: Premature Optimization Considered Harmful
+
+# NOTE: Acceptance Rate 45.5% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 260 ms Beats 55.88%
+# NOTE: Memory 21.74 MB Beats 15.88%
