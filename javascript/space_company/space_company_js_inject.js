@@ -1030,6 +1030,7 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
             /\[.*\]/g,              // "[3d 23:59:59]"
             /Activate\ .*\ Wonder/g,
             /Rebuild\ .*\ Wonder/g,
+
             "Activate Portal",
             "Donate Resources",
             "Unlock Dyson Sphere Research",
@@ -1086,6 +1087,8 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
             "ZZZ LAST NO COMMA"
         ],
         "}{COST:": [
+            /Distance\ --\ \ [0-9]*[.][0-9]*\ [(]/g,
+
             "Costs:",
             "Costs -- ",    // we've replaced colons with em-dashes above ...
             "costs -- ",    // ...
@@ -1131,6 +1134,8 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
         ],
         "}": [
             /$/g,
+            /[)]/g,
+
             ". ",
             "each second",
             "every second",
@@ -1235,6 +1240,7 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
         "kuiper_belt",
         "sol_scientific_center",
         "military",
+        "travel",
         // -----
         "carnelian_resistance",
         "prasnian_empire",
@@ -1247,6 +1253,7 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
 
     const pane_ignore_need = [
         "science",
+        // -----
         "ZZZ LAST NO COMMA"
     ];
 
@@ -1267,11 +1274,11 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
         c_n_m.cost = "";
     }
 
-    if (pane_title === "travel") {
-        // Interstellar.
-        // does not have Costs section
-        c_n_m.cost = "";
-    }
+    // if (pane_title === "travel") {
+    //     // Interstellar.
+    //     // does not have Costs section
+    //     c_n_m.cost = "";
+    // }
 
     if (details === "") {
         // details is now blank: return nothing
@@ -1366,9 +1373,12 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
         }
         return pieces;
     });
-    // console.log('orig_details:', orig_details);
-    // console.log('details:', details);
-    // console.log('answers:', answers);
+    // if (pane_title === "travel") {
+    //     // Interstellar.
+    //     console.log('orig_details:', orig_details);
+    //     console.log('details:', details);
+    //     console.log('answers:', answers);
+    // }
 
     var answers_lowercase = answers.map(function([label, data]) {
         return [label.toLowerCase(), data];
@@ -1721,6 +1731,16 @@ function tr_2_clack_raw(tr, pane_title) {
         .text()
         .trim()
         ;
+    var h5 = tr
+        .find("td > h5")
+        .text()
+        .trim()
+        ;
+    if (h5) {
+        // Travel section e.g. "Alpha Centauri":
+        // console.warn('found h5:', h5, details, tr_id);
+        details = h5;
+    }
 
     var td = tr.find("td");
 
