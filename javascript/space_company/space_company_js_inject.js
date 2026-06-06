@@ -771,13 +771,9 @@ function inputid_2_desired(input_id) {
         var val = $("#" + input_id).val();
         if (val) {
             desired = val.trim();
-            if (desired < 0) {
-                // don't allow negative values
-                desired = "";
-            }
         }
     }
-    return to_number(desired);
+    return desired;
 }
 
 function create_input_and_get_id(button_id, debug_label) {
@@ -1468,6 +1464,28 @@ function set_display_value(display_id, value) {
     }
 }
 
+function ratchet(compare) {
+    "use strict";
+    const values = [
+        1, 4, 5,
+        10, 24, 25,
+        50, 74, 75,
+        100, 125, 149, 150,
+        200, 249, 250,
+        500, 1000, 2000, 3000, 4000, 5000,
+        6000, 7000, 8000, 9000, 10000
+    ];
+    var found = values.find(function(element) {return element > compare;});
+    // console.log('ratchet', compare, found);
+    return found;
+}
+
+function set_object_value(id, value) {
+    "use strict";
+    var ob = $( "#" + id );
+    ob.val(value);
+}
+
 function compose_clack_object(pane_title, purchase, details, current_ob, button_ob, tr_id, clack_type) {
     "use strict";
     var clack = {};
@@ -1524,12 +1542,62 @@ function compose_clack_object(pane_title, purchase, details, current_ob, button_
     clack.input_id = input_id;
 
     clack.desired = inputid_2_desired(input_id);
+    if (clack.desired) {
+        var first_char = clack.desired[0];
+        var remainder = clack.desired.substring(1); // all but the first char
+        var total;
+        var new_desired;
+        switch(first_char) {
+            case '+':
+                total = ratchet(clack.current);
+                new_desired = '=' + total;
+
+                console.warn('Ratchet', clack.current, '=>', total, '(', new_desired, ')');
+                set_object_value(clack.input_id, new_desired);
+                clack.desired = "";
+                break;
+
+            case '=':
+                total = to_number(remainder);
+                clack.desired = total - clack.current;
+
+                console.warn('Equal', clack.current, '=>', total, '(', clack.desired, ')');
+                set_object_value(clack.input_id, clack.desired);
+                clack.desired = "";
+                break;
+
+            case '-':
+            case '0':
+                // do nothing
+                break;
+
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                clack.desired = to_number(clack.desired);
+                if (clack.desired < 0) {
+                    // don't allow negative values
+                    clack.desired = "";
+                }
+                break;
+
+            default:
+                throw new Error('Invalid first char of clack.desired "' + first_char + '"');
+        }
+    }
     clack.click_requested = ((clack.desired > 0) ? 1 : 0);
 
     var display_id = create_display_and_get_id(button_id, pane_title + "/" + purchase);
     clack.display_id = display_id;
 
     clack.details = details;
+    clack.orig_details = details;
 
     var cost_need_make = details_2_cost_need_make(details, pane_title, purchase, clean_name);
 
@@ -2347,9 +2415,8 @@ function perform_click(clack, all_click_classes) {
     var tr = $( "#" + clack.tr_id );
     add_class_remove_others(tr, "clicking", all_click_classes);
     var button = $( "#" + clack.button_id );
-    var input = $( "#" + clack.input_id );
     var desired = clack.desired;
-    // console.log('... tr', tr, 'desired', desired, 'button', button, 'input', input);
+    // console.log('... tr', tr, 'desired', desired, 'button', button);
 
     var click_time;
     click_time = Math.floor(new Date().getTime() / 1000);
@@ -2369,7 +2436,9 @@ function perform_click(clack, all_click_classes) {
 
     console.log("AUTO-CLICK", TIME, /* GLOBAL_pane_heading, **/ clack.pane_title, clack.name, "(" + clack.desired + "->" + desired + ")");
 
-    input.val(desired);
+    set_object_value(clack.input_id, desired);
+    // var input = $( "#" + clack.input_id );
+    // input.val(desired);
 
     return;
 }
@@ -2380,7 +2449,6 @@ function perform_auto_request(clack, desired, all_click_classes) {
     var tr = $( "#" + clack.tr_id );
     add_class_remove_others(tr, "auto_request", all_click_classes);
     // var button = $( "#" + clack.button_id );
-    var input = $( "#" + clack.input_id );
     // console.log('... tr', tr, 'desired', clack.desired, 'input', input);
     if (clack.desired) {
         console.error("Error!  'desired' is not zero/blank!", clack.desired);
@@ -2392,7 +2460,10 @@ function perform_auto_request(clack, desired, all_click_classes) {
     }
 
     console.warn("AUTO-REQUEST", /* TIME, */ clack.pane_title, clack.name, "(" + clack.desired + "->" + desired + ")");
-    input.val(desired);
+
+    set_object_value(clack.input_id, desired);
+    // var input = $( "#" + clack.input_id );
+    // input.val(desired);
 
     return;
 }
@@ -2750,9 +2821,9 @@ function test() {
     return;
 }
 
-
 function x_CONSUME() {
     "use strict";
     x_CONSUME();
     test();
+    ratchet(27);
 }
