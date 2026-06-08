@@ -50,3 +50,8 @@ class Solution:
 
         return createTreeNode(rootVal)
 
+ # NOTE: Acceptance Rate 82.0% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 470 ms Beats 5.28%
+# NOTE: Memory 138.22 MB Beats 6.50%
