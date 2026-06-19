@@ -1,5 +1,6 @@
 class Solution:
     def angleClock(self, hour: int, minutes: int) -> float:
+
         circle = 360
         halfCircle = circle // 2
         ClockHours = 12
@@ -24,3 +25,9 @@ class Solution:
 # NOTE: Accepted on second Submit (was measuring angle >180deg)
 # NOTE: Runtime 0 ms Beats 100.00%
 # NOTE: Memory 16.79 MB Beats 7.79%
+
+# NOTE: Acceptance Rate 64.6% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 0 ms Beats 100.00%
+# NOTE: Memory 19.46 MB Beats 45.03%
