@@ -63,3 +63,10 @@ class Solution:
 # NOTE: Accepted on second Submit (Time Limit Exceeded)
 # NOTE: Runtime 60 ms Beats 47.22%
 # NOTE: Memory 48.92 MB Beats 47.80%
+
+# NOTE: Acceptance Rate 60.9% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: accepted on second Submit (Time Limit Exceeded: comment out show_ListNode()s
+# NOTE: Runtime 102 ms Beats 32.76%
+# NOTE: Memory 63.03 MB Beats 8.71%
