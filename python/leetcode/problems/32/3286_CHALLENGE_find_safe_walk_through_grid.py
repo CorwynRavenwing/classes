@@ -89,3 +89,7 @@ class Solution:
 # NOTE: Accepted on second Submit (edge case: need to sort by health)
 # NOTE: Runtime 610 ms Beats 24.07%
 # NOTE: Memory 18.40 MB Beats 48.14%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 632 ms Beats 18.87%
+# NOTE: Memory 20.09 MB Beats 29.72%

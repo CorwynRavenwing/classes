@@ -59,3 +59,9 @@ class Solution:
 # NOTE: re-ran for challenge:
 # NOTE: Runtime 599 ms Beats 5.35%
 # NOTE: Memory 23.34 MB Beats 17.65%
+
+# NOTE: Acceptance Rate 73.9% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 555 ms Beats 5.05%
+# NOTE: Memory 24.75 MB Beats 15.25%
