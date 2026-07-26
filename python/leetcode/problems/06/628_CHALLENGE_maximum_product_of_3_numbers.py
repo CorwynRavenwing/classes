@@ -69,3 +69,8 @@ class Solution:
         # print(f"{answers=}")
         return max(answers)
 
+# NOTE: Acceptance Rate 46.3% (easy)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 30 ms Beats 15.14%
+# NOTE: Memory 20.59 MB Beats 17.11%
