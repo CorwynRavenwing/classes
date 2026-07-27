@@ -224,8 +224,10 @@ function uniqueId(ob, prefix) {
     return id;
 }
 
-function add_class_remove_others(ob, className, classList) {
+var debug_classes = '';
+function add_class_remove_others(ob, className, classList, ob_name) {
     "use strict";
+    var old_classes = ob.attr("class");
     if (className) {
         ob.addClass(className);
     }
@@ -532,7 +534,7 @@ function check_energy_levels(quantities) {
     } else {
         add_class = "energy-okay";
     }
-    add_class_remove_others(game_ob, add_class, all_energy_classes);
+    add_class_remove_others(game_ob, add_class, all_energy_classes, 'game energy');
 }
 
 var GLOBAL_known_missing_tabs = [];
@@ -2299,7 +2301,7 @@ function colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes) {
         // console.log('debug; clack (no button)', clack);
         var tr_id = clack.tr_id;
         var tr = $( "#" + tr_id );
-        add_class_remove_others(tr, "no_button", all_click_classes);
+        add_class_remove_others(tr, "no_button", all_click_classes, clack.clean_name);
         // console.log("tr_id", tr_id, "class", "no_button", "tr", tr);
         set_display_value(clack.display_id, "");
         set_ob_title_by_string(tr, "No button");
@@ -2312,7 +2314,7 @@ function colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes) {
         // console.log('debug; clack (unknown)', clack);
         var tr_id = clack.tr_id;
         var tr = $( "#" + tr_id );
-        add_class_remove_others(tr, "unknown_substance", all_click_classes);
+        add_class_remove_others(tr, "unknown_substance", all_click_classes, clack.clean_name);
         // console.log("tr_id", tr_id, "class", "unknown_substance", "tr", tr);
 
         var pop_up = safeEntries(clack.unknown).map(function(entry) {
@@ -2329,7 +2331,7 @@ function colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes) {
         // console.log('debug; clack (bump max)', clack);
         var tr_id = clack.tr_id;
         var tr = $( "#" + tr_id );
-        add_class_remove_others(tr, "bump_max", all_click_classes);
+        add_class_remove_others(tr, "bump_max", all_click_classes, clack.clean_name);
         // console.log("tr_id", tr_id, "class", "bump_max", "tr", tr);
 
         var pop_up = safeEntries(clack.bump_max).map(function(entry) {
@@ -2347,7 +2349,7 @@ function colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes) {
         // console.log('debug; clack (high cost)', clack);
         var tr_id = clack.tr_id;
         var tr = $( "#" + tr_id );
-        add_class_remove_others(tr, "high_cost", all_click_classes);
+        add_class_remove_others(tr, "high_cost", all_click_classes, clack.clean_name);
         // console.log("tr_id", tr_id, "class", "high_cost", "tr", tr);
 
         var high_cost_time = clack.high_cost_time;
@@ -2382,7 +2384,7 @@ function colorize_clacks_by_clickable(clacks_by_clickable, all_click_classes) {
         // console.log('debug; clack (high rate/sec)', clack);
         var tr_id = clack.tr_id;
         var tr = $( "#" + tr_id );
-        add_class_remove_others(tr, "high_rate", all_click_classes);
+        add_class_remove_others(tr, "high_rate", all_click_classes, clack.clean_name);
         // console.log("tr_id", tr_id, "class", "high_rate", "tr", tr);
 
         var pop_up = safeEntries(clack.high_rate).map(function(entry) {
@@ -2405,7 +2407,7 @@ function colorize_clacks_by_requested(ok_requested, ok_UNrequested, all_click_cl
         // console.log('debug; clack (requested yes)', clack);
         var tr_id = clack.tr_id;
         var tr = $( "#" + tr_id );
-        add_class_remove_others(tr, "click_me", all_click_classes);
+        add_class_remove_others(tr, "click_me", all_click_classes, clack.clean_name);
         // console.log("tr_id", tr_id, "class", "click_me", "tr", tr);
 
         set_display_value(clack.display_id, "");
@@ -2418,7 +2420,7 @@ function colorize_clacks_by_requested(ok_requested, ok_UNrequested, all_click_cl
         // console.log('debug; clack (requested no)', clack);
         var tr_id = clack.tr_id;
         var tr = $( "#" + tr_id );
-        add_class_remove_others(tr, "click_me_maybe", all_click_classes);
+        add_class_remove_others(tr, "click_me_maybe", all_click_classes, clack.clean_name);
         // console.log("tr_id", tr_id, "class", "click_me_maybe", "tr", tr);
 
         set_display_value(clack.display_id, "");
@@ -2433,7 +2435,7 @@ function perform_click(clack, all_click_classes) {
     "use strict";
 
     var tr = $( "#" + clack.tr_id );
-    add_class_remove_others(tr, "clicking", all_click_classes);
+    add_class_remove_others(tr, "clicking", all_click_classes, clack.clean_name);
     var button = $( "#" + clack.button_id );
     var desired = clack.desired;
     // console.log('... tr', tr, 'desired', desired, 'button', button);
@@ -2467,7 +2469,7 @@ function perform_auto_request(clack, desired, all_click_classes) {
     "use strict";
 
     var tr = $( "#" + clack.tr_id );
-    add_class_remove_others(tr, "auto_request", all_click_classes);
+    add_class_remove_others(tr, "auto_request", all_click_classes, clack.clean_name);
     // var button = $( "#" + clack.button_id );
     // console.log('... tr', tr, 'desired', clack.desired, 'input', input);
     if (clack.desired) {
@@ -2758,7 +2760,7 @@ function colorize_left_bar(quantities, overflow_reasons, storage_numbers) {
             }
         }
         // console.log('debug: overflow overflow_class', overflow_class);
-        add_class_remove_others(tr, overflow_class, all_overflow_classes);
+        add_class_remove_others(tr, overflow_class, all_overflow_classes, 'overflow class');
 
         set_ob_title_by_array(tr, reason_arr);
     });
