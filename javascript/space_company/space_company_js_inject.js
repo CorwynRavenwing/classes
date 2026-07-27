@@ -237,6 +237,17 @@ function add_class_remove_others(ob, className, classList, ob_name) {
             ob.removeClass(remove_me);
         }
     });
+    var new_classes = ob.attr("class");
+
+    if ((debug_classes === ob_name) || (debug_classes === 'all')) {
+        if (old_classes !== new_classes) {
+            console.warn(
+                "debug classes:", ob_name,
+                "(" + old_classes + "->" + new_classes + ")",
+                "+" + className + " -", classList
+            );
+        }
+    }
 }
 
 function panesdesc_2_allowed(pane_descriptors, tabs_available) {
