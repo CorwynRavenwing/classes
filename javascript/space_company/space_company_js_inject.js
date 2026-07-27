@@ -152,11 +152,6 @@ function toElapsedTime(total_sec) {
     return answer;
 }
 
-function sum(arr) {
-    "use strict";
-    return arr.reduce((a, b) => a + b, 0);
-}
-
 function jQuery_to_array(jquery_object) {
     "use strict";
     function filter_legal_item(line) {
