@@ -2488,6 +2488,91 @@ function perform_auto_request(clack, desired, all_click_classes) {
     return;
 }
 
+function emc_tds_to_material(tds) {
+    "use strict";
+
+    var price = tds[1].textContent;
+
+    var pair = price_2_pair(price);
+
+    var material = pair[0];
+    // var count = pair[1];
+
+    return material;
+}
+
+function emc_tds_to_span(tds) {
+    "use strict";
+
+    return $( tds[2] ).find('span').first();
+}
+
+function emc_tds_to_input(tds) {
+    "use strict";
+
+    return $( tds[4] ).find('input');
+}
+
+// find the first TR that comes after the current TR in the DOM
+// and wrap around if there is no "next"
+function emc_tr_next_wrap(tr_current) {
+    "use strict";
+
+    var tr_next = tr_current.next('tr');
+
+    if (! tr_next.length) {
+        var tbody = tr_current.parent();
+        tr_next = tbody.find('tr').first();
+    }
+
+    return tr_next;
+}
+
+function checkAutoEmc() {
+    "use strict";
+    // Check if any autoEmc checkboxes are checked
+    var checked = $('.autoEmc:checked');
+    if (!checked.length) {
+        console.log('No autoEmc checkbox is checked. Exiting.');
+        return;
+    }
+
+    // Get the parent TD of the checked checkbox
+    var td_current = checked.parent();
+
+    // Check if the TD has the correct class
+    if (! td_current.hasClass('autoEmcHide')) {
+        console.log('Parent TD does not have class autoEmcHide. Exiting.');
+        return;
+    }
+
+    // TODO: also check for td_current being hidden here
+
+    // Save the TR record for later use
+    var tr_current = td_current.parent();
+
+    var tds_current = tr_current.find('td');
+
+    // var material_current = emc_tds_to_material(tds_current);
+    // console.log("DEBUG: current material = " + material_current);
+
+    var span = emc_tds_to_span(tds_current);
+    if (! span.hasClass("green")) {
+        // console.log(material_current, 'span is not green');
+        return;
+    }
+
+    var tr_next = emc_tr_next_wrap(tr_current);
+
+    var tds_next = tr_next.find('td');
+
+    var material_next = emc_tds_to_material(tds_next);
+    console.log("Clicking EMC " + material_next);
+
+    var input_next = emc_tds_to_input(tds_next);
+    input_next.click();
+}
+
 function choose_and_perform_action(
     ok_normal_requested,
     ok_normal_UNrequested,
@@ -2569,6 +2654,8 @@ function choose_and_perform_action(
     }
 
     // console.log("NO CLICK, no fallback");
+
+    checkAutoEmc();
 
     return;
 }
