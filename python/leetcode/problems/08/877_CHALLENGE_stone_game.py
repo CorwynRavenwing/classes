@@ -1,32 +1,40 @@
 class Solution:
-    def predictTheWinner(self, nums: List[int]) -> bool:
+    def stoneGame(self, piles: List[int]) -> bool:
+
+        nums = piles    # variable rename
+
+        # we borrow some code from #486:
 
         @cache
         def DP(nums: List[int]) -> Tuple[int,int]:
             # returns (my_score, other_player_score)
             # therefore we must receive these in the other order
-            print(f'DP({nums})')
+
+            DEBUG = False
+
+            # if DEBUG: print(f'DP({nums})')
+            # if DEBUG: print(f'DP({len(nums)})')
             if not nums:
-                print(f'  trivial 0 0')
+                if DEBUG: print(f'  trivial 0 0')
                 return (0, 0)
             first = nums[0]
             not_first = nums[1:]
             last = nums[-1]
             not_last = nums[:-1]
             if len(nums) == 1:
-                print(f'  trivial N 0')
+                if DEBUG: print(f'  trivial N 0')
                 return (first, 0)
             (him_first, me_first) = DP(not_first)
             me_first += first
-            print(f'  first: ({me_first}, {him_first})')
+            if DEBUG: print(f'  first: ({me_first}, {him_first})')
             (him_last, me_last) = DP(not_last)
             me_last += last
-            print(f'  last : ({me_last}, {him_last})')
+            if DEBUG: print(f'  last : ({me_last}, {him_last})')
             if (me_first > me_last):
-                print(f'  take first')
+                if DEBUG: print(f'  take first')
                 return (me_first, him_first)
             else:
-                print(f'  take last')
+                if DEBUG: print(f'  take last')
                 return (me_last, him_last)
 
         (P1, P2) = DP(tuple(nums))
@@ -34,6 +42,12 @@ class Solution:
 
         return P1 >= P2     # player 1 wins ties
 
-# NOTE: Accepted on second Submit (first was Output Exceeded)
-# NOTE: Runtime 52 ms Beats 34.11%
-# NOTE: Memory 17.29 MB Beats 5.12%
+# NOTE: Re-used entire prior version as-is, changing 1 variable name
+# NOTE: Runtime 2576 ms Beats 5.02%
+# NOTE: Memory 284.54 MB Beats 5.97%
+
+# NOTE: Acceptance Rate 73.6% (medium)
+
+# NOTE: re-ran for challenge
+# NOTE: Runtime 2016 ms Beats 5.02%
+# NOTE: Memory 232.56 MB Beats 5.07%

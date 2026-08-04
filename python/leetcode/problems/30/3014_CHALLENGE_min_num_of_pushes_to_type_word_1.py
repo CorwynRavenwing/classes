@@ -1,6 +1,7 @@
 class Solution:
     def minimumPushes(self, word: str) -> int:
         
+        # we borrow some code from #3016, which I solved first:
         def encodePushes(word: str, mapping: Dict[str, str]) -> List[str]:
             # mapping = {
             #     '2': 'abc',
@@ -27,7 +28,7 @@ class Solution:
                     pushes
                 )
             )
-        
+
         # defaultMapping = {
         #     '2': 'abc',
         #     '3': 'def',
@@ -38,7 +39,6 @@ class Solution:
         #     '8': 'tuv',
         #     '9': 'wxyz',
         # }
-
         # return findPrice(word, defaultMapping)
 
         wordCounts = Counter(word)
@@ -66,5 +66,10 @@ class Solution:
 
         return findPrice(word, mapping)
 
-# NOTE: Acceptance Rate 80.0% (medium)
+# NOTE: Acceptance Rate 67.1% (easy)
 
+# NOTE: re-used exact code from prior (next) version
+# NOTE: Accepted on first Run
+# NOTE: Accepted on first Submit
+# NOTE: Runtime 11 ms Beats 0.94%
+# NOTE: Memory 19.55 MB Beats 16.35%
