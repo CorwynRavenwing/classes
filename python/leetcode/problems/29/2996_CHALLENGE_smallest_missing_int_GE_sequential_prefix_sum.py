@@ -22,3 +22,8 @@ class Solution:
                 break
         return answer
 
+# NOTE: Acceptance Rate 36.4% (easy)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 4 ms Beats 5.08%
+# NOTE: Memory 19.59 MB Beats 17.68%

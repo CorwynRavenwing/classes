@@ -47,5 +47,12 @@ class Solution:
         (Alice, Bob) = bestPair(0, 0, 1)
         
         return Alice
+
 # NOTE: Runtime 4296 ms Beats 5.10%
 # NOTE: Memory 83.62 MB Beats 5.10%
+
+# NOTE: Acceptance Rate 72.7% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 4282 ms Beats 5.02%
+# NOTE: Memory 260.59 MB Beats 5.22%
