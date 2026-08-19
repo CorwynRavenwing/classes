@@ -35,7 +35,7 @@ class Solution:
             aliceStone = stone
             if aliceStone not in stones:
                 print(f'  Cannot actually take {aliceStone=}, there are none')
-                return None
+                return False
             counts = Counter(stones)
             total = 0
             print(f'BEFORE stone=X {total=} counts={show(counts)}')
@@ -113,5 +113,14 @@ class Solution:
         Play1 = AliceWinsIfSheChooses(1, stones)
         Play2 = AliceWinsIfSheChooses(2, stones)
         return (Play1 or Play2)
+
 # NOTE: Runtime 996 ms Beats 51.76%
 # NOTE: Memory 30.89 MB Beats 23.53%
+
+# NOTE: Acceptance Rate 32.3% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: formerly suceeding code now failed
+# NOTE: needed line 38 changed from 'return None' to 'return False'
+# NOTE: Runtime 95 ms Beats 8.40%
+# NOTE: Memory 30.80 MB Beats 31.30%
