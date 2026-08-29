@@ -78,5 +78,10 @@ class Solution:
         else:
             print(f'    Bob cannot force a win by complementing Alices moves.  Poor Bob.')
             return True
+
 # NOTE: Runtime 88 ms Beats 95.04%
 # NOTE: Memory 17.81 MB Beats 17.36%
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 43 ms Beats 90.59%
+# NOTE: Memory 20.09 MB Beats 15.29%

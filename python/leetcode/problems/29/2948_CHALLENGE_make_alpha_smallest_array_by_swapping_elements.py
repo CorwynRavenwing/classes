@@ -54,9 +54,16 @@ class Solution:
         ]
 
         return answer
+
 # NOTE: Runtime 2535 ms Beats 5.41%
 # NOTE: Memory 49.60 MB Beats 38.74%
 
 # NOTE: re-ran for challenge:
 # NOTE: Runtime 1879 ms Beats 18.75%
 # NOTE: Memory 52.72 MB Beats 29.86%
+
+# NOTE: Acceptance Rate 60.8% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 1863 ms Beats 5.22%
+# NOTE: Memory 52.94 MB Beats 44.78%
