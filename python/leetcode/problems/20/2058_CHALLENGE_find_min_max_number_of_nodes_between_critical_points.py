@@ -32,5 +32,11 @@ class Solution:
 
         minDist = min(Distances)
         maxDist = Critical[-1] - Critical[0]
+
         return [minDist, maxDist]
 
+# NOTE: Acceptance Rate 69.8% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 127 ms Beats 7.56%
+# NOTE: Memory 64.42 MB Beats 7.81%
