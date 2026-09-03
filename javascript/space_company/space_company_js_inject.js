@@ -1427,6 +1427,8 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
                 console.warn('key:', key, 'value_str:', value_str);
                 console.log('answers:', answers);
                 console.log('details:', details);
+                console.log('pane_title:', pane_title);
+                tick_stop();
             } else if (prior_key === "make") {
                 key = "need";
             } else if (prior_key === "need") {
@@ -1436,6 +1438,8 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
                 console.warn('key:', key, 'value_str:', value_str);
                 console.log('answers:', answers);
                 console.log('details:', details);
+                console.log('pane_title:', pane_title);
+                tick_stop();
             }
         }
         if ((key === "make") || (key === "need")) {
@@ -1455,6 +1459,8 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
                 console.warn('key:', key, 'value_str:', value_str);
                 console.log('answers:', answers);
                 console.log('details:', details);
+                console.log('pane_title:', pane_title);
+                tick_stop();
             }
         }
     });
