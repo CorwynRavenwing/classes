@@ -33,6 +33,19 @@ var auto_gain = false;
 
 var prior_cick_time;
 
+// global variable
+var tick_id;
+
+// tick_start is way lower, so it can call tick()
+function tick_stop() {
+    "use strict";
+    if (tick_id) {
+        clearInterval(tick_id);
+        console.warn("tick stop", tick_id);
+        tick_id = 0;
+    }
+}
+
 var pane_descriptors = {
     Interstellar:   "#interstellarTab_pane",
     // Machine:     "#machineTab",
@@ -2810,9 +2823,6 @@ function colorize_left_bar(quantities, overflow_reasons, storage_numbers) {
     return substances_that_need_bumping;
 }
 
-// global variable
-var tick_id;
-
 function tick() {
     "use strict";
     // console.log("tick", tick_id);
@@ -2932,15 +2942,7 @@ function tick() {
     return;
 }
 
-function tick_stop() {
-    "use strict";
-    if (tick_id) {
-        clearInterval(tick_id);
-        console.warn("tick stop", tick_id);
-        tick_id = 0;
-    }
-}
-
+// stop is way higher, so it can be called from error traps
 function tick_start() {
     "use strict";
     var tick_milliseconds = tick_seconds * 1000;
