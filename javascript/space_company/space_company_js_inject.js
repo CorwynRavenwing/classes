@@ -1072,8 +1072,10 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
             "asteroids for gold",
             "axe for your woodcutter",
             "batteries for all",
+            "beneficial for your",
             "blueprints for this",
             "designed for mining",
+            "enough for at least",
             "field for pieces",
             "for this knowledge",       // NOTE: also in "}" section
             "game for tools",
@@ -1092,6 +1094,7 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
             "shovel for your woodburner",
             "source for your",
             "store it for later use",
+            "TARDIS, for short",
             "upgrade for dark matter",
             "Uranium for easy",
             "used for advanced",
@@ -1104,6 +1107,7 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
             "Wonders, for complex",
 
             // misuse of "out of":
+            "heat out of the ingredients",
             "landings out of atmospheres",
             "transportation out of deep",
 
