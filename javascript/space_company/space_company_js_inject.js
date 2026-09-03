@@ -1466,8 +1466,6 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
     });
     // console.log('c_n_m_entries [B]:', c_n_m_entries);
 
-    // XYZZY
-
     c_n_m.details = details;
 
     var make = c_n_m.make;
@@ -1546,11 +1544,40 @@ function compose_clack_object(pane_title, purchase, details, current_ob, button_
 
     clack.pane_title = pane_title;
 
+    // XYZZY
+
+    if (clack.pane_title === "science") {
+        clack.type = "science";
+    }
+
+    if (clack.pane_title === "technologies") {
+        clack.type = "technologies";
+    }
+
+    if (clack.pane_title === "wonder_station") {
+        clack.type = "wonder";
+    }
+
+    if (clack.name === "Activate Wonder") {
+        var activate_what = ":" + clack.pane_title;
+        clack.name += activate_what;
+        clack.clean_name += activate_what;
+        clack.type = "wonder";
+    }
+
     if (clack.name === "Exploration") {
         var explore_where = ":" + clack.pane_title;
         clack.name += explore_where;
         purchase = clack.name;
         clack.clean_name += explore_where;
+        clack.type = "explore";
+    }
+
+    if (clack.name === "Research") {
+        var research_what = ":" + clack.pane_title;
+        clack.name += research_what;
+        clack.clean_name += research_what;
+        clack.type = "research";
     }
 
     var current;
