@@ -2666,7 +2666,7 @@ function checkAutoEmc() {
 
 function choose_and_perform_action(
     ok_normal_requested,
-    ok_normal_UNrequested,
+    ok_UNrequested_byType,
     clack_type_dyson,
     clack_type_gain,
     clack_type_storage,
@@ -2721,9 +2721,72 @@ function choose_and_perform_action(
         }
     }
 
-    if (TEST) { console.log('TEST: ok_normal_UNrequested=', ok_normal_UNrequested); }
-    if (ok_normal_UNrequested.length) {
-        clack = choose_best_unrequested(ok_normal_UNrequested);
+    var group;
+
+    group = ok_UNrequested_byType.science || [];
+    if (TEST) { console.log('TEST: ok_UNrequested_byType.science=', group); }
+    if (group.length) {
+        clack = choose_random(group);
+
+        if (clack) {
+            desired = 1;
+            perform_auto_request(clack, desired, all_click_classes);
+            return;
+        }
+    }
+
+    group = ok_UNrequested_byType.technologies || [];
+    if (TEST) { console.log('TEST: ok_UNrequested_byType.technologies=', group); }
+    if (group.length) {
+        clack = choose_random(group);
+
+        if (clack) {
+            desired = 1;
+            perform_auto_request(clack, desired, all_click_classes);
+            return;
+        }
+    }
+
+    group = ok_UNrequested_byType.wonder || [];
+    if (TEST) { console.log('TEST: ok_UNrequested_byType.wonder=', group); }
+    if (group.length) {
+        clack = choose_random(group);
+
+        if (clack) {
+            desired = 1;
+            perform_auto_request(clack, desired, all_click_classes);
+            return;
+        }
+    }
+
+    group = ok_UNrequested_byType.explore || [];
+    if (TEST) { console.log('TEST: ok_UNrequested_byType.explore=', group); }
+    if (group.length) {
+        clack = choose_random(group);
+
+        if (clack) {
+            desired = 1;
+            perform_auto_request(clack, desired, all_click_classes);
+            return;
+        }
+    }
+
+    group = ok_UNrequested_byType.research || [];
+    if (TEST) { console.log('TEST: ok_UNrequested_byType.research=', group); }
+    if (group.length) {
+        clack = choose_random(group);
+
+        if (clack) {
+            desired = 1;
+            perform_auto_request(clack, desired, all_click_classes);
+            return;
+        }
+    }
+
+    group = ok_UNrequested_byType.normal || [];
+    if (TEST) { console.log('TEST: ok_UNrequested.normal=', group); }
+    if (group.length) {
+        clack = choose_best_unrequested(group);
 
         if (clack && auto_request) {
             desired = 1;
@@ -2904,7 +2967,7 @@ function tick() {
     colorize_clacks_by_requested(ok_requested, ok_UNrequested, all_click_classes);
 
     // var ok_normal_requested = filter_field_equal(ok_requested, "type", "normal");
-    var ok_normal_UNrequested = filter_field_equal(ok_UNrequested, "type", "normal");
+    var ok_UNrequested_byType = filter_clacks_by(ok_UNrequested, "type");
 
     var overflow_reasons = get_bump_reasons(clacks_by_clickable);
     var storage_numbers = get_storage_numbers(clack_by_type);
@@ -2913,7 +2976,7 @@ function tick() {
 
     choose_and_perform_action(
         ok_requested,
-        ok_normal_UNrequested,
+        ok_UNrequested_byType,
         clack_type_dyson,
         clack_type_gain,
         clack_type_storage,
