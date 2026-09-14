@@ -5,7 +5,8 @@ var default_config = {
     autoRestartEnergy: true,
     autoRestartCopium: true,
     automate: 'OFF',    // allowed values: 'zone', 'all', 'OFF'
-    taskMode: 'OFF'     // Options: 'OFF', 'Normal', 'Travel', 'ALL'
+    taskMode: 'OFF',    // Options: 'OFF', 'Normal', 'Travel', 'ALL'
+    autoResources: true
 };
 
 var config;
@@ -18,6 +19,11 @@ if (!config) {
 var taskAutoStore;
 if (!taskAutoStore) {
     taskAutoStore = {};
+}
+
+var resourceAutoStore;
+if (!resourceAutoStore) {
+    resourceAutoStore = {};
 }
 
 /**
@@ -45,7 +51,7 @@ function isElementHidden(target) {
     );
 }
 
-var HUD_VERSION = '1.4';
+var HUD_VERSION = '1.5';
 
 /**
  * Injects a floating HUD control panel into the page.
@@ -111,6 +117,10 @@ function createHUD() {
             '            <option value="ALL">ALL</option>' +
             '        </select>' +
             '    </label>' +
+            '    <label style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">' +
+            '        <span>Use Resources:</span>' +
+            '        <input type="checkbox" id="hud-auto-resources">' +
+            '    </label>' +
             '    <label style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">' +
             '        <span>Automation:</span>' +
             '        <select id="hud-automate" style="background: #222; color: #fff; border: 1px solid #555; padding: 2px 4px; border-radius: 4px;">' +
@@ -132,6 +142,7 @@ function createHUD() {
     var copiumCheckbox = document.getElementById('hud-copium');
     var automateSelect = document.getElementById('hud-automate');
     var taskModeSelect = document.getElementById('hud-task-mode');
+    var autoResourcesCheckbox = document.getElementById('hud-auto-resources');
 
     if (energyCheckbox) {
         energyCheckbox.checked = config.autoRestartEnergy;
@@ -144,6 +155,14 @@ function createHUD() {
     }
     if (taskModeSelect) {
         taskModeSelect.value = config.taskMode;
+    }
+
+    if (autoResourcesCheckbox) {
+        autoResourcesCheckbox.checked = config.autoResources;
+        autoResourcesCheckbox.addEventListener('change', function (e) {
+            config.autoResources = e.target.checked;
+            console.log('[JS Bot] Use Resources set to: ' + config.autoResources);
+        });
     }
 
     // Bind controls using standard function callbacks
@@ -247,6 +266,182 @@ function syncTaskCheckboxes() {
     Array.prototype.forEach.call(tasks, function (taskEl) {
         decorateTaskElement(taskEl);
     });
+}
+
+/**
+ * Decorates a single resource DOM element with an auto-consume checkbox.
+ * @param {Element} resEl - The resource element.
+ */
+function decorateResourceElement(resEl) {
+    'use strict';
+
+    // Identify resource by data attribute, id, or fallback
+    var resKey = (
+        resEl.getAttribute('data-resource')
+        || resEl.getAttribute('data-name')
+        || resEl.id
+    );
+
+    if (!resKey) {
+        return;
+    }
+
+    if (resEl.querySelector('.jsbot-resource-checkbox')) {
+        return;
+    }
+
+    var computedView = document.defaultView || resEl.ownerDocument.defaultView;
+    if (computedView && computedView.getComputedStyle(resEl).position === 'static') {
+        resEl.style.position = 'relative';
+    }
+
+    var checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'jsbot-resource-checkbox';
+    checkbox.style.cssText =
+            'position: absolute;' +
+            'top: 2px;' +
+            'right: 2px;' +
+            'z-index: 100;' +
+            'cursor: pointer;' +
+            'margin: 0;';
+
+    if (resourceAutoStore[resKey] === true) {
+        checkbox.checked = true;
+    }
+
+    checkbox.addEventListener('change', function (e) {
+        resourceAutoStore[resKey] = e.target.checked;
+        console.log('[JS Bot] Resource [' + resKey + '] auto-consume set to: ' + e.target.checked);
+    });
+
+    // Prevent clicking the checkbox from triggering the underlying resource click
+    checkbox.addEventListener('click', function (e) {
+        e.stopPropagation();
+    });
+
+    resEl.appendChild(checkbox);
+}
+
+/**
+ * Scans for resource elements in the DOM and injects auto-consume checkboxes.
+ */
+function syncResourceCheckboxes() {
+    'use strict';
+
+    var resources = document.querySelectorAll('#resourcesGrid .resource-item, #resources .resource-item, .resource-node');
+
+    Array.prototype.forEach.call(resources, function (resEl) {
+        decorateResourceElement(resEl);
+    });
+}
+
+/**
+ * Dispatches a synthetic contextmenu (right-click) event to a target DOM node.
+ * Uses strict dynamic references to satisfy global-variable linters.
+ * @param {Element} element - The target DOM element.
+ */
+function triggerRightClick(element) {
+    'use strict';
+
+    if (!element || !element.ownerDocument) {
+        return;
+    }
+
+    var doc = element.ownerDocument;
+    var return_this = function () {
+        return this;
+    };
+    var view = doc.defaultView || return_this();
+    var evt;
+
+    if (view && typeof view.MouseEvent === 'function') {
+        evt = new view.MouseEvent('contextmenu', {
+            bubbles: true,
+            cancelable: true,
+            view: view,
+            button: 2,
+            buttons: 2
+        });
+    } else if (doc.createEvent) {
+        evt = doc.createEvent('MouseEvents');
+        evt.initMouseEvent(
+            'contextmenu',
+            true,   // bubbles
+            true,   // cancelable
+            view,   // view
+            1,      // detail
+            0,      // screenX
+            0,      // screenY
+            0,      // clientX
+            0,      // clientY
+            false,  // ctrl
+            false,  // alt
+            false,  // shift
+            false,  // meta
+            2,      // button (right click)
+            null    // relatedTarget
+        );
+    }
+
+    if (evt) {
+        element.dispatchEvent(evt);
+    }
+}
+
+/**
+ * Predicate to determine if a resource is executable.
+ * @param {Element} resEl - The resource element.
+ * @returns {boolean} True if eligible to be consumed.
+ */
+function isResourceExecutable(resEl) {
+    'use strict';
+
+    if (!config.autoResources || isElementHidden(resEl)) {
+        return false;
+    }
+
+    var resKey = (
+        resEl.getAttribute('data-resource')
+        || resEl.getAttribute('data-name')
+        || resEl.id
+    );
+
+    if (!resKey || resourceAutoStore[resKey] !== true) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Automates right-clicking checked, available resources.
+ * @returns {boolean} True if a resource was right-clicked, false otherwise.
+ */
+function processAutomatedResources() {
+    'use strict';
+
+    if (!config.autoResources) {
+        return false;
+    }
+
+    var resources = document.querySelectorAll('#resourcesGrid .resource-item, #resources .resource-item, .resource-node');
+    var executableResources = Array.prototype.filter.call(resources, isResourceExecutable);
+
+    if (executableResources.length === 0) {
+        return false;
+    }
+
+    var targetRes = executableResources[0];
+    var resKey = (
+        targetRes.getAttribute('data-resource')
+        || targetRes.getAttribute('data-name')
+        || targetRes.id
+    );
+
+    triggerRightClick(targetRes);
+    console.log('[JS Bot] Right-clicked automated resource [' + resKey + ']');
+    return true;
 }
 
 /**
@@ -520,11 +715,13 @@ function run() {
     // Always run per-tick visual syncs
     updateHUDStats();
     syncTaskCheckboxes();
+    syncResourceCheckboxes();
 
     // Execute first successful action and short-circuit remainder
     return (
         checkAndRestartEnergy()
         || checkAndRestartCopium()
+        || processAutomatedResources()
         || setZoneAutomation()
         || processAutomatedTasks()
         // Future modular checks can be added here
