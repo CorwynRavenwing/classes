@@ -45,4 +45,11 @@ class Solution:
             else:
                 print(f'NO: {distanceSqr} > {rSqr}')
                 return False
+
 # NOTE: 27 ms; Beats 95.04%
+
+# NOTE: Acceptance Rate 62.6% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 0 ms Beats 100.00%
+# NOTE: Memory 19.28 MB Beats 88.00%

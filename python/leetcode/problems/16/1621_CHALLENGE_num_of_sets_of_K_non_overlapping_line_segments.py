@@ -63,5 +63,12 @@ class Solution:
         answer = NchooseKwithDuplicates(2*k + 1, n-k)
         answer %= mod
         return answer
+
 # NOTE: Runtime 51 ms; Beats 79.17%
 # NOTE: Memory 28.61 MB; Beats 62.50%
+
+# NOTE: Acceptance Rate 47.0% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 7 ms Beats 56.03%
+# NOTE: Memory 31.28 MB Beats 47.41%

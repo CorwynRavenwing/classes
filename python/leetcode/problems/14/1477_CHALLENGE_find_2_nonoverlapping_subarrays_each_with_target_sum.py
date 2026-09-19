@@ -86,3 +86,8 @@ class Solution:
         print(f'{answers=}')
         return min(answers, default=-1)
 
+# NOTE: Acceptance Rate 37.7% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 311 ms Beats 26.81%
+# NOTE: Memory 33.01 MB Beats 50.84%
