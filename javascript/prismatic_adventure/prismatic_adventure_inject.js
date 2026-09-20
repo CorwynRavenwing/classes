@@ -1,5 +1,20 @@
 // prismatic_adventure_inject.js
 
+// Global variable to store the timer reference
+var botIntervalId = null;
+
+/**
+ * Stops the heartbeat timer.
+ * startBot is much lower down, so it can call other functions
+ */
+function stopBot() {
+    'use strict';
+    if (botIntervalId !== null) {
+        clearInterval(botIntervalId);
+        botIntervalId = null;
+        console.log('[JS Bot] Heartbeat stopped.');
+    }
+}
 // Control variables to toggle auto-restart behavior
 var default_config = {
     autoRestartEnergy: true,
@@ -741,18 +756,6 @@ function startBot(intervalMs) {
 
     botIntervalId = setInterval(run, intervalMs);
     console.log(`[JS Bot] Heartbeat started (${intervalMs}ms interval).`);
-}
-
-/**
- * Stops the heartbeat timer.
- */
-function stopBot() {
-    'use strict';
-    if (botIntervalId !== null) {
-        clearInterval(botIntervalId);
-        botIntervalId = null;
-        console.log('[JS Bot] Heartbeat stopped.');
-    }
 }
 
 // Initialize HUD and start heartbeat loop on script injection
