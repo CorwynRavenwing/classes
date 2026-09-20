@@ -170,7 +170,6 @@ function isElementHidden(target) {
     );
 }
 
-var HUD_VERSION = '1.5';
 /**
  * Parses formatted game numbers with K/M/B/T suffixes into numeric values.
  * Handles uppercase, lowercase, and trailing characters cleanly.
@@ -217,10 +216,14 @@ function parseFormattedNumber(text) {
 }
 
 /**
- * Injects a floating HUD control panel into the page.
  */
-function createHUD() {
     'use strict';
+
+function create_HUD_object() {
+    'use strict';
+
+    var HUD_VERSION = '1.9';
+
     // Prevent duplicate HUD creation
     var existingHud_A = document.getElementById('jsbot-hud');
     var existingHud_B = document.getElementById('prismatic-bot-hud');
@@ -231,11 +234,12 @@ function createHUD() {
 
         // Check if existing HUD version matches current version
         if (oldVersion === HUD_VERSION) {
-            return;
+            return existingHud;
         }
         // Remove outdated HUD instance to force re-render
         console.log('[JS Bot] Replacing obsolete HUD version ' + oldVersion + ' -> ' + HUD_VERSION);
         existingHud.parentNode.removeChild(existingHud);
+        // now fall through to re-create a new copy
     }
 
     var hud = document.createElement('div');
@@ -396,6 +400,18 @@ function bindHUDEvents() {
         });
     }
 }
+
+/**
+ * Injects a floating HUD control panel into the page.
+ */
+function createHUD() {
+    'use strict';
+
+    var hud = create_HUD_object();
+    document.body.appendChild(hud);
+    var header = hud.querySelector('.hud-header');
+
+    bindHUDEvents();
 }
 
 /**
