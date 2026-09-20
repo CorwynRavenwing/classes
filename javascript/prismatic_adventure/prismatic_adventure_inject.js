@@ -1108,28 +1108,32 @@ function setZoneAutomation() {
 }
 
 /**
- * Reads the energy bar tooltip and returns the maximum energy capacity.
+ * Reads and parses the maximum energy capacity from the EnergyBar tooltip attribute.
  * @returns {number|null} Max energy capacity, or null if missing/unparseable.
  */
 function getMaxEnergy() {
     'use strict';
     var energyBar = document.getElementById('energyBar');
-    if (isElementHidden(energyBar)) {
+    if (!energyBar) {
         return null;
     }
 
-    var tooltip = energyBar.getAttribute('data-tooltip');
-    if (!tooltip) {
+    var tooltip = energyBar.getAttribute('data-tooltip') || '';
+    if (!tooltip || tooltip.indexOf('/') === -1) {
         return null;
     }
 
-    // Matches "Energy: 50.9/287" -> captures "287"
-    var match = tooltip.match(/Energy:\s*[\d.]+\/([\d.]+)/);
-    if (match && match[1]) {
-        return parseFloat(match[1]);
-    }
+    // Tooltip format expected: "Current / Max" (e.g., "1.2K/2.96K" or "1200/2960")
+    // var match = tooltip.match(/Energy:\s*[\d.]+\/([\d.]+)/);
+    var parts = tooltip.split('/');
+    var maxStr = parts[1]
+        ? parts[1].trim()
+        : '';
 
-    return null;
+    var numericMax = parseFormattedNumber(maxStr);
+    return numericMax > 0
+        ? numericMax
+        : null;
 }
 
 /**
