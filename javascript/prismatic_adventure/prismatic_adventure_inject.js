@@ -15,6 +15,88 @@ function stopBot() {
         console.log('[JS Bot] Heartbeat stopped.');
     }
 }
+
+/**
+ * Safely reads a JSON key from localStorage.
+ * @param {string} key - The key to read.
+ * @returns {Object|null} Parsed JSON data or null if invalid/missing.
+ */
+function loadStorageData(key) {
+    'use strict';
+    try {
+        if (localStorage !== undefined && localStorage !== null) {
+            var raw = localStorage.getItem(key);
+            if (raw) {
+                return JSON.parse(raw);
+            }
+        }
+    } catch (err) {
+        console.warn('[JS Bot] Failed to read from localStorage:', err);
+    }
+    return null;
+}
+
+/**
+ * Safely writes a JSON value to localStorage.
+ * @param {string} key - The key to write.
+ * @param {Object} value - The object to serialize.
+ */
+function saveStorageData(key, value) {
+    'use strict';
+    try {
+        if (localStorage !== undefined && localStorage !== null) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+    } catch (err) {
+        console.warn('[JS Bot] Failed to write to localStorage:', err);
+    }
+}
+
+var STORAGE_KEY_CONFIG = 'jsbot_config';
+var STORAGE_KEY_TASKS = 'jsbot_taskAutoStore';
+var STORAGE_KEY_RESOURCES = 'jsbot_resourceAutoStore';
+
+// create, but do not initialize, local variables
+
+var config;
+var taskAutoStore;
+var resourceAutoStore;
+
+// save various storage
+
+function saveConfig() {
+    'use strict';
+    saveStorageData(STORAGE_KEY_CONFIG, config);
+}
+
+function saveTasks() {
+    'use strict';
+    saveStorageData(STORAGE_KEY_TASKS, taskAutoStore);
+}
+
+function saveResources() {
+    'use strict';
+    saveStorageData(STORAGE_KEY_RESOURCES, resourceAutoStore);
+}
+
+// load various storage
+
+function loadConfig() {
+    'use strict';
+    return loadStorageData(STORAGE_KEY_CONFIG);
+}
+
+function loadTasks() {
+    'use strict';
+    return loadStorageData(STORAGE_KEY_TASKS);
+}
+
+function loadResources() {
+    'use strict';
+    return loadStorageData(STORAGE_KEY_RESOURCES);
+}
+
+// 1. Initialize or load config
 // Control variables to toggle auto-restart behavior
 var default_config = {
     autoRestartEnergy: true,
@@ -24,21 +106,41 @@ var default_config = {
     autoResources: true
 };
 
-var config;
+var savedConfig = loadConfig();
+
 if (!config) {
-    config = default_config;
+    if (savedConfig !== null && savedConfig !== undefined) {
+        config = savedConfig;
+    } else {
+        config = default_config;
+        saveConfig();
+    }
 }
+
+// 2. Initialize or load task auto store
+var savedTasks = loadTasks();
 
 // Control variables for which items' checkboxes are checked
 // Keys will be "zoneIdx_taskIdx", e.g., "4_8": true
-var taskAutoStore;
 if (!taskAutoStore) {
-    taskAutoStore = {};
+    if (savedTasks !== null && savedTasks !== undefined) {
+        taskAutoStore = savedTasks;
+    } else {
+        taskAutoStore = {};
+        saveTasks();
+    }
 }
 
-var resourceAutoStore;
+// 3. Initialize or load resource auto store
+var savedResources = loadResources();
+
 if (!resourceAutoStore) {
-    resourceAutoStore = {};
+    if (savedResources !== null && savedResources !== undefined) {
+        resourceAutoStore = savedResources;
+    } else {
+        resourceAutoStore = {};
+        saveResources();
+    }
 }
 
 /**
@@ -158,7 +260,6 @@ function createHUD() {
             '    </div>' +
             '</div>' +
 
-    if (energyCheckbox) {
             '<fieldset class="game-over-group">' +
             '    <legend>Game Over Restarts</legend>' +
             '    <div class="hud-row">' +
@@ -174,49 +275,81 @@ function createHUD() {
 
     return hud;
 }
+
+function bindHUDEvents() {
+    'use strict';
+
+    var automateSelect = document.getElementById('hud-automate');
     if (automateSelect) {
         automateSelect.value = config.automate;
-    }
-    if (taskModeSelect) {
-        taskModeSelect.value = config.taskMode;
+        automateSelect.addEventListener('change', function (e) {
+            config.automate = e.target.value;
+            console.log('[JS Bot] Automation mode set to: ' + config.automate);
+            saveConfig();
+        });
     }
 
+    var taskAutoSelect = document.getElementById('hud-task-mode-auto');
+    if (taskAutoSelect) {
+        taskAutoSelect.value = config.taskModeAuto;
+        taskAutoSelect.addEventListener('change', function (e) {
+            config.taskModeAuto = e.target.value;
+            console.log('[JS Bot] Automation Task Mode set to: ' + config.taskMode);
+            saveConfig();
+        });
+    }
+
+    var taskClearingSelect = document.getElementById('hud-task-mode-clearing');
+    if (taskClearingSelect) {
+        taskClearingSelect.value = config.taskModeClearing;
+        taskClearingSelect.addEventListener('change', function (e) {
+            config.taskModeClearing = e.target.value;
+            console.log('[JS Bot] Clearing Task Mode set to: ' + config.taskMode);
+            saveConfig();
+        });
+    }
+
+
+    var autoResourcesCheckbox = document.getElementById('hud-auto-resources');
     if (autoResourcesCheckbox) {
         autoResourcesCheckbox.checked = config.autoResources;
         autoResourcesCheckbox.addEventListener('change', function (e) {
             config.autoResources = e.target.checked;
+            saveConfig();
             console.log('[JS Bot] Use Resources set to: ' + config.autoResources);
         });
     }
 
-    // Bind controls using standard function callbacks
+    var energyCheckbox = document.getElementById('hud-energy');
     if (energyCheckbox) {
+        energyCheckbox.checked = config.autoRestartEnergy;
         energyCheckbox.addEventListener('change', function (e) {
             config.autoRestartEnergy = e.target.checked;
+            saveConfig();
             console.log('[JS Bot] Auto Restart Energy set to: ' + config.autoRestartEnergy);
         });
     }
 
+    var copiumCheckbox = document.getElementById('hud-copium');
     if (copiumCheckbox) {
+        copiumCheckbox.checked = config.autoRestartCopium;
         copiumCheckbox.addEventListener('change', function (e) {
             config.autoRestartCopium = e.target.checked;
+            saveConfig();
             console.log('[JS Bot] Auto Restart Copium set to: ' + config.autoRestartCopium);
         });
     }
 
-    if (automateSelect) {
-        automateSelect.addEventListener('change', function (e) {
-            config.automate = e.target.value;
-            console.log('[JS Bot] Automation mode set to: ' + config.automate);
+    var autoRestartDelusionCheckbox = document.getElementById('hud-auto-restart-delusion');
+    if (autoRestartDelusionCheckbox) {
+        autoRestartDelusionCheckbox.checked = config.autoRestartDelusion;
+        autoRestartDelusionCheckbox.addEventListener('change', function (e) {
+            config.autoRestartDelusion = e.target.checked;
+            saveConfig();
+            console.log('[JS Bot] Auto Restart Delusion set to: ' + config.autoRestartDelusion);
         });
     }
-
-    if (taskModeSelect) {
-        taskModeSelect.addEventListener('change', function (e) {
-            config.taskMode = e.target.value;
-            console.log('[JS Bot] Task Mode set to: ' + config.taskMode);
-        });
-    }
+}
 }
 
 /**
@@ -271,6 +404,7 @@ function decorateTaskElement(taskEl) {
     }
     checkbox.addEventListener('change', function (e) {
         taskAutoStore[taskKey] = e.target.checked;
+        saveTasks();
         console.log('[JS Bot] Task [' + taskKey + '] auto-run set to: ' + e.target.checked);
     });
 
@@ -336,6 +470,7 @@ function decorateResourceElement(resEl) {
 
     checkbox.addEventListener('change', function (e) {
         resourceAutoStore[resKey] = e.target.checked;
+        saveResources();
         console.log('[JS Bot] Resource [' + resKey + '] auto-consume set to: ' + e.target.checked);
     });
 
