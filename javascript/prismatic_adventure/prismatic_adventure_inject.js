@@ -216,8 +216,73 @@ function parseFormattedNumber(text) {
 }
 
 /**
+ * Enables smooth dragging on a target element via a header handle.
+ * @param {Element} hudEl - The main HUD container element.
+ * @param {Element} handleEl - The header element used as the drag handle.
  */
+function makeHUDDraggable(hudEl, handleEl) {
     'use strict';
+
+    if (!hudEl || !handleEl) {
+        return;
+    }
+
+    var isDragging = false;
+    var startX = 0;
+    var startY = 0;
+    var initialLeft = 0;
+    var initialTop = 0;
+
+
+    function onMouseMove(e) {
+        if (!isDragging) {
+            return;
+        }
+
+        var dx = e.clientX - startX;
+        var dy = e.clientY - startY;
+
+        hudEl.style.left = (initialLeft + dx) + 'px';
+        hudEl.style.top = (initialTop + dy) + 'px';
+    }
+
+    function onMouseUp() {
+        if (!isDragging) {
+            return;
+        }
+
+        isDragging = false;
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+    }
+
+    function onMouseDown(e) {
+        // Ignore clicks on interactive controls inside the header
+        var targetTag = e.target.tagName;
+        if (targetTag === 'INPUT' || targetTag === 'BUTTON' || targetTag === 'SELECT') {
+            return;
+        }
+
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+
+        // Get current computed position
+        var rect = hudEl.getBoundingClientRect();
+        initialLeft = rect.left;
+        initialTop = rect.top;
+
+        // Switch positioning from 'right' anchored to explicit 'left/top' pixel bounds
+        hudEl.style.right = 'auto';
+        hudEl.style.left = initialLeft + 'px';
+        hudEl.style.top = initialTop + 'px';
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    }
+
+    handleEl.addEventListener('mousedown', onMouseDown);
+}
 
 function create_HUD_object() {
     'use strict';
@@ -410,6 +475,7 @@ function createHUD() {
     var hud = create_HUD_object();
     document.body.appendChild(hud);
     var header = hud.querySelector('.hud-header');
+    makeHUDDraggable(hud, header);
 
     bindHUDEvents();
 }
