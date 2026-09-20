@@ -99,11 +99,12 @@ function loadResources() {
 // 1. Initialize or load config
 // Control variables to toggle auto-restart behavior
 var default_config = {
+    automate: 'OFF',             // 'OFF', 'Manual', 'zone', 'all'
+    autoResources: true,
     autoRestartEnergy: true,
     autoRestartCopium: true,
-    automate: 'OFF',    // allowed values: 'zone', 'all', 'OFF'
     taskMode: 'OFF',    // Options: 'OFF', 'Normal', 'Travel', 'ALL'
-    autoResources: true
+    zzz_last: 0
 };
 
 var savedConfig = loadConfig();
