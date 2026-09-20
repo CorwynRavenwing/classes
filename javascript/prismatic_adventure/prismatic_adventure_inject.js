@@ -104,6 +104,7 @@ var default_config = {
     autoRestartEnergy: true,
     autoRestartCopium: true,
     taskMode: 'OFF',    // Options: 'OFF', 'Normal', 'Travel', 'ALL'
+    autoRestartDelusion: true,
     zzz_last: 0
 };
 
@@ -813,6 +814,22 @@ function checkAndRestartCopium() {
     );
 }
 
+// Function 3: Check & Restart for Delusion Game Over
+/**
+ * Automatically clicks the restart button on the Delusion Game Over screen when active.
+ * @returns {boolean} True if a restart action was triggered, false otherwise.
+ */
+function checkAndRestartDelusion() {
+    'use strict';
+
+    return handleAutoRestart(
+        'gameOverContentDelusion',
+        'restartButtonDelusion',
+        config.autoRestartDelusion,
+        'Delusion Game Over detected. Clicking Restart.'
+    );
+}
+
 /**
  * Ensures the specified automation button is active if present.
  * @returns {boolean} - True if an action was taken, False if target state was already met or elements missing.
@@ -922,6 +939,7 @@ function run() {
     return (
         checkAndRestartEnergy()
         || checkAndRestartCopium()
+        || checkAndRestartDelusion()
         || processAutomatedResources()
         || setZoneAutomation()
         || processAutomatedTasks()
