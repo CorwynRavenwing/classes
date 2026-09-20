@@ -726,9 +726,6 @@ function updateHUDStats() {
     }
 }
 
-// Global variable to store the timer reference
-var botIntervalId = null;
-
 /**
  * Main execution tick.
  * Calls all modular checks sequentially.
@@ -754,6 +751,7 @@ function run() {
 
 /**
  * Starts the heartbeat timer.
+ * stopBot is much higher up, so other functions can call it
  * @param {number} intervalMs - Milliseconds between ticks (default: 1000).
  */
 function startBot(intervalMs) {
