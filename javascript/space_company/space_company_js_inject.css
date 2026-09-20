@@ -72,6 +72,7 @@ button.destroy {
     width: 1px;
     height: 1px;
     overflow: hidden;
+    display: none;
 }
 
 /* For some reason they don't already mark the active menu item: */
