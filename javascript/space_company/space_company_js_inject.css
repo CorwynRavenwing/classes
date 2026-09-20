@@ -69,7 +69,8 @@
 button.destroy {
     color: red;
     background-color: red;
-    width: 3em;
+    width: 1px;
+    height: 1px;
     overflow: hidden;
 }
 
