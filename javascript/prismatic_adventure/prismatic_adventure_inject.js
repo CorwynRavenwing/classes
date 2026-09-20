@@ -802,6 +802,16 @@ function processAutomatedResources() {
 }
 
 /**
+ * Retrieves all task DOM elements as a true JavaScript Array.
+ * @returns {Array<Element>} Array of task elements.
+ */
+function getTaskElements() {
+    'use strict';
+    var nodes = document.querySelectorAll('#tasks .task');
+    return Array.from(nodes);
+}
+
+/**
  * Determines whether a task element is a zone travel task.
  * @param {Element} taskEl - The task element to check.
  * @returns {boolean} True if it is a travel task, false otherwise.
@@ -855,51 +865,105 @@ function isTaskEnabledInConfig(taskEl, activeTaskMode) {
 
     return true;
 }
-    var button = taskEl.querySelector('.task-control button');
-    if (!button || button.classList.contains('active') || button.disabled) {
-        return false;
-    }
 
-    return true;
+function isTaskGrayedOut(taskEl) {
+    'use strict';
+    var button = taskEl.querySelector('.task-control button');
+    return (!button || button.disabled);
+}
+
+function isTaskInProgress(taskEl) {
+    'use strict';
+    var button = taskEl.querySelector('.task-control button');
+    return (!button || button.classList.contains('active'));
+}
+
+/*
+ * Helper functions: same comment
+ */
+function triggerClick(targetTask) {
+    'use strict';
+    var button = targetTask.querySelector('.task-control button');
+    button.click();
+}
+
+function getTaskName(targetTask) {
+    'use strict';
+    var zoneIdx = targetTask.getAttribute('data-zone-index');
+    var taskIdx = targetTask.getAttribute('data-task-index');
+    return (zoneIdx + '_' + taskIdx);
 }
 
 /**
  * Automates execution for checked, available tasks.
- * @returns {boolean} True if a task button was clicked, false otherwise.
+ * Processes automated tasks sequentially, ensuring normal tasks complete fully
+ * before initiating a Travel task.
+ * @returns {boolean} True if a task click was performed, false otherwise.
  */
-function processAutomatedTasks() {
+function processAutomatedTasks(activeTaskMode) {
     'use strict';
 
-    var tasks = document.querySelectorAll('#tasks .task');
-
-    // Filter down to only valid, clickable task elements
-    var executableTasks = Array.prototype.filter.call(tasks, isTaskExecutable);
-
-    if (executableTasks.length === 0) {
+    if (activeTaskMode === 'OFF') {
         return false;
     }
 
-    // Sort clickable tasks: regular tasks come before travel tasks
-    executableTasks.sort(function (a, b) {
-        var aIsTravel = isTravelTask(a);
-        var bIsTravel = isTravelTask(b);
+    // 1. Get all task elements
+    var taskElements = getTaskElements();
+    if (!taskElements || taskElements.length === 0) {
+        return false;
+    }
 
-        if (aIsTravel && !bIsTravel) {
-            return 1;  // Move travel task 'a' to the end
-        }
-        if (!aIsTravel && bIsTravel) {
-            return -1; // Keep regular task 'a' ahead of travel task 'b'
-        }
-        return 0;      // Preserve original DOM order for identical types
+    // 2. Filter eligible tasks (checked in HUD & available)
+    var eligibleTasks = taskElements.filter(function (el, activeTaskMode) {
+        return isTaskEnabledInConfig(el, activeTaskMode) && !isTaskGrayedOut(el);
+    });
+    if (eligibleTasks.length === 0) {
+        return false;
+    }
+
+    // 3. Check if any normal (non-travel) tasks are still pending or in-progress
+    var hasIncompleteNormalTasks = eligibleTasks.some(function (el) {
+        return !isTravelTask(el);
     });
 
-    var targetTask = executableTasks[0];
-    var zoneIdx = targetTask.getAttribute('data-zone-index');
-    var taskIdx = targetTask.getAttribute('data-task-index');
-    var button = targetTask.querySelector('.task-control button');
+    // 4. Filter out tasks that are already running
+    var readyTasks = eligibleTasks.filter(function (el) {
+        return !isTaskInProgress(el);
+    });
+    if (readyTasks.length === 0) {
+        return false;
+    }
 
-    button.click();
-    console.log('[JS Bot] Executing automated task [' + zoneIdx + '_' + taskIdx + ']');
+    // 5. Sort normal tasks first, travel tasks last
+    var boolean_integer = function (x) {
+        return (
+            x
+                ? 1
+                : 0
+        );
+    };
+    var normal_before_travel = function (a, b) {
+        return (
+            0
+            + boolean_integer(isTravelTask(a))
+            - boolean_integer(isTravelTask(b))
+        );
+    };
+    readyTasks.sort(normal_before_travel);
+
+    // 6. Pick top candidate
+    var targetTask = readyTasks[0];
+
+    // 7. Guard Travel: hold off if any normal task is still running or pending
+    if (isTravelTask(targetTask) && hasIncompleteNormalTasks) {
+        return false;
+    }
+
+    // 8. Execute click
+    triggerClick(targetTask);
+
+    console.log('[JS Bot] Executed task [' + getTaskName(targetTask) + ']');
+
     return true;
 }
 
