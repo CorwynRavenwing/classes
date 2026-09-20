@@ -1566,6 +1566,10 @@ function compose_clack_object(pane_title, purchase, details, current_ob, button_
         clack.type = "rocket";
     }
 
+    if (clack.name === "Activate Portal") {
+        clack.type = "wonder";
+    }
+
     if (clack.name === "Activate Wonder") {
         var activate_what = ":" + clack.pane_title;
         clack.name += activate_what;
