@@ -1558,6 +1558,14 @@ function compose_clack_object(pane_title, purchase, details, current_ob, button_
         clack.type = "wonder";
     }
 
+    if (clack.name.match(/Rebuild\ .*\ Wonder/)) {
+        clack.type = "wonder";
+    }
+
+    if (clack.pane_title === "rockets") {
+        clack.type = "rocket";
+    }
+
     if (clack.name === "Activate Wonder") {
         var activate_what = ":" + clack.pane_title;
         clack.name += activate_what;
@@ -2749,6 +2757,18 @@ function choose_and_perform_action(
 
     group = ok_UNrequested_byType.wonder || [];
     if (TEST) { console.log('TEST: ok_UNrequested_byType.wonder=', group); }
+    if (group.length) {
+        clack = choose_random(group);
+
+        if (clack) {
+            desired = 1;
+            perform_auto_request(clack, desired, all_click_classes);
+            return;
+        }
+    }
+
+    group = ok_UNrequested_byType.rocket || [];
+    if (TEST) { console.log('TEST: ok_UNrequested_byType.rocket=', group); }
     if (group.length) {
         clack = choose_random(group);
 
