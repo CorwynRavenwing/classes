@@ -74,7 +74,9 @@ var HUD_VERSION = '1.5';
 function createHUD() {
     'use strict';
     // Prevent duplicate HUD creation
-    var existingHud = document.getElementById('jsbot-hud');
+    var existingHud_A = document.getElementById('jsbot-hud');
+    var existingHud_B = document.getElementById('prismatic-bot-hud');
+    var existingHud = existingHud_A || existingHud_B;
 
     if (existingHud) {
         var oldVersion = existingHud.getAttribute('data-version') || 'unknown';
@@ -89,82 +91,89 @@ function createHUD() {
     }
 
     var hud = document.createElement('div');
-    hud.id = 'jsbot-hud';
+    hud.id = 'prismatic-bot-hud';
     hud.setAttribute('data-version', HUD_VERSION);
 
-    // Apply floating panel styling directly via inline CSS
-    hud.style.cssText =
-            'position: fixed;' +
-            'top: 300px;' +
-            'right: 50px;' +
-            'z-index: 999999;' +
-            'background: rgba(20, 20, 25, 0.92);' +
-            'color: #e0e0e0;' +
-            'border: 1px solid #444;' +
-            'border-radius: 8px;' +
-            'padding: 12px 16px;' +
-            'font-family: monospace;' +
-            'font-size: 12px;' +
-            'box-shadow: 0 4px 12px rgba(0,0,0,0.5);' +
-            'user-select: none;' +
-            'min-width: 200px;';
-
     hud.innerHTML =
-            '<div style="display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 13px; margin-bottom: 10px; color: #4af; border-bottom: 1px solid #333; padding-bottom: 4px;">' +
-            '    <span>JS Bot Control</span>' +
-            '    <span style="font-size: 10px; color: #888;">v' + HUD_VERSION + '</span>' +
+            '<div class="hud-header">' +
+            '    <span>Prismatic Bot</span>' +
+            '    <span class="hud-version">v' + HUD_VERSION + '</span>' +
             '</div>' +
-            '<div style="display: flex; flex-direction: column; gap: 8px;">' +
-            '    <label style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">' +
-            '        <span>Restart Energy:</span>' +
-            '        <input type="checkbox" id="hud-energy">' +
-            '    </label>' +
-            '    <label style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">' +
-            '        <span>Restart Copium:</span>' +
-            '        <input type="checkbox" id="hud-copium">' +
-            '    </label>' +
-            '    <label style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">' +
-            '        <span>Task Mode:</span>' +
-            '        <select id="hud-task-mode" style="background: #222; color: #fff; border: 1px solid #555; padding: 2px 4px; border-radius: 4px;">' +
-            '            <option value="OFF">OFF</option>' +
+
+            // 1. Clearing Zone Controls
+            '<fieldset class="hud-zone-group" id="hud-group-clearing">' +
+            '    <legend>Clearing Zone Controls</legend>' +
+            '    <div class="hud-row disabled-row">' +
+            '        <span>Automation:</span>' +
+            '        <span class="hud-disabled-tag">N/A (Clearing)</span>' +
+            '    </div>' +
+            '    <div class="hud-row">' +
+            '        <label><span>Clearing Tasks:</span>' +
+            '            <select id="hud-task-mode-clearing">' +
+            '                <option value="OFF">OFF</option>' +
             '            <option value="Normal">Normal</option>' +
             '            <option value="Travel">Travel</option>' +
             '            <option value="ALL">ALL</option>' +
             '        </select>' +
             '    </label>' +
-            '    <label style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">' +
-            '        <span>Use Resources:</span>' +
-            '        <input type="checkbox" id="hud-auto-resources">' +
-            '    </label>' +
-            '    <label style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">' +
-            '        <span>Automation:</span>' +
-            '        <select id="hud-automate" style="background: #222; color: #fff; border: 1px solid #555; padding: 2px 4px; border-radius: 4px;">' +
+            '    </div>' +
+            '</fieldset>' +
+
+            // 2. Automatable Zone Controls
+            '<fieldset class="hud-zone-group" id="hud-group-automatable">' +
+            '    <legend>Automated Zone Controls</legend>' +
+            '    <div class="hud-row">' +
+            '        <label><span>Automation:</span>' +
+            '            <select id="hud-automate">' +
             '            <option value="OFF">OFF</option>' +
             '            <option value="zone">Zone</option>' +
             '            <option value="all">All</option>' +
-            '        </select>' +
-            '    </label>' +
-            '    <div style="display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top: 6px; margin-top: 2px;">' +
-            '        <span>Max Energy:</span>' +
-            '        <span id="hud-max-energy" style="color: #4f4; font-weight: bold;">--</span>' +
+            '                <option value="manual">Manual</option>' +
+            '            </select>' +
+            '        </label>' +
             '    </div>' +
-            '</div>';
 
-    document.body.appendChild(hud);
+            '    <div class="hud-row">' +
+            '        <label><span>Auto Tasks:</span>' +
+            '            <select id="hud-task-mode-auto">' +
+            '                <option value="OFF">OFF</option>' +
+            '                <option value="Normal">Normal</option>' +
+            '                <option value="Travel">Travel</option>' +
+            '                <option value="ALL">ALL</option>' +
+            '            </select>' +
+            '        </label>' +
+            '    </div>' +
+            '</fieldset>' +
 
-    // Sync initial state from config after appending
-    var energyCheckbox = document.getElementById('hud-energy');
-    var copiumCheckbox = document.getElementById('hud-copium');
-    var automateSelect = document.getElementById('hud-automate');
-    var taskModeSelect = document.getElementById('hud-task-mode');
-    var autoResourcesCheckbox = document.getElementById('hud-auto-resources');
+            '<div class="hud-stats-group">' +
+            '    <div class="hud-row">' +
+            '        <label for="hud-auto-resources">' +
+            '            <span>Use Resources:</span>' +
+            '            <input type="checkbox" id="hud-auto-resources">' +
+            '        </label>' +
+            '    </div>' +
+            '    <div class="hud-stat-row">' +
+            '        <span>Max Energy:</span>' +
+            '        <span id="hud-max-energy" class="hud-stat-value">--</span>' +
+            '    </div>' +
+            '</div>' +
 
     if (energyCheckbox) {
-        energyCheckbox.checked = config.autoRestartEnergy;
-    }
-    if (copiumCheckbox) {
-        copiumCheckbox.checked = config.autoRestartCopium;
-    }
+            '<fieldset class="game-over-group">' +
+            '    <legend>Game Over Restarts</legend>' +
+            '    <div class="hud-row">' +
+            '        <label><span>Restart Energy:</span><input type="checkbox" id="hud-auto-restart-energy"></label>' +
+            '    </div>' +
+            '    <div class="hud-row">' +
+            '        <label><span>Restart Copium:</span><input type="checkbox" id="hud-auto-restart-copium"></label>' +
+            '    </div>' +
+            '    <div class="hud-row">' +
+            '        <label><span>Restart Delusion:</span><input type="checkbox" id="hud-auto-restart-delusion"></label>' +
+            '    </div>' +
+            '</fieldset>';
+
+    return hud;
+}
     if (automateSelect) {
         automateSelect.value = config.automate;
     }
