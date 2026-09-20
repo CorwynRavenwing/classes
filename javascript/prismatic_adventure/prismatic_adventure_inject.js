@@ -100,10 +100,11 @@ function loadResources() {
 // Control variables to toggle auto-restart behavior
 var default_config = {
     automate: 'OFF',             // 'OFF', 'Manual', 'zone', 'all'
+    taskModeAuto: 'OFF',         // 'OFF', 'Normal', 'Travel', 'ALL'
+    taskModeClearing: 'OFF',     // 'OFF', 'Normal', 'Travel', 'ALL'
     autoResources: true,
     autoRestartEnergy: true,
     autoRestartCopium: true,
-    taskMode: 'OFF',    // Options: 'OFF', 'Normal', 'Travel', 'ALL'
     autoRestartDelusion: true,
     zzz_last: 0
 };
@@ -282,6 +283,75 @@ function makeHUDDraggable(hudEl, handleEl) {
     }
 
     handleEl.addEventListener('mousedown', onMouseDown);
+}
+
+/**
+ * Detects whether the active zone is a Clearing Zone (has "Full completes")
+ * or an Automatable Zone.
+ * @returns {string} 'clearing' or 'automatable'
+ */
+function getZoneType() {
+    'use strict';
+
+    // Inspect the DOM for the completion counter text
+    var zoneHeader = document.querySelector('#zoneAutomation');
+    if (zoneHeader) {
+        if (zoneHeader.textContent.indexOf('Full Completes:') !== -1) {
+            return 'clearing';
+        }
+        if (zoneHeader.querySelector('button') !== null) {
+            return 'automatable';
+        }
+    }
+
+    console.error('getZoneType: failed', zoneHeader);
+    stopBot();
+    return 'UNKNOWN';
+}
+
+/**
+ * Updates HUD section highlights based on active zone type and returns
+ * the active Task Mode for current processing.
+ * @returns {string} Effective task mode ('OFF', 'Normal', 'Travel', 'ALL')
+ */
+function syncZoneUIAndGetTaskMode() {
+    'use strict';
+
+    var zoneType = getZoneType();
+    var clearingGroup = document.getElementById('hud-group-clearing');
+    var autoGroup = document.getElementById('hud-group-automatable');
+
+    var clearingTaskSelect = document.getElementById('hud-task-mode-clearing');
+    var autoTaskSelect = document.getElementById('hud-task-mode-auto');
+
+    if (zoneType === 'clearing') {
+        if (autoGroup) {
+            autoGroup.classList.remove('hud-active-group');
+        }
+        if (clearingGroup) {
+            clearingGroup.classList.add('hud-active-group');
+        }
+
+        return config.taskModeClearing || (
+            clearingTaskSelect
+                ? clearingTaskSelect.value
+                : 'OFF'
+        );
+    }
+
+    // Default to Automatable Zone
+    if (clearingGroup) {
+        clearingGroup.classList.remove('hud-active-group');
+    }
+    if (autoGroup) {
+        autoGroup.classList.add('hud-active-group');
+    }
+
+    return config.taskModeAuto || (
+        autoTaskSelect
+            ? autoTaskSelect.value
+            : 'OFF'
+    );
 }
 
 function create_HUD_object() {
@@ -741,37 +811,35 @@ function isTravelTask(taskEl) {
     return taskEl.classList.contains('travel-task');
 }
 
-/**
- * Helper predicate: determines if a task element is eligible to be automated.
- * @param {Element} taskEl - The task element to evaluate.
- * @returns {boolean} True if the task is eligible under current taskMode, false otherwise.
+/*
+ * Helper predicates: do what they say on the tin
  */
-function isTaskExecutable(taskEl) {
+function isTaskEnabledInConfig(taskEl, activeTaskMode) {
     'use strict';
 
-    var mode = config.taskMode;
-
     // Master switch OFF
-    if (mode === 'OFF') {
+    if (activeTaskMode === 'OFF') {
         return false;
     }
 
     var travel = isTravelTask(taskEl);
 
     // Normal mode: reject travel tasks
-    if (mode === 'Normal' && travel) {
+    if (activeTaskMode === 'Normal' && travel) {
         return false;
     }
 
     // Travel mode: reject normal (non-travel) tasks
-    if (mode === 'Travel' && !travel) {
+    if (activeTaskMode === 'Travel' && !travel) {
         return false;
     }
 
+    // Hidden (=== done already)
     if (isElementHidden(taskEl)) {
         return false;
     }
 
+    // Verify Checkbox for Task is Checked
     var zoneIdx = taskEl.getAttribute('data-zone-index');
     var taskIdx = taskEl.getAttribute('data-task-index');
 
@@ -785,6 +853,8 @@ function isTaskExecutable(taskEl) {
         return false;
     }
 
+    return true;
+}
     var button = taskEl.querySelector('.task-control button');
     if (!button || button.classList.contains('active') || button.disabled) {
         return false;
@@ -920,8 +990,18 @@ function setZoneAutomation() {
     'use strict';
     var container = document.getElementById('zoneAutomation');
 
+    // 1. In clearing zones, zone automation buttons don't exist: exit early
+    if (getZoneType() === 'clearing') {
+        return false;
+    }
+
     // Guard clause: check container existence and visibility
     if (isElementHidden(container)) {
+        return false;
+    }
+
+    // In 'manual' mode, do not manipulate automation buttons.
+    if (config.automate === 'manual') {
         return false;
     }
 
@@ -1016,6 +1096,7 @@ function run() {
     updateHUDStats();
     syncTaskCheckboxes();
     syncResourceCheckboxes();
+    var activeTaskMode = syncZoneUIAndGetTaskMode();
 
     // Execute first successful action and short-circuit remainder
     return (
@@ -1024,7 +1105,7 @@ function run() {
         || checkAndRestartDelusion()
         || processAutomatedResources()
         || setZoneAutomation()
-        || processAutomatedTasks()
+        || processAutomatedTasks(activeTaskMode)
         // Future modular checks can be added here
     );
 }
