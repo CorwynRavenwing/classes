@@ -398,11 +398,11 @@ function create_HUD_object() {
             '        <label><span>Clearing Tasks:</span>' +
             '            <select id="hud-task-mode-clearing">' +
             '                <option value="OFF">OFF</option>' +
-            '            <option value="Normal">Normal</option>' +
-            '            <option value="Travel">Travel</option>' +
-            '            <option value="ALL">ALL</option>' +
-            '        </select>' +
-            '    </label>' +
+            '                <option value="Normal">Normal</option>' +
+            '                <option value="Travel">Travel</option>' +
+            '                <option value="ALL">ALL</option>' +
+            '            </select>' +
+            '        </label>' +
             '    </div>' +
             '</fieldset>' +
 
@@ -412,9 +412,9 @@ function create_HUD_object() {
             '    <div class="hud-row">' +
             '        <label><span>Automation:</span>' +
             '            <select id="hud-automate">' +
-            '            <option value="OFF">OFF</option>' +
-            '            <option value="zone">Zone</option>' +
-            '            <option value="all">All</option>' +
+            '                <option value="OFF">OFF</option>' +
+            '                <option value="zone">Zone</option>' +
+            '                <option value="all">All</option>' +
             '                <option value="manual">Manual</option>' +
             '            </select>' +
             '        </label>' +
