@@ -1204,3 +1204,6 @@ function dont_complain() {
     stopBot();
     dont_complain();
 }
+
+// // Toggle class cleanly in JavaScript:
+// taskEl.classList.toggle('bot-automated', isChecked);
