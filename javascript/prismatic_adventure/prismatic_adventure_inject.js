@@ -170,6 +170,50 @@ function isElementHidden(target) {
 }
 
 var HUD_VERSION = '1.5';
+/**
+ * Parses formatted game numbers with K/M/B/T suffixes into numeric values.
+ * Handles uppercase, lowercase, and trailing characters cleanly.
+ * @param {string} text - Raw string like "2.96K" or "12.5".
+ * @returns {number} The numeric representation, or 0 if unparseable.
+ */
+function parseFormattedNumber(text) {
+    'use strict';
+
+    if (!text || typeof text !== 'string') {
+        return 0;
+    }
+
+    // Strip commas and extra spaces, convert to uppercase for clean suffix matching
+    var cleaned = text.replace(/,/g, '').trim().toUpperCase();
+    var match = cleaned.match(/^([0-9.]+)\s*([A-Z])?/);
+
+    if (!match) {
+        var simpleFloat = parseFloat(cleaned);
+        return isNaN(simpleFloat)
+            ? 0
+            : simpleFloat;
+    }
+
+    var baseValue = parseFloat(match[1]);
+    var suffix = match[2] || '';
+
+    if (isNaN(baseValue)) {
+        return 0;
+    }
+
+    var multiplier = 1;
+    if (suffix === 'K') {
+        multiplier = 1000;
+    } else if (suffix === 'M') {
+        multiplier = 1000000;
+    } else if (suffix === 'B') {
+        multiplier = 1000000000;
+    } else if (suffix === 'T') {
+        multiplier = 1000000000000;
+    }
+
+    return Math.round(baseValue * multiplier);
+}
 
 /**
  * Injects a floating HUD control panel into the page.
