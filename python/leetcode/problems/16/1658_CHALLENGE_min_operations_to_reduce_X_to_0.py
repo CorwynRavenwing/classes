@@ -39,3 +39,8 @@ class Solution:
         # print(f'{keepSizes=}')
         return len(nums) - max(keepSizes)
 
+# NOTE: Acceptance Rate 41.1% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 339 ms Beats 5.04%
+# NOTE: Memory 56.52 MB Beats 5.45%
