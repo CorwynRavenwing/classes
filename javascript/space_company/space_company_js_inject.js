@@ -1965,7 +1965,6 @@ function update_clack_fields(clack, pane_title, quantities) {
     }).flat();
 
     var unknown_substances_ob = Object.fromEntries(unknown_substances_entry_list);
-    // console.warn('unknown_substances_ob:', unknown_substances_ob);
     var unknown_substances = Object.keys(unknown_substances_ob);
 
     complain_about_unknown_substances_once(unknown_substances);
@@ -2566,8 +2565,6 @@ function perform_click(clack, all_click_classes) {
     }
 
     set_object_value(clack.input_id, desired);
-    // var input = $( "#" + clack.input_id );
-    // input.val(desired);
 
     return;
 }
