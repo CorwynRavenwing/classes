@@ -2398,8 +2398,17 @@ function get_all_clacks(tabs_available, quantities) {
     clacks_entries.forEach(function(entry) {
         const [pane_title, clacks_list] = entry;
         clacks_list.forEach(function(clack) {
-            // console.warn('DEBUG: updating clack', 'pane_title', pane_title, 'clack', clack);
+            if (TEST) {
+                if (pane_title === "rocket") {
+                    console.warn('DEBUG: updating clack (before)', 'pane_title', pane_title, 'clack', clack);
+                }
+            }
             update_clack_fields(clack, pane_title, quantities);
+            if (TEST) {
+                if (pane_title === "rocket") {
+                    console.warn('DEBUG: updating clack (after)', 'pane_title', pane_title, 'clack', clack);
+                }
+            }
         });
     });
     if (TEST) {
