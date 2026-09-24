@@ -2027,6 +2027,7 @@ function trsob_2_clacksob(trs_ob) {
         ;
         return [pane_title, clacks];
     });
+    clacks_array.sort();
     var clacks_ob = Object.fromEntries(clacks_array);
     return clacks_ob;
 }
