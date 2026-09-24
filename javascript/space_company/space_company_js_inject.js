@@ -2377,7 +2377,9 @@ function suppress_unused_fn_msgs() {
 function get_all_clacks(tabs_available, quantities) {
     "use strict";
     var clacks_ob = get_clacks_ob(pane_descriptors, tabs_available, quantities);
-    // console.warn('clacks_ob (before):', clacks_ob);
+    if (TEST) {
+        console.warn('clacks_ob (before):', clacks_ob);
+    }
 
     var clacks_entries = safeEntries(clacks_ob);
     clacks_entries.forEach(function(entry) {
@@ -2387,7 +2389,9 @@ function get_all_clacks(tabs_available, quantities) {
             update_clack_fields(clack, pane_title, quantities);
         });
     });
-    // console.warn('clacks_ob (after):', clacks_ob);
+    if (TEST) {
+        console.warn('clacks_ob (after):', clacks_ob);
+    }
 
     return clacks_ob;
 }
