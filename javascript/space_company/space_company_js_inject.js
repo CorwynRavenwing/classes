@@ -338,6 +338,7 @@ function cleanup_substance_name_simple(name) {
         .replace("stargate", "stargate room")
         .replace("room room", "room")
         .replace("dyson swarms and sphere", "dyson segments")
+        // .replace("launch rocket", "rocket a")
         .replace("space rocket", "rocket")
         .replace(" production", "")
         .replace(": dormant", "")
@@ -404,6 +405,7 @@ function textlist_2_substance(pane_heading, tr_id, texts) {
         case "Shield Plating":
         case "Engine Unit":
         case "Aerodynamic Sections":
+        // case "Rocket A":
             substance.count = A;
             substance.rate = 0;
             substance.max = B;
@@ -498,7 +500,13 @@ function get_quantities(tabs_available) {
     var plating_count = to_number($("#rocpart_shieldCount").text().trim());
     var engine_count = to_number($("#rocpart_engineCount").text().trim());
     var section_count = to_number($("#rocpart_aeroCount").text().trim());
+    // var rocket_ob = $('#rocket');
+    // var rocket_text = rocket_ob.text();
+    // var rocket_count = (
+    //     (rocket_text === "Not Built") ? 0 : 1
+    // );
     var fake_substances = [
+        // ["Rocket A", rocket_count, 1],
         ["Shield Plating", plating_count, 50],
         ["Engine Unit", engine_count, 25],
         ["Aerodynamic Sections", section_count, 15]
@@ -515,6 +523,7 @@ function get_quantities(tabs_available) {
     if (DEBUG) {console.log('GQ(): quantities_list', quantities_list);}
 
     var quantities = Object.fromEntries(quantities_list);
+
     // DEBUG = true;
     if (DEBUG) {console.log('GQ(): quantities', quantities);}
     // DEBUG = false;
@@ -1994,9 +2003,35 @@ function update_clack_fields(clack, pane_title, quantities) {
 
     clack.high_rate = get_high_rate_ob(clack.need, quantities);
 
+    // var substance = cleanup_substance_name(clack.clean_name);
+
+    // // ##### XYZZY #####
+    // if (substance) {
+    //     var q = quantities[substance];
+    //     if (q) {
+    //         if (TEST) {
+    //             console.log('DEBUG: substance=', substance, 'q=', q);
+    //         }
+
+    //         clack.max = q.max;
+    //         clack.current_q = q.count;
+    //     } else {
+    //         if (pane_title === "rocket") {
+    //             if (TEST) {
+    //                 console.log('DEBUG: substance=', substance, 'NO q=', q);
+    //             }
+    //         }
+    //     }
+    // } else {
+    //     if (TEST) {
+    //         console.error('DEBUG: no substance=', substance);
+    //     }
+    // }
+
     if (clack.button_id === "") {
         clack.clickable = "no_button";
     }
+    // TODO: else if current is at max, clickable is also "no_button"
     else if (clack.unknown !== "") {
         clack.clickable = "unknown";
     }
