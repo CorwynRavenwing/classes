@@ -2558,11 +2558,12 @@ function perform_click(clack, all_click_classes) {
     prior_cick_time = click_time;
 
     desired -= 1;
+
+    console.log("AUTO-CLICK", TIME, /* GLOBAL_pane_heading, **/ clack.pane_title, clack.name, "(" + clack.desired + "->" + desired + ")");
+
     if (! desired) {
         desired = "";
     }
-
-    console.log("AUTO-CLICK", TIME, /* GLOBAL_pane_heading, **/ clack.pane_title, clack.name, "(" + clack.desired + "->" + desired + ")");
 
     set_object_value(clack.input_id, desired);
     // var input = $( "#" + clack.input_id );
