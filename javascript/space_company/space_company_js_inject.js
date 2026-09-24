@@ -1686,6 +1686,11 @@ function compose_clack_object(pane_title, purchase, details, current_ob, button_
     var cost_need_make = details_2_cost_need_make(details, pane_title, purchase, clean_name);
 
     clack.cost = multiply_price(cost_need_make.cost, multiplier);
+    // if (TEST) {
+    //     if (pane_title === "rocket") {
+    //         console.warn('cnm.cost:', cost_need_make.cost, 'x', multiplier, '=clack.cost:', clack.cost);
+    //     }
+    // }
     clack.need = cost_need_make.need;
     clack.make = cost_need_make.make;
     clack.make_item = cost_need_make.make_item;
