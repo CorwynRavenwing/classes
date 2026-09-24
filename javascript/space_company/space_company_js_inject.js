@@ -1562,6 +1562,11 @@ function compose_clack_object(pane_title, purchase, details, current_ob, button_
         clack.type = "wonder";
     }
 
+    if (clack.pane_title === "rocket") {
+        // "Build rocket", for exploring the solar system
+        clack.type = "rocket";
+    }
+
     if (clack.pane_title === "rockets") {
         clack.type = "rocket";
     }
