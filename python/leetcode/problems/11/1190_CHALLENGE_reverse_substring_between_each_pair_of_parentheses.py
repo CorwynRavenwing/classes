@@ -33,3 +33,8 @@ class Solution:
         print(f'  DONE')
         return s
 
+# NOTE: Acceptance Rate 72.1% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 35 ms Beats 5.30%
+# NOTE: Memory 21.22 MB Beats 7.39%
