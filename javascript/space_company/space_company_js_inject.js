@@ -1092,6 +1092,7 @@ function details_2_cost_need_make(orig_details, pane_title, purchase, clean_name
             "machines, for propulsion",
             "makes up for in",
             "necessary for Tier",
+            "need for demolishing",
             "need for fuel",
             "pickaxe for your miner",
             "power for your",
