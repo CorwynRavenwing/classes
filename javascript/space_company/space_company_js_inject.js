@@ -2693,14 +2693,21 @@ function emc_tr_next_wrap(tr_current) {
     return tr_next;
 }
 
+// clear this variable every reload
+var mentioned_emc_off = false;
+
 function checkAutoEmc() {
     "use strict";
     // Check if any autoEmc checkboxes are checked
     var checked = $('.autoEmc:checked');
     if (!checked.length) {
-        console.log('No autoEmc checkbox is checked. Exiting.');
+        if (!mentioned_emc_off) {
+            console.log('No autoEmc checkbox is checked. Exiting.');
+            mentioned_emc_off = true;
+        }
         return;
     }
+    mentioned_emc_off = false;
 
     // Get the parent TD of the checked checkbox
     var td_current = checked.parent();
