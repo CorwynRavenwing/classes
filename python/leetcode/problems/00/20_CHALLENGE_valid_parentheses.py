@@ -31,3 +31,8 @@ class Solution:
             return False
         return True
 
+# NOTE: Acceptance Rate 45.0% (easy)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 4 ms Beats 11.63%
+# NOTE: Memory 19.31 MB Beats 24.83%
