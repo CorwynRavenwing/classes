@@ -28,3 +28,8 @@ class Solution:
             print(f'no successful parses')
             return False
 
+# NOTE: Acceptance Rate 42.8% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 7 ms Beats 10.73%
+# NOTE: Memory 19.45 MB Beats 14.30%
