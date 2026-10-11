@@ -76,5 +76,12 @@ class Solution:
         print(f'{squares=}')
         
         return sum(squares)
+
 # NOTE: Runtime 928 ms Beats 48.96%
 # NOTE: Memory 41.34 MB Beats 11.03%
+
+# NOTE: Acceptance Rate 28.7% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 302 ms Beats 35.00%
+# NOTE: Memory 49.13 MB Beats 5.00%
