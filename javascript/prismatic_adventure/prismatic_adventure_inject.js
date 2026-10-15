@@ -286,19 +286,27 @@ function makeHUDDraggable(hudEl, handleEl) {
 }
 
 /**
- * Detects whether the active zone is a Clearing Zone (has "Full completes")
- * or an Automatable Zone.
+ * Detects whether the active zone is a Clearing Zone, an Automatable Zone,
+ * or uninitialized (e.g. start of game or immediately after Prestige).
  * @returns {string} 'clearing' or 'automatable'
  */
 function getZoneType() {
     'use strict';
 
-    // Inspect the DOM for the completion counter text
     var zoneHeader = document.querySelector('#zoneAutomation');
     if (zoneHeader) {
+        // 1. Prestige / Uninitialized Guard:
+        // If the container exists but is empty, default to 'clearing' while the DOM repopulates.
+        if (zoneHeader.children.length === 0 || zoneHeader.textContent.trim() === '') {
+            return 'clearing';
+        }
+
+        // 2. Clearing Zone Check
         if (zoneHeader.textContent.indexOf('Full Completes:') !== -1) {
             return 'clearing';
         }
+
+        // 3. Automatable Zone Check
         if (zoneHeader.querySelector('button') !== null) {
             return 'automatable';
         }
