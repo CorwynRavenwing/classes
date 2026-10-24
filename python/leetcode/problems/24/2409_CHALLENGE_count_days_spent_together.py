@@ -22,3 +22,8 @@ class Solution:
 
         return len(together)
 
+# NOTE: Acceptance Rate 49.7% (easy)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 6 ms Beats 2.73%
+# NOTE: Memory 19.28 MB Beats 79.30%
