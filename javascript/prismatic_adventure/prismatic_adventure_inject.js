@@ -922,7 +922,8 @@ function processAutomatedTasks(activeTaskMode) {
     }
 
     // 2. Filter eligible tasks (checked in HUD & available)
-    var eligibleTasks = taskElements.filter(function (el, activeTaskMode) {
+    var eligibleTasks = taskElements.filter(function (el) {
+        // nonlocal activeTaskMode
         return isTaskEnabledInConfig(el, activeTaskMode) && !isTaskGrayedOut(el);
     });
     if (eligibleTasks.length === 0) {
