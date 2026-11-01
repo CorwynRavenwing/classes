@@ -66,6 +66,7 @@
 }
 
 /* Since the "make Destroy buttons red" option doesn't work: */
+#antimatter_drive_destroy,
 button.destroy {
     color: red;
     background-color: red;
