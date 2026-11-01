@@ -863,7 +863,7 @@ function create_display_and_get_id(button_id, debug_label) {
             return;
         }
         // button but no display: create display
-        console.log(debug_label, "Creating display object:");
+        // console.log(debug_label, "Creating display object:");
         display = $("<span class='" + display_class + "'>SET ME</span>");
         var button_ob = $("#" + button_id);
         button_ob.after(display);
