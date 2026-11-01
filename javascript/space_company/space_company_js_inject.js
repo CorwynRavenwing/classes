@@ -1577,9 +1577,10 @@ function compose_clack_object(pane_title, purchase, details, current_ob, button_
         clack.type = "rocket";
     }
 
-    if (clack.pane_title === "rockets") {
-        clack.type = "rocket";
-    }
+    // if (clack.pane_title === "rockets") {
+    //     // I don't remember what this is: let's find out with a scream test
+    //     clack.type = "rocket";
+    // }
 
     if (clack.name === "Activate Portal") {
         clack.type = "wonder";
