@@ -14,3 +14,9 @@ class Solution:
 # NOTE: By eye, it's O(N) time and O(1) space
 # NOTE: Runtime 192 ms Beats 83.29%
 # NOTE: Memory 18.12 MB Beats 20.08%
+
+# NOTE: Acceptance Rate 59.4% (medium)
+
+# NOTE: re-ran for challenge:
+# NOTE: Runtime 4 ms Beats 68.67%
+# NOTE: Memory 20.38 MB Beats 87.24%
