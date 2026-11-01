@@ -23,7 +23,7 @@
 //
 // I will want to rename my functions and variables to match this list.
 
-var tick_seconds = 1;
+var tick_seconds = 0.1;
 
 var DEBUG = false;
 var DEBUG_tick = false;
